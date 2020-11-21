@@ -19,7 +19,7 @@ const ModalPayment = ({ show, referenceCode, toggle }) => {
         quantity: 1,
         value: current_user.student.amountOwed,
         // eslint-disable-next-line
-        key: MD5(apiKey + '~' + '508029' + '~' + referenceCode + '~' + String(monthly_payment) + '~' + 'COP').toString()
+        key: MD5(apiKey + '~' + '508029' + '~' + referenceCode + '~' + String(current_user.student.amountOwed) + '~' + 'COP').toString()
     })
 
     // eslint-disable-next-line
@@ -28,7 +28,7 @@ const ModalPayment = ({ show, referenceCode, toggle }) => {
             quantity: e.target.value,
             value: e.target.value,
             // eslint-disable-next-line
-            key: MD5(apiKey + '~' + '508029' + '~' + referenceCode + '~' + String(monthly_payment * e.target.value) + '~' + 'COP').toString()
+            key: MD5(apiKey + '~' + '508029' + '~' + referenceCode + '~' + String(e.target.value) + '~' + 'COP').toString()
         })
     }
 
