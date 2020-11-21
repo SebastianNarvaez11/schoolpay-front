@@ -1,0 +1,41 @@
+body {
+    /* Ubicación de la imagen */
+    background-image: url(../img/bg-login.png);
+    /* Para dejar la imagen de fondo centrada, vertical y horizontalmente */
+    background-position: center;
+    /* Para que la imagen de fondo no se repita */
+    background-repeat: no-repeat;
+    /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
+    background-attachment: fixed;
+    /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
+    background-size: cover;
+    /*quita el scroll horizontal*/
+    overflow-x: hidden;
+    /* Se muestra un color de fondo mientras se está cargando la imagen de fondo o si hay problemas para cargarla */
+    background-color: linear-gradient(87deg, #11cdef 0, #1171ef 100%) !important;
+}
+
+#card-login {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: transparent;
+    background-clip: border-box;
+    border: 0px solid rgba(0, 0, 0, .125);
+}
+
+#input-group-login {
+    box-shadow: 0 10px 10px rgba(21, 21, 23, 0.6), 0 0px 0 rgba(0, 0, 0, 0.76);
+    transition: box-shadow .15s ease;
+}
+
+#btn {
+    box-shadow: 0 2px 6px rgba(50, 50, 93, 0.78), 0 2px 10px rgba(0, 0, 0, 0.82);
+}
+
+#btn:hover {
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.6), 0 3px 6px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}

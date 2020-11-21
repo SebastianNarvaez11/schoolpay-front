@@ -1,0 +1,35 @@
+.fa-home {
+    color: salmon;
+}
+
+.fa-users {
+    color: rgb(114, 177, 250);
+}
+
+.fa-school {
+    color: #faad14;
+}
+
+#fa-cog {
+    color: white;
+}
+
+#icon-button {
+    cursor: pointer;
+}
+
+#icon-button:hover {
+    color: #40a9ff;
+}
+
+.rotateMe {
+    -webkit-transition: -webkit-transform 0.2s ease-out;
+    -moz-transition: -moz-transform 0.2s ease-out;
+    transition: transform 0.2s ease-out;
+}
+
+.rotateMe:active {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg);
+}

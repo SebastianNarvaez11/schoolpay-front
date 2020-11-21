@@ -1,8 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'antd/dist/antd.css';
+import "./assets/nucleo/css/nucleo.css";
+import "./assets/scss/argon-dashboard-react.scss";
+import "./assets/css/fonts.css"
+import "./assets/css/general.css"
+
 
 ReactDOM.render(
   <React.StrictMode>

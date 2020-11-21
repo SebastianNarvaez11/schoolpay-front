@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&family=Varela+Round&display=swap');
+#welcome {
+    font-family: 'Varela Round', sans-serif;
+    font-size: 50px;
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.623);
+}
+
+#text-info {
+    font-family: 'Quicksand', sans-serif;
+    color: white;
+}
+
+.font-varela {
+    font-family: 'Varela Round', sans-serif;
+}
+
+.error-text {
+    font-family: 'Varela Round', sans-serif;
+    color: red;
+    font-size: 13px;
+}

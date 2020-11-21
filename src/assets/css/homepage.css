@@ -1,0 +1,27 @@
+.fondo-homapage {
+    background-color: white;
+}
+
+.fondo-homapage:before {
+	content:'';
+	position: absolute;
+        top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.fondo-homapage {
+    position: relative;
+    overflow: hidden;
+}
+
+.fondo-homapage {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
