@@ -87,7 +87,7 @@ const ModalPayment = ({ show, referenceCode, toggle }) => {
                         <Input name="buyerEmail" type="hidden" value={current_user.email} />
                         <Input name="buyerFullName" type="hidden" value={current_user.first_name + ' ' + current_user.last_name} />
                         <Input name="extra1" type="hidden" value={current_user.student.id} />
-                        <Input name="responseUrl" type="hidden" value="http://localhost:3000/student/payments" />
+                        <Input name="responseUrl" type="hidden" value="https://schoolpay-front.netlify.app/student/payments" />
                         <Input name="confirmationUrl" type="hidden" value="https://schoolpay.herokuapp.com/api/v1/payments/student/create/" />
                     </Row>
                 </ModalBody>
