@@ -1,10 +1,11 @@
 import { LOGIN, LOGOUT, GET_CURRENT_USER, START_LOGIN, FINISH_LOGIN } from '../actions/authActions'
+import { getToken } from '../../helpers/helper'
 
 const initialState = {
     startLogin: false,
-    isLoggedIn: false,
+    isLoggedIn: !getToken() ? false : true,
     token: localStorage.getItem('TOKEN_KEY'),
-    current_user: {},
+    current_user: JSON.parse(localStorage.getItem('CURRENT_USER')),
 }
 
 

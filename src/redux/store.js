@@ -12,11 +12,13 @@ const customMiddleware = store => next => action => {
         case LOGIN:
             // PERSISTENCIA DEL TOKEN Y EL USUARIO
             localStorage.setItem('TOKEN_KEY', action.payload.token);
+            localStorage.setItem('CURRENT_USER', JSON.stringify(action.payload.user));
             return next(action);
 
         case LOGOUT:
             // SE REMUEVE LA PERSITENCIA
             localStorage.removeItem('TOKEN_KEY');
+            localStorage.removeItem('CURRENT_USER');
             return next(action);
 
 

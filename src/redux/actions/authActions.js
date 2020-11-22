@@ -64,6 +64,7 @@ export const getCurrentUser = () => async (dispatch) => {
         .catch(error => {
             console.log(error)
             localStorage.removeItem('TOKEN_KEY');
+            localStorage.removeItem('CURRENT_USER');
             window.location.reload()
             Swal.fire({
                 icon: 'error',

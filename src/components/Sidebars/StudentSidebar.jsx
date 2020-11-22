@@ -20,11 +20,6 @@ const Sidebar = (props) => {
                         <i className="fas fa-home mr-3 ml-3"></i> Inicio
                     </NavLink>
                 </li>
-                <li className={props.location.pathname === '/student/payments' ? 'navActive' : 'navActiveHover'}>
-                    <NavLink exact to='/student/payments' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela'>
-                        <i className="fas fa-dollar-sign mr-3 ml-3"></i> Pagos
-                    </NavLink>
-                </li>
             </ul>
         </div>
     )

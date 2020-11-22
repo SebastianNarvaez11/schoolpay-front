@@ -4,7 +4,6 @@ import HeaderStudent from '../../components/Headers/students/HeaderStudent'
 import { useSelector } from 'react-redux'
 import NavbarAdmin from '../../components/Navbars/NavbarAdmin'
 import StudentSidebar from '../../components/Sidebars/StudentSidebar'
-import Home from './Home'
 import ListPayments from './ListPayments'
 
 
@@ -18,8 +17,8 @@ const RouterIndex = ({ match }) => {
                     <NavbarAdmin />
                     <HeaderStudent />
                     <Switch>
-                        <Route exact path={match.path} component={Home} />
-                        <Route exact path={`${match.path}/payments`} component={ListPayments} />
+                        <Route exact path={match.path} component={ListPayments} />
+                        {/* <Route exact path={`${match.path}/payments`} component={ListPayments} /> */}
                     </Switch>
                 </div>
             </div>
