@@ -5,7 +5,6 @@ const Home = () => {
     return (
         <>
             <HeaderAdmin />
-            <h1>Bienvenido Admin</h1>
         </>
     )
 }

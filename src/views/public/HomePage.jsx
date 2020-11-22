@@ -1,12 +1,9 @@
 import React from 'react'
 import '../../assets/css/homepage.css'
+import { Redirect } from 'react-router-dom';
 
 const HomePage = () => {
-    return (
-        <div className='fondo-homapage'>
-            <h1>Home Page</h1>
-        </div>
-    )
+    return <Redirect to='/login' />
 }
 
 export default HomePage

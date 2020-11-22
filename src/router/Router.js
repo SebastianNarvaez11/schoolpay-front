@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { getToken } from '../helpers/helper'
 import { getCurrentUser } from '../redux/actions/authActions'
 import RouterAdmin from './RouterAdmin'
