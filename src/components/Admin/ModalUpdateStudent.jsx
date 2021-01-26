@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 const digitsOnly = (value) => /^\d+$/.test(value)
 const formSchema = yup.object().shape({
     username: yup.string().min(3, 'El nombre de usuario debe tener minimo 3 caracteres').required('El nombre de usuario es obligatorio'),
+    code: yup.string().min(4, 'El codigo debe tener minimo 4 digitos').max(5, 'El codigo debe tener maximo 5 digitos'),
     email: yup.string().email('Ingrese un email valido').required('El email es obligatorio'),
     first_name: yup.string().min(2, 'El nombre debe tener minimo 2 caracteres')
         .test('alphabets', 'El nombre solo debe contener letras', (value) => { return /^[A-Za-zÑñ ]+$/.test(value); })
@@ -37,12 +38,14 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
 
     const grades = useSelector(state => state.gradeReducer.grades)
     const dispatch = useDispatch()
+    console.log(data)
 
     return (
         <Modal isOpen={show} toggle={toggle} size='lg'>
             <Formik
                 initialValues={{
                     username: data.username,
+                    code: data.student.code,
                     email: data.email,
                     first_name: data.first_name,
                     last_name: data.last_name,
@@ -75,6 +78,7 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
 
                     const student = {
                         ...data.student,
+                        code: values.code,
                         grade: JSON.parse(values.grade),
                         document_type: values.document_type,
                         document: values.document,
@@ -113,7 +117,7 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                         <ModalHeader>Actualizar Estudiante</ModalHeader>
                         <ModalBody>
                             <Row>
-                                <Col lg='12'>
+                                <Col lg='8'>
                                     <FormGroup >
                                         <InputGroup className="mb-4">
                                             <InputGroupAddon addonType="prepend">
@@ -127,6 +131,17 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                                                 onChange={handleChange('username')} />
                                         </InputGroup>
                                         <ErrorMessage name="username" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
+                                    </FormGroup>
+                                </Col>
+                                <Col lg='4'>
+                                    <FormGroup >
+                                        <InputGroup className="mb-4">
+                                            <Input name='code' placeholder="Codigo" type="number"
+                                                value={values.code}
+                                                onBlur={handleBlur('code')}
+                                                onChange={handleChange('code')} />
+                                        </InputGroup>
+                                        <ErrorMessage name="code" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
                                     </FormGroup>
                                 </Col>
                                 <Col lg='6'>

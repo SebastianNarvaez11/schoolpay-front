@@ -22,7 +22,6 @@ const formSchema = yup.object().shape({
     type: yup.number().min(2, 'Seleccione un perfil').required('El perfil es obligatorio'),
     password1: yup.string().required('La contraseña es obligatoria'),
     password2: yup.string().oneOf([yup.ref('password1'), null], 'Las contraseñas no coinciden').required('Repita la contraseña')
-
 })
 
 

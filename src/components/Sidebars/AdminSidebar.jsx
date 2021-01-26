@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink, Link, withRouter } from 'react-router-dom'
 import { Collapse } from 'reactstrap'
-import logo from '../../assets/img/Imagen22.png';
+import logo from '../../assets/img/logosp2.png';
 
 
 

@@ -5,8 +5,7 @@ import { Container, Card, CardBody, Form, Button, FormGroup, Label, Input, Input
 import ModalSpinner from '../../components/Spinner/ModalSpinner'
 import { loginUser } from '../../redux/actions/authActions'
 import '../../assets/css/login.css'
-import title from '../../assets/img/title-white-logo.png'
-import logo from '../../assets/img/logo-sombra.png'
+import logo from '../../assets/img/logosp3.png'
 
 const Login = () => {
     const { isLoggedIn, current_user, startLogin } = useSelector(state => state.authReducer)
@@ -42,20 +41,10 @@ const Login = () => {
     }
 
     return (
-        <div className='fondo'>
-            <Row>
-                <Col>
-                    <img
-                        alt="logo_de_schoolpay"
-                        src={title}
-                        className='ml-5 mt-3'
-                        height='60'
-                    />
-                </Col>
-            </Row>
+        < >
             <Row className='text-center'>
                 <Col>
-                    <p id='welcome' className='mt-1'>Bienvenido!</p>
+                    <p id='welcome' className='mt-5'>Bienvenido!</p>
                     <p id='text-info'>SchoolPay es la plataforma que le permite realizar y gestinar los pagos de <br /> las colegiaturas de sus hijos.</p>
                 </Col>
             </Row>
@@ -66,7 +55,7 @@ const Login = () => {
                             <img
                                 alt="logo_de_schoolpay"
                                 src={logo}
-                                height='120'
+                                height='250'
                             />
                         </div>
 
@@ -110,8 +99,8 @@ const Login = () => {
                     </Col>
                 </Row>
             </Container>
-            <ModalSpinner isLoading={startLogin} text={'Ingresando...'}/>
-        </div>
+            <ModalSpinner isLoading={startLogin} text={'Ingresando...'} />
+        </>
     )
 }
 

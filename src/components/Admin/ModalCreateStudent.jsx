@@ -11,7 +11,8 @@ import axios from 'axios'
 const digitsOnly = (value) => /^\d+$/.test(value)
 const formSchema = yup.object().shape({
     username: yup.string().min(3, 'El nombre de usuario debe tener minimo 3 caracteres').required('El nombre de usuario es obligatorio'),
-    email: yup.string().email('Ingrese un email valido').required('El email es obligatorio'),
+    code: yup.string().min(4, 'El codigo debe tener minimo 4 digitos').max(5, 'El codigo debe tener maximo 5 digitos'),
+    email: yup.string().email('Ingrese un email valido').required('El email es obligatorio').required('El codigo es obligatorio'),
     first_name: yup.string().min(2, 'El nombre debe tener minimo 2 caracteres')
         .test('alphabets', 'El nombre solo debe contener letras', (value) => { return /^[A-Za-zÑñ ]+$/.test(value); })
         .required('El nombre es obligatorio'),
@@ -34,7 +35,6 @@ const formSchema = yup.object().shape({
         .required('Si no desea asignar un descuento, digite el numero 0'),
     password1: yup.string().required('La contraseña es obligatoria'),
     password2: yup.string().oneOf([yup.ref('password1'), null], 'Las contraseñas no coinciden').required('Repita la contraseña')
-
 })
 
 export const ModalCreateStudent = ({ show, toggle }) => {
@@ -50,6 +50,7 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                     email: '',
                     first_name: '',
                     last_name: '',
+                    code: '',
                     type: '3',
                     grade: '0',
                     document_type: '0',
@@ -79,6 +80,7 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                     }
 
                     const student = {
+                        code: values.code,
                         grade: JSON.parse(values.grade),
                         document_type: values.document_type,
                         document: values.document,
@@ -123,7 +125,7 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                         </ModalHeader>
                         <ModalBody>
                             <Row>
-                                <Col lg='12'>
+                                <Col lg='8'>
                                     <FormGroup >
                                         <InputGroup className="mb-4">
                                             <InputGroupAddon addonType="prepend">
@@ -137,6 +139,17 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                                                 onChange={handleChange('username')} />
                                         </InputGroup>
                                         <ErrorMessage name="username" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
+                                    </FormGroup>
+                                </Col>
+                                <Col lg='4'>
+                                    <FormGroup >
+                                        <InputGroup className="mb-4">
+                                            <Input name='code' placeholder="Codigo" type="number"
+                                                value={values.code}
+                                                onBlur={handleBlur('code')}
+                                                onChange={handleChange('code')} />
+                                        </InputGroup>
+                                        <ErrorMessage name="code" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
                                     </FormGroup>
                                 </Col>
                                 <Col lg='6'>

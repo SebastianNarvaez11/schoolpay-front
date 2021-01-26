@@ -1,20 +1,3 @@
-body {
-    /* Ubicación de la imagen */
-    background-image: url(../img/bg-login.png);
-    /* Para dejar la imagen de fondo centrada, vertical y horizontalmente */
-    background-position: center;
-    /* Para que la imagen de fondo no se repita */
-    background-repeat: no-repeat;
-    /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
-    background-attachment: fixed;
-    /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
-    background-size: cover;
-    /*quita el scroll horizontal*/
-    overflow-x: hidden;
-    /* Se muestra un color de fondo mientras se está cargando la imagen de fondo o si hay problemas para cargarla */
-    background-color: linear-gradient(87deg, #11cdef 0, #1171ef 100%) !important;
-}
-
 #card-login {
     position: relative;
     display: flex;
