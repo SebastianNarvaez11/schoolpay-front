@@ -4,7 +4,7 @@ import {
     DELETE_STUDENT, FILTER_STUDENT,
     RESET_STUDENT_SELECT, UPDATE_STUDENT_SELECT,
     UPDATE_STUDENT_FULL, FILTER_STUDENT_GRADE,
-    FETCH_DATA_GRAPHICS, FETCHING_DATA_GRAPHICS
+    FETCH_DATA_GRAPHICS, START_FETCH_DATA_GRAPHICS, FINISH_FETCH_DATA_GRAPHICS
 } from '../actions/studentActions'
 
 const initialState = {
@@ -105,10 +105,15 @@ const studentReducer = (state = initialState, action) => {
                 student_full: action.payload.user
             }
 
-        case FETCHING_DATA_GRAPHICS:
+        case START_FETCH_DATA_GRAPHICS:
             return {
                 ...state,
                 isFetchingData: true
+            }
+        
+        case FINISH_FETCH_DATA_GRAPHICS:
+            return {
+                isFetchingData: false
             }
 
         case FETCH_DATA_GRAPHICS:

@@ -1,17 +1,31 @@
-import { FETCH_GRADES, CREATE_GRADE, UPDATE_GRADE, DELETE_GRADE, SELECT_GRADE, RESET_GRADE } from '../actions/gradeActions'
+import { START_FETCH_GRADES, FINISH_FETCH_GRADES, FETCH_GRADES, CREATE_GRADE, UPDATE_GRADE, DELETE_GRADE, SELECT_GRADE, RESET_GRADE } from '../actions/gradeActions'
 
 const initialState = {
     grades: [],
     grade_select: {},
+    isFetchingGrades: false
 }
 
 const gradeReducer = (state = initialState, action) => {
     switch (action.type) {
 
+        case START_FETCH_GRADES:
+            return {
+                ...state,
+                isFetchingGrades: true
+            }
+
+        case FINISH_FETCH_GRADES:
+            return {
+                ...state,
+                isFetchingGrades: false
+            }
+
         case FETCH_GRADES:
             return {
                 ...state,
-                grades: action.payload.grades
+                grades: action.payload.grades,
+                isFetchingGrades: false
             }
 
         case CREATE_GRADE:

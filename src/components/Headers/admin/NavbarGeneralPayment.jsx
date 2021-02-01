@@ -59,66 +59,67 @@ export const NavbarGeneralPayment = () => {
                 <Container >
                     <div className="header-body">
                         <Row className="d-flex justify-content-center">
-                            <Col lg="6" xl="6">
-                                <Card className="card-stats mt--5 mb-4">
-                                    <CardBody>
-                                        <Row>
-                                            <h3 className="mb-0 font-varela ml-3" style={{ fontSize: '20px' }}>Filtro General</h3>
-                                            <Col lg="12">
-                                                <FormGroup className="mb--1">
-                                                    <Input type="select" name="select" defaultValue="0" onChange={changeFilter} disabled={isFetchingData}>
-                                                        <option disabled value="0">Seleccione filtro</option>
-                                                        <option value="1">1 ó mas meses en mora</option>
-                                                        <option value="2">2 ó mas meses en mora</option>
-                                                        <option value="3">3 ó mas meses en mora</option>
-                                                        <option value="4">4 ó mas meses en mora</option>
-                                                        <option value="5">5 ó mas meses en mora</option>
-                                                        <option value="6">6 ó mas meses en mora</option>
-                                                        <option value="7">7 ó mas meses en mora</option>
-                                                        <option value="8">8 ó mas meses en mora</option>
-                                                        <option value="9">9 ó mas meses en mora</option>
-                                                        <option value="10">10 meses en mora</option>
-                                                    </Input>
-                                                </FormGroup>
-                                                <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                                    <DropdownToggle disabled={value === '0'}>
-                                                        <span style={{ color: '#ffe000' }}>
-                                                            <i id='icon-button' className="fas fa-sms fa-3x"></i>
-                                                        </span>
-                                                    </DropdownToggle>
-                                                    <DropdownMenu>
-                                                        <DropdownItem
-                                                            onClick={() => toggleCreateSms(sms_recordatorio)}>
-                                                            Recordatorio de Meses en mora
+                            <Card className="card-stats mt--4 mb-4">
+                                <CardBody>
+                                    <h3 className="mb-0 font-varela ml-3" style={{ fontSize: '20px' }}>Envio Masivo</h3>
+                                    <Row>
+                                        <Col lg='6' xl='6'>
+                                            <FormGroup >
+                                                <Input type="select" name="select" defaultValue="0" onChange={changeFilter} disabled={isFetchingData}>
+                                                    <option disabled value="0">Seleccione filtro</option>
+                                                    <option value="1">1 ó mas meses en mora</option>
+                                                    <option value="2">2 ó mas meses en mora</option>
+                                                    <option value="3">3 ó mas meses en mora</option>
+                                                    <option value="4">4 ó mas meses en mora</option>
+                                                    <option value="5">5 ó mas meses en mora</option>
+                                                    <option value="6">6 ó mas meses en mora</option>
+                                                    <option value="7">7 ó mas meses en mora</option>
+                                                    <option value="8">8 ó mas meses en mora</option>
+                                                    <option value="9">9 ó mas meses en mora</option>
+                                                    <option value="10">10 meses en mora</option>
+                                                </Input>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col lg='6' xl='6'>
+                                            <UncontrolledDropdown direction="left" className=" mb-1">
+                                                <DropdownToggle disabled={value === '0'}>
+                                                    <span style={{ color: '#ffe000' }}>
+                                                        <i id='icon-button' className="fas fa-sms fa-3x"></i>
+                                                    </span>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem
+                                                        onClick={() => toggleCreateSms(sms_recordatorio)}>
+                                                        Recordatorio de Meses en mora
                                                 </DropdownItem>
-                                                        <DropdownItem disabled>Action</DropdownItem>
-                                                        <DropdownItem>
-                                                            Circular de Cobro
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                    <DropdownItem>
+                                                        Circular de Cobro
                                                 </DropdownItem>
-                                                    </DropdownMenu>
-                                                </UncontrolledDropdown>
-                                                <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                                    <DropdownToggle disabled={value === '0'}>
-                                                        <span style={{ color: '#f14336' }}>
-                                                            <i id='icon-button' className="far fa-envelope fa-3x"></i>
-                                                        </span>
-                                                    </DropdownToggle>
-                                                    <DropdownMenu>
-                                                        <DropdownItem onClick={() => sentEmails(email_recordatorio)}>
-                                                            Recordatorio de Meses en mora
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
+                                            <UncontrolledDropdown direction="left" className=" mb-1">
+                                                <DropdownToggle disabled={value === '0'}>
+                                                    <span style={{ color: '#f14336' }}>
+                                                        <i id='icon-button' className="far fa-envelope fa-3x"></i>
+                                                    </span>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem onClick={() => sentEmails(email_recordatorio)}>
+                                                        Recordatorio de Meses en mora
                                                 </DropdownItem>
-                                                        <DropdownItem disabled>Action</DropdownItem>
-                                                        <DropdownItem
-                                                            onClick={console.log()}>
-                                                            Circular de Cobro
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                    <DropdownItem
+                                                        onClick={console.log()}>
+                                                        Circular de Cobro
                                                 </DropdownItem>
-                                                    </DropdownMenu>
-                                                </UncontrolledDropdown>
-                                            </Col>
-                                        </Row>
-                                    </CardBody>
-                                </Card>
-                            </Col>
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
+                                        </Col>
+                                    </Row>
+                                </CardBody>
+                            </Card>
+
                         </Row>
                     </div>
                 </Container>

@@ -143,7 +143,7 @@ const ModalCreateCompromise = ({ show, toggle, student }) => {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="success" disabled={isSubmitting || !isValid} type='submit'>Crear</Button>
-                            <Button color="secondary" onClick={toggle}>Cancel</Button>
+                            <Button color="secondary" onClick={toggle}>Cancelar</Button>
                         </ModalFooter>
                     </Form>
                 )

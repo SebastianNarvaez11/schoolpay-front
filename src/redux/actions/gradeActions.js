@@ -3,6 +3,8 @@ import { Toast } from '../../assets/alerts'
 import Swal from 'sweetalert2'
 import { host } from '../../helpers/host.js'
 
+export const START_FETCH_GRADES = 'START_FETCH_GRADES'
+export const FINISH_FETCH_GRADES = 'FINISH_FETCH_GRADES'
 export const FETCH_GRADES = 'FETCH_GRADES'
 export const CREATE_GRADE = 'CREATE_GRADE'
 export const UPDATE_GRADE = 'UPDATE_GRADE'
@@ -13,6 +15,8 @@ export const RESET_GRADE = 'RESET_GRADE'
 
 
 export const fetchGrades = () => async (dispatch) => {
+
+    dispatch({ type: START_FETCH_GRADES })
 
     let url = `${host}api/v1/school/grade/`
     await axios.get(url)
@@ -26,10 +30,11 @@ export const fetchGrades = () => async (dispatch) => {
         })
         .catch(error => {
             console.log(error)
+            dispatch({ type: FINISH_FETCH_GRADES })
             Swal.fire({
                 icon: 'error',
                 showConfirmButton: true,
-                text: Object.values(error.response.data)[0]
+                text: 'Upss! Ha ocurrido un error al cargar los grados'
             })
         })
 }

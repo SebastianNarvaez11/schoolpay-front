@@ -15,7 +15,8 @@ export const RESET_STUDENT_SELECT = 'RESET_STUDENT_SELECT'
 export const UPDATE_STUDENT_SELECT = 'UPDATE_STUDENT_SELECT'
 export const UPDATE_STUDENT_FULL = 'UPDATE_STUDENT_FULL'
 export const FETCH_DATA_GRAPHICS = 'FETCH_DATA_GRAPHICS'
-export const FETCHING_DATA_GRAPHICS = 'FETCHING_DATA_GRAPHICS'
+export const START_FETCH_DATA_GRAPHICS = 'START_FETCH_DATA_GRAPHICS'
+export const FINISH_FETCH_DATA_GRAPHICS = 'FINISH_FETCH_DATA_GRAPHICS'
 
 export const fetchStudents = () => async (dispatch) => {
 
@@ -37,6 +38,7 @@ export const fetchStudents = () => async (dispatch) => {
             Swal.fire({
                 icon: 'error',
                 showConfirmButton: true,
+                text: 'Upss! Ha ocurrido un problema al cargar los estudiantes'
             })
         })
 }
@@ -217,31 +219,32 @@ export const filterStudentsGrade = (grade, schedule) => async (dispatch) => {
             Swal.fire({
                 icon: 'error',
                 showConfirmButton: true,
-                text: error
+                text: 'Upps! Ha ocurrido un error al cargar los estudiantes'
             })
         })
 }
 
 export const fetchDataGraphics = () => async (dispatch) => {
 
-    dispatch({type : FETCHING_DATA_GRAPHICS})
+    dispatch({ type: START_FETCH_DATA_GRAPHICS })
 
     let url = `${host}api/v1/users/student/list/debt/`
     axios.get(url)
         .then(response => {
             dispatch({
-                type : FETCH_DATA_GRAPHICS,
+                type: FETCH_DATA_GRAPHICS,
                 payload: {
-                    students : response.data
+                    students: response.data
                 }
             })
         })
         .catch(error => {
             console.log(error)
+            dispatch({ type: FINISH_FETCH_DATA_GRAPHICS })
             Swal.fire({
                 icon: 'error',
                 showConfirmButton: true,
-                text: Object.values(error.response.data)[0]
+                text: 'Upss! Ha ocurrido un error al cargar los datos'
             })
         })
 }

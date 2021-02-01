@@ -15,7 +15,7 @@ const NavbarAdmin = () => {
                 <span className="navbar-toggler-icon" onClick={() => dispatch(toggleSidebar())} ></span>
             </Button>
             <NavbarText className='mr-auto'>
-                {current_user.type !== 1 && <img alt="logo_de_schoolpay" src={title} height='60' />}
+                <img alt="logo_de_schoolpay" src={title} height='60' />
             </NavbarText>
             <NavbarText className='text-white mr-3 p-2 bd-highlight font-varela'>{current_user.first_name} {current_user.last_name}</NavbarText>
             <UncontrolledDropdown className='mb-1 bd-highlight'>

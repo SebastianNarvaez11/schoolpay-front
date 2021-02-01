@@ -4,9 +4,38 @@ import Swal from 'sweetalert2'
 import { host } from '../../helpers/host.js'
 import { UPDATE_STUDENT, UPDATE_STUDENT_SELECT } from '../actions/studentActions'
 
+export const START_FETCH_PAYMENTS = 'START_FETCH_PAYMENTS'
+export const FINISH_FETCH_PAYMENTS = 'FINISH_FETCH_PAYMENTS'
+export const FETCH_PAYMENTS = 'FETCH_PAYMENTS'
 export const CREATE_PAYMENT = 'CREATE_PAYMENT'
 export const DELETE_PAYMENT = 'DELETE_PAYMENT'
 
+export const fetchPayments = () => async (dispatch) => {
+
+    dispatch({ type: START_FETCH_PAYMENTS })
+
+    let url = `${host}api/v1/payments/student/list/`
+
+    await axios.get(url)
+        .then(response => {
+            dispatch({
+                type: FETCH_PAYMENTS,
+                payload: {
+                    payments: response.data
+                }
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({ type: FINISH_FETCH_PAYMENTS })
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: 'Upss! Ha ocurrido un error al cargar los pagos'
+            })
+        })
+
+}
 
 export const createPaymentManual = (payment) => async (dispatch) => {
 

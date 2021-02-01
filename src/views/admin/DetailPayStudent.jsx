@@ -308,13 +308,13 @@ export const DetailPayStudent = () => {
                                 <Col lg="9" md="12" sm="12">
                                     {student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0 &&
                                         <>
-                                        <h3 className="float-right mt--5 badge badge-warning text-wrap" style={{ fontSize: '14px' }}>
-                                            Compromiso Pendinte: {student_full.student.compromises.filter(compromise => compromise.state === 1)[0].date_pay}
-                                            <PDFDownloadLink className="btn btn-success btn-sm ml-3" document={<CompromisePDF compromise={student_full.student.compromises.filter(compromise => compromise.state === 1)[0]} student={student_full}/>} fileName="somename.pdf">
-                                                {({ blob, url, loading, error }) => (loading ? 'Loading document...' : ' Descargar ')}
-                                            </PDFDownloadLink>
-                                        </h3>
-                                            
+                                            <h3 className="float-right mt--5 badge badge-warning text-wrap" style={{ fontSize: '14px' }}>
+                                                Compromiso Pendinte: {student_full.student.compromises.filter(compromise => compromise.state === 1)[0].date_pay}
+                                                <PDFDownloadLink className="btn btn-success btn-sm ml-3" document={<CompromisePDF compromise={student_full.student.compromises.filter(compromise => compromise.state === 1)[0]} student={student_full} />} fileName="somename.pdf">
+                                                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : ' Descargar ')}
+                                                </PDFDownloadLink>
+                                            </h3>
+
                                         </>
                                     }
                                     <BarPayment student={student_full.student} />
@@ -369,75 +369,80 @@ export const DetailPayStudent = () => {
                                 </Col>
 
                                 <Col lg="3" md="12" sm="12">
-                                    <Formik
-                                        initialValues={{
-                                            value: student_full.student.monthly_payment,
-                                            description: 'Pago manual'
+                                    {!student_full.student.coverage && <>
+                                        <Formik
+                                            initialValues={{
+                                                value: student_full.student.monthly_payment,
+                                                description: 'Pago manual'
+                                            }}
+
+                                            enableReinitialize
+
+                                            validationSchema={formSchema}
+
+                                            onSubmit={(values, formikBag) => {
+                                                const payment = {
+                                                    value: values.value,
+                                                    reference: 'Pago Manual',
+                                                    method: 'Manual',
+                                                    description: values.description,
+                                                    student: student_full.student.id
+                                                }
+
+                                                dispatch(createPaymentManual(payment))
+                                                formikBag.setSubmitting(false)
+                                            }}
+                                        >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
+                                            return (
+                                                <Form>
+                                                    <Card body outline color="success">
+                                                        <h3 className="mb-0 font-varela" style={{ fontSize: '16px' }}>Registrar Pago: </h3>
+                                                        <FormGroup >
+                                                            <InputGroup >
+                                                                <Input name='description' placeholder="Concepto" type="text"
+                                                                    value={values.description}
+                                                                    onBlur={handleBlur('description')}
+                                                                    onChange={handleChange('description')} />
+                                                            </InputGroup>
+                                                            <ErrorMessage name="description" render={msg => <div className='error-text'>{msg}</div>} />
+                                                        </FormGroup>
+                                                        <FormGroup >
+                                                            <InputGroup className="mt--2">
+                                                                <InputGroupAddon addonType="prepend">
+                                                                    <InputGroupText>
+                                                                        <i className="fas fa-dollar-sign" />
+                                                                    </InputGroupText>
+                                                                </InputGroupAddon>
+                                                                <Input name='value' placeholder="Ingrese un valor" type="number"
+                                                                    max={student_full.student.total_year - student_full.student.total_paid}
+                                                                    value={values.value}
+                                                                    onBlur={handleBlur('value')}
+                                                                    onChange={handleChange('value')} />
+                                                            </InputGroup>
+                                                            <ErrorMessage name="value" render={msg => <div className='error-text'>{msg}</div>} />
+                                                        </FormGroup>
+                                                        <Button className="mt--2" color="success" type="submit" disabled={isSubmitting || !isValid}>Registrar</Button>
+                                                    </Card>
+                                                </Form>
+                                            )
                                         }}
+                                        </Formik>
 
-                                        enableReinitialize
+                                        <Card body outline color="primary" className='mt-2'>
+                                            <h3 className="mb-0 mt--2 font-varela" style={{ fontSize: '14px' }}>Compromisos de Pago: </h3>
+                                            <Row>
+                                                <Col lg='6'>
+                                                    <Button className="mt-2 btn-block" color="primary" disabled={student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0} onClick={toggleCompromise}>Nuevo</Button>
+                                                </Col>
+                                                <Col lg='6'>
+                                                    <Button className="mt-2 btn-block" color="warning" disabled={student_full.student.compromises.length === 0 && true} onClick={toggleHistorial}>Historial</Button>
+                                                </Col>
+                                            </Row>
+                                        </Card>
+                                    </>
 
-                                        validationSchema={formSchema}
+                                    }
 
-                                        onSubmit={(values, formikBag) => {
-                                            const payment = {
-                                                value: values.value,
-                                                reference: 'Pago Manual',
-                                                method: 'Manual',
-                                                description: values.description,
-                                                student: student_full.student.id
-                                            }
-
-                                            dispatch(createPaymentManual(payment))
-                                            formikBag.setSubmitting(false)
-                                        }}
-                                    >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
-                                        return (
-                                            <Form>
-                                                <Card body outline color="success">
-                                                    <h3 className="mb-0 font-varela" style={{ fontSize: '16px' }}>Registrar Pago: </h3>
-                                                    <FormGroup >
-                                                        <InputGroup >
-                                                            <Input name='description' placeholder="Concepto" type="text"
-                                                                value={values.description}
-                                                                onBlur={handleBlur('description')}
-                                                                onChange={handleChange('description')} />
-                                                        </InputGroup>
-                                                        <ErrorMessage name="description" render={msg => <div className='error-text'>{msg}</div>} />
-                                                    </FormGroup>
-                                                    <FormGroup >
-                                                        <InputGroup className="mt--2">
-                                                            <InputGroupAddon addonType="prepend">
-                                                                <InputGroupText>
-                                                                    <i className="fas fa-dollar-sign" />
-                                                                </InputGroupText>
-                                                            </InputGroupAddon>
-                                                            <Input name='value' placeholder="Ingrese un valor" type="number"
-                                                                max={student_full.student.total_year - student_full.student.total_paid}
-                                                                value={values.value}
-                                                                onBlur={handleBlur('value')}
-                                                                onChange={handleChange('value')} />
-                                                        </InputGroup>
-                                                        <ErrorMessage name="value" render={msg => <div className='error-text'>{msg}</div>} />
-                                                    </FormGroup>
-                                                    <Button className="mt--2" color="success" type="submit" disabled={isSubmitting || !isValid}>Registrar</Button>
-                                                </Card>
-                                            </Form>
-                                        )
-                                    }}
-                                    </Formik>
-                                    <Card body outline color="primary" className='mt-2'>
-                                        <h3 className="mb-0 mt--2 font-varela" style={{ fontSize: '14px' }}>Compromisos de Pago: </h3>
-                                        <Row>
-                                            <Col lg='6'>
-                                                <Button className="mt-2 btn-block" color="primary" disabled={student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0} onClick={toggleCompromise}>Nuevo</Button>
-                                            </Col>
-                                            <Col lg='6'>
-                                                <Button className="mt-2 btn-block" color="warning" disabled={student_full.student.compromises.length === 0 && true} onClick={toggleHistorial}>Historial</Button>
-                                            </Col>
-                                        </Row>
-
-                                    </Card>
                                     <Row className="mt-2 mb-3 d-flex justify-content-center">
                                         <UncontrolledDropdown direction="left" className="mt-1 mb-1">
                                             <DropdownToggle>
@@ -523,7 +528,7 @@ export const DetailPayStudent = () => {
                 <ModalSendSms show={modalSms.show} msg={modalSms.message} user={student_full} toggle={toggleCreateSms} />
                 <ModalSpinner isLoading={sending} text={'Enviando ...'} />
                 {student_full.student && <ModalCreateCompromise show={showCompromise} toggle={toggleCompromise} student={student_full} />}
-                {student_full.student && <ModalListCompromise show={showHistorial} toggle={toggleHistorial} compromises={student_full.student.compromises} student={student_full}/>}
+                {student_full.student && <ModalListCompromise show={showHistorial} toggle={toggleHistorial} compromises={student_full.student.compromises} student={student_full} />}
                 {showUpdate.data && <ModalUpdateStudent show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
             </Container >
         </>

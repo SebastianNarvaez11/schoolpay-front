@@ -9,7 +9,7 @@ import { Card, CardHeader, Container, Row, Spinner, UncontrolledDropdown, Dropdo
 import { ToastConfirmSendSms } from '../../assets/alerts'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
 import { sendEmailMassive } from '../../redux/actions/contactAction'
-import { formatNumber, scheduleFormat, initialCharge } from '../../helpers/functions'
+import { formatNumber, scheduleFormat } from '../../helpers/functions'
 import { sms_recordatorio, email_recordatorio } from '../../helpers/messages'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -236,11 +236,11 @@ export const PaymentGrades = () => {
                 );
             }
         },
-        {
-            title: 'Periodo',
-            dataIndex: 'periodo',
-            render: (text, row) => `${initialCharge(row.student.initial_charge)}`,
-        },
+        // {
+        //     title: 'Periodo',
+        //     dataIndex: 'periodo',
+        //     render: (text, row) => `${initialCharge(row.student.initial_charge)}`,
+        // },
         {
             title: 'Wpp',
             dataIndex: 'id',

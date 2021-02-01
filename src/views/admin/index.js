@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import { fetchGrades } from "../../redux/actions/gradeActions";
 import { fetchStudents } from "../../redux/actions/studentActions";
 import { fetchAdminUsers } from "../../redux/actions/adminActions";
+import { fetchPayments } from '../../redux/actions/paymentActions'
 import NavbarAdmin from "../../components/Navbars/NavbarAdmin";
 import AdminSidebar from "../../components/Sidebars/AdminSidebar";
 import Home from "./Home";
@@ -13,6 +14,7 @@ import DetailPayStudent from "./DetailPayStudent";
 import PaymentGrades from "./PaymentGrades";
 import PaymentGeneral from './PaymentGeneral'
 import Reports from './Reports'
+import ListPayments from './ListPayments'
 
 const RouterIndex = ({ match }) => {
     const stateSidebar = useSelector((state) => state.uiReducer.sidebar);
@@ -22,6 +24,7 @@ const RouterIndex = ({ match }) => {
         dispatch(fetchStudents());
         dispatch(fetchGrades());
         dispatch(fetchAdminUsers());
+        dispatch(fetchPayments())
     }, [dispatch]);
 
     return (<div >
@@ -38,6 +41,7 @@ const RouterIndex = ({ match }) => {
                     <Route exact path={`${match.path}/payments/grades`} component={PaymentGrades} />
                     <Route exact path={`${match.path}/payments/general`} component={PaymentGeneral} />
                     <Route exact path={`${match.path}/payments/reports`} component={Reports} />
+                    <Route exact path={`${match.path}/payments/list`} component={ListPayments} />
                 </Switch>
             </div>
         </div>

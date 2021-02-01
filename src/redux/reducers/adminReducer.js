@@ -1,16 +1,30 @@
-import {FETCH_ADMIN_USERS, CREATE_ADMIN, UPDATE_ADMIN, DELETE_USER} from '../actions/adminActions'
+import { START_FETCH_USERS, FINISH_FETCH_USERS, FETCH_USERS, CREATE_ADMIN, UPDATE_ADMIN, DELETE_USER } from '../actions/adminActions'
 
 const initialState = {
     users: [],//usuarios de tipo admin
+    isFetchingUsers: false
 }
 
 const AdminReducer = (state = initialState, action) => {
     switch (action.type) {
 
-        case FETCH_ADMIN_USERS:
+        case START_FETCH_USERS:
             return {
                 ...state,
-                users: action.payload.users,
+                isFetchingUsers: true
+            }
+
+        case FINISH_FETCH_USERS:
+            return {
+                ...state,
+                isFetchingUsers: false
+            }
+        
+        case FETCH_USERS:
+            return {
+                ...state,
+                users : action.payload.users,
+                isFetchingUsers: false
             }
 
         case CREATE_ADMIN:

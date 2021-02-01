@@ -7,7 +7,7 @@ import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import ModalCreateAdmin from '../../components/Admin/ModalCreateAdmin'
 import ModalUpdateAdmin from '../../components/Admin/ModalUpdateAdmin'
 import { Table, Input, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Col, Button } from "reactstrap";
+import { Card, CardHeader, Container, Row, Col, Button, Spinner } from "reactstrap";
 import { ToastDelete } from '../../assets/alerts'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2'
 
 const ListUser = () => {
 
-    const users = useSelector(state => state.adminReducer.users)
+    const { users, isFetchingUsers } = useSelector(state => state.adminReducer)
 
     const dispatch = useDispatch()
 
@@ -54,20 +54,17 @@ const ListUser = () => {
     const toggleState = (row) => {
         row.is_active = !row.is_active
         let url = `${host}api/v1/users/update/${row.id}/`
-        console.log(row)
         axios.put(url, row)
             .then(response => {
-                console.log(response.data)
                 dispatch(updateAdmin(row.admin, response.data))
             })
             .catch(error => {
                 Swal.fire({
                     icon: 'error',
                     showConfirmButton: true,
-                    text: Object.values(error.response.data)[0]
+                    text: error
                 })
             })
-
     }
 
     //logica para borrar
@@ -226,32 +223,39 @@ const ListUser = () => {
 
     return (
         <>
-        <HeaderAdmin/>
-        <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
-            <Row>
-                <div className="col">
-                    <Card id='card_shadow' className="animate__animated animate__fadeIn">
-                        <CardHeader className="border-0">
-                            <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Usuarios</h3>
-                            <Button className='btn btn-outline-success float-right  mt--5' color="success" type="button" onClick={toggleCreate} >
-                                Nuevo <i className="fas fa-plus ml-1"></i>
-                            </Button>
-                        </CardHeader>
-                        <Container fluid>
-                            <Table className='table-responsive'
-                                dataSource={users}
-                                columns={columns}
-                                rowKey="id"
-                                pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20', '30'] }} />
-                        </Container>
-                    </Card>
-                </div>
-            </Row>
-            <ModalCreateAdmin show={showCreate} toggle={toggleCreate} />
-            {showUpdate.data && <ModalUpdateAdmin show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
-        </Container >
+            <HeaderAdmin />
+            <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
+                <Row>
+                    <div className="col">
+                        <Card id='card_shadow' className="animate__animated animate__fadeIn d-flex justify-content-center">
+                            <CardHeader className="border-0">
+                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Usuarios</h3>
+                                <Button className='btn btn-outline-success float-right  mt--5' color="success" type="button" onClick={toggleCreate} >
+                                    Nuevo <i className="fas fa-plus ml-1"></i>
+                                </Button>
+                            </CardHeader>
+                            {isFetchingUsers
+                                ?
+                                <div style={{ margin: 40, alignSelf: 'center' }}>
+                                    <Spinner className="float-right" color="primary" />
+                                </div>
+                                :
+                                <Container fluid>
+                                    <Table className='table-responsive'
+                                        dataSource={users}
+                                        columns={columns}
+                                        rowKey="id"
+                                        pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20', '30'] }} />
+                                </Container>
+                            }
+                        </Card>
+                    </div>
+                </Row>
+                <ModalCreateAdmin show={showCreate} toggle={toggleCreate} />
+                {showUpdate.data && <ModalUpdateAdmin show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
+            </Container >
         </>
-        
+
     )
 }
 

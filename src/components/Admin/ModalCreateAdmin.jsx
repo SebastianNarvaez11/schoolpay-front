@@ -202,7 +202,7 @@ const ModalCreateAdmin = ({ show, toggle }) => {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="success" disabled={isSubmitting || !isValid} type='submit'>Crear</Button>
-                            <Button color="secondary" onClick={toggle}>Cancel</Button>
+                            <Button color="secondary" onClick={toggle}>Cancelar</Button>
                         </ModalFooter>
                     </Form>
                 )

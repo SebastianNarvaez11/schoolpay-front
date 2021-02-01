@@ -11,7 +11,10 @@ export const BarPayment = ({ student }) => {
         // calculamos los meses pagados
         const months_pay = Math.floor(total_paid / monthly_payment)
 
-        if ((months_pay + (10 - student.initial_charge)) === 1) {
+        if (student.coverage) {
+            return <p>COBERTURA</p>;
+
+        } else if ((months_pay + (10 - student.initial_charge)) === 1) {
             return <p>FEBRERO</p>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 2) {
@@ -49,10 +52,13 @@ export const BarPayment = ({ student }) => {
         const n = student.monthOwed
         const e = student.amountOwed
 
-        if (student.compromises.filter(compromise => compromise.state === 1).length !== 0){
+        if (student.coverage) {
+            return "info"
+        }
+        else if (student.compromises.filter(compromise => compromise.state === 1).length !== 0) {
             return "primary"
         }
-        else if(n >= 3) {
+        else if (n >= 3) {
             return "danger"
         }
         else if (n >= 1 || e !== 0) {
@@ -64,7 +70,7 @@ export const BarPayment = ({ student }) => {
     }
 
     return (
-        <Progress style={{ height: '50px' }} animated color={changeColorBar()} value={total_paid} max={total_year}>
+        <Progress style={{ height: '50px' }} animated={!student.coverage} color={changeColorBar()} value={student.coverage ? total_year: total_paid} max={total_year}>
             <div className="d-flex justify-content-around mt-3 font-varela">
                 {renderMonths()}
             </div>

@@ -382,7 +382,7 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="success" disabled={isSubmittig || !isValid} type='submit'>Crear</Button>
-                            <Button color="secondary" onClick={toggle}>Cancel</Button>
+                            <Button color="secondary" onClick={toggle}>Cancelar</Button>
                         </ModalFooter>
                     </Form>
                 )

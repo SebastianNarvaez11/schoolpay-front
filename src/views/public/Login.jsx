@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
-import { Container, Card, CardBody, Form, Button, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Col } from 'reactstrap'
+import { Container, Card, CardBody, Form, Button, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import ModalSpinner from '../../components/Spinner/ModalSpinner'
 import { loginUser } from '../../redux/actions/authActions'
 import '../../assets/css/login.css'
@@ -42,12 +42,7 @@ const Login = () => {
 
     return (
         < >
-            <Row className='text-center'>
-                <Col>
-                    <p id='welcome' className='mt-5'>Bienvenido!</p>
-                    <p id='text-info'>SchoolPay es la plataforma que le permite realizar y gestinar los pagos de <br /> las colegiaturas de sus hijos.</p>
-                </Col>
-            </Row>
+
             <Container className='d-flex justify-content-center'>
                 <Card id='card-login' style={{ width: '30rem' }}>
                     <CardBody>
@@ -91,13 +86,6 @@ const Login = () => {
                         </Container>
                     </CardBody>
                 </Card>
-            </Container>
-            <Container>
-                <Row className='pt-5'>
-                    <Col>
-                        <Link to='' id='text-info'>© 2020 Sebas Developer</Link>
-                    </Col>
-                </Row>
             </Container>
             <ModalSpinner isLoading={startLogin} text={'Ingresando...'} />
         </>

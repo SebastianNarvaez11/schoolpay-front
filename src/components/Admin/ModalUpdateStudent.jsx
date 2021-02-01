@@ -342,7 +342,7 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="success" type='submit' disabled={isSubmitting || !isValid}>Actualizar</Button>
-                            <Button color="secondary" onClick={toggle}>Cancel</Button>
+                            <Button color="secondary" onClick={toggle}>Cancelar</Button>
                         </ModalFooter>
                     </Form>
                 )

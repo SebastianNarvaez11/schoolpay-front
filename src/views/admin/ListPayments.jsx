@@ -1,63 +1,20 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteGrade } from '../../redux/actions/gradeActions'
 //components
 import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
-import ModalCreateGrade from '../../components/Admin/ModalCreateGrade'
-import ModalUpdateGrade from '../../components/Admin/ModalUpdateGrade'
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Col, Button, Spinner } from "reactstrap";
-import { ToastDelete } from '../../assets/alerts'
+import { Card, CardHeader, Container, Row, Col, Spinner } from "reactstrap";
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 
 
-const ListGrades = () => {
+const ListPayments = () => {
 
-    const { grades, isFetchingGrades } = useSelector(state => state.gradeReducer)
+    const { payments, isFetchingPayments } = useSelector(state => state.paymentReducer)
 
     const dispatch = useDispatch()
-
-
-    // //logica modales
-    const [showCreate, setShowCreate] = useState(false)
-    const [showUpdate, setShowUpdate] = useState({
-        show: false,
-        data: null
-    })
-
-    const toggleCreate = () => {
-        setShowCreate(!showCreate)
-    }
-
-    const toggleOpenUpdate = (row) => {
-        setShowUpdate({
-            show: true,
-            data: row
-        })
-    }
-
-    const toggleCloseUpdate = () => {
-        setShowUpdate({
-            show: false,
-            data: null
-        })
-    }
-
-
-    //logica para borrar
-    const handleDelete = (row) => {
-        ToastDelete(`¿ Esta seguro de eliminar el grado "${row.name}" y todos sus estudiantes ?`)
-            .fire().then((result) => {
-                if (result.value) {
-                    row.deleted = true
-                    dispatch(deleteGrade(row))
-                }
-            })
-    }
-
 
     //Logica para la datatable
     const [searchText, setSearchText] = useState('')
@@ -119,41 +76,33 @@ const ListGrades = () => {
 
     const columns = [
         {
-            title: 'Grado',
-            dataIndex: "name",
-            ...getColumnSearchProps("name"),
-            render: (text, row) => `${row.name} `,
+            title: 'Estudiante',
+            dataIndex: ['student', 'user', 'last_name'],
+            render: (text, row) => `${row.student.user.last_name} ${row.student.user.first_name} `,
         },
         {
-            title: 'Mensualidad',
-            dataIndex: 'monthly_pay',
-            ...getColumnSearchProps("monthly_pay"),
-            render: (text, row) => `${row.monthly_pay}`,
+            title: 'Valor',
+            dataIndex: 'value',
+            ...getColumnSearchProps("value"),
+            render: (text, row) => `${row.value}`,
         },
         {
-            title: 'Matricula',
-            dataIndex: 'enrollment',
-            ...getColumnSearchProps("enrollment"),
-            render: (text, row) => `${row.enrollment}`,
+            title: 'Fecha',
+            dataIndex: 'create',
+            ...getColumnSearchProps("create"),
+            render: (text, row) => `${row.create}`,
         },
         {
-            title: 'Acciones',
-            dataIndex: 'id',
-            render: (text, row) => {
-                return (
-                    <Row>
-                        <Col>
-                            <span style={{ fontSize: '20px', color: '#faad14' }} className='mr-4' onClick={() => toggleOpenUpdate(row)}>
-                                <i id='icon-button' className="far fa-edit"></i>
-                            </span>
-
-                            <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
-                                <i id='icon-button' className="far fa-trash-alt"></i>
-                            </span>
-                        </Col>
-                    </Row>
-                );
-            },
+            title: 'Descripcion',
+            dataIndex: 'description',
+            ...getColumnSearchProps("description"),
+            render: (text, row) => `${row.description}`,
+        },
+        {
+            title: 'Referencia',
+            dataIndex: 'reference',
+            ...getColumnSearchProps("reference"),
+            render: (text, row) => `${row.reference}`,
         },
     ];
 
@@ -166,33 +115,30 @@ const ListGrades = () => {
                     <div className="col">
                         <Card id='card_shadow' className="animate__animated animate__fadeIn">
                             <CardHeader className="border-0">
-                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Grados</h3>
-                                <Button className='btn btn-outline-success float-right  mt--5' color="success" type="button" onClick={toggleCreate}  >
-                                    Nuevo <i className="fas fa-plus ml-1"></i>
-                                </Button>
+                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Pagos</h3>
                             </CardHeader>
-                            {isFetchingGrades ?
+                            {isFetchingPayments ?
                                 <div style={{ margin: 40, alignSelf: 'center' }}>
                                     <Spinner className="float-right" color="primary" />
                                 </div>
                                 :
                                 <Container fluid>
                                     <Table className='table-responsive'
-                                        dataSource={grades}
+                                        dataSource={payments}
                                         columns={columns}
                                         rowKey="id"
-                                        pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20', '30'] }} />;
+                                        size="small"
+                                        scroll={{ x: 'calc(700px + 50%)', y: 500 }}
+                                                pagination={false}  />
                                 </Container>
                             }
                         </Card>
                     </div>
                 </Row>
-                <ModalCreateGrade show={showCreate} toggle={toggleCreate} />
-                {showUpdate.data && <ModalUpdateGrade show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
             </Container >
         </>
 
     )
 }
 
-export default ListGrades
+export default ListPayments
