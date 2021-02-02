@@ -230,7 +230,7 @@ const ListUser = () => {
                         <Card id='card_shadow' className="animate__animated animate__fadeIn d-flex justify-content-center">
                             <CardHeader className="border-0">
                                 <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Usuarios</h3>
-                                <Button className='btn btn-outline-success float-right  mt--5' color="success" type="button" onClick={toggleCreate} >
+                                <Button className='btn btn-success float-right  mt--5' color="success" type="button" onClick={toggleCreate} >
                                     Nuevo <i className="fas fa-plus ml-1"></i>
                                 </Button>
                             </CardHeader>

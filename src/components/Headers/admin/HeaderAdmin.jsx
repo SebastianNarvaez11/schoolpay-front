@@ -7,11 +7,11 @@ const HeaderAdmin = () => {
   const { students } = useSelector(state => state.studentReducer)
 
   return (
-    <div className="header bg-gradient-info pb-9  pt-md-4" >
+    <div className="header bg-blue pb-9  pt-md-4" >
       <Container >
         <div className="header-body">
           {/* Card stats */}
-          <Row className='d-flex justify-content-center'>
+          {/* <Row className='d-flex justify-content-center'>
             <Col lg="6" xl="3">
               <Card className="card-stats mb-4 mb-xl-0">
                 <CardBody>
@@ -60,7 +60,7 @@ const HeaderAdmin = () => {
                 </CardBody>
               </Card>
             </Col>
-          </Row>
+          </Row> */}
         </div>
       </Container>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink, Link, withRouter } from 'react-router-dom'
-import logo from '../../assets/img/logosp2.png';
+import logo from '../../assets/img/colegio.png';
 
 
 
@@ -8,9 +8,9 @@ const Sidebar = (props) => {
     return (
         <div className='navbar-vertical fixed-left' id="sidebar-wrapper">
             <div className="sidebar-heading text-center mt-3 mb-5">
-                <Link to='/'><img
+            <Link to='/'><img
                     className='pro-img'
-                    alt=""
+                    alt="logo colegio"
                     src={logo}
                 /></Link>
             </div>

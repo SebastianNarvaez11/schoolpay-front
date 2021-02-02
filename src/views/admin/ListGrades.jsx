@@ -12,6 +12,7 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
+import { formatNumber } from '../../helpers/functions'
 
 
 const ListGrades = () => {
@@ -128,13 +129,13 @@ const ListGrades = () => {
             title: 'Mensualidad',
             dataIndex: 'monthly_pay',
             ...getColumnSearchProps("monthly_pay"),
-            render: (text, row) => `${row.monthly_pay}`,
+            render: (text, row) => `$ ${formatNumber(row.monthly_pay)}`,
         },
         {
             title: 'Matricula',
             dataIndex: 'enrollment',
             ...getColumnSearchProps("enrollment"),
-            render: (text, row) => `${row.enrollment}`,
+            render: (text, row) => `$ ${formatNumber(row.enrollment)}`,
         },
         {
             title: 'Acciones',
@@ -167,7 +168,7 @@ const ListGrades = () => {
                         <Card id='card_shadow' className="animate__animated animate__fadeIn">
                             <CardHeader className="border-0">
                                 <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Grados</h3>
-                                <Button className='btn btn-outline-success float-right  mt--5' color="success" type="button" onClick={toggleCreate}  >
+                                <Button className='btn btn-success float-right  mt--5' color="success" type="button" onClick={toggleCreate}  >
                                     Nuevo <i className="fas fa-plus ml-1"></i>
                                 </Button>
                             </CardHeader>
@@ -181,7 +182,9 @@ const ListGrades = () => {
                                         dataSource={grades}
                                         columns={columns}
                                         rowKey="id"
-                                        pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20', '30'] }} />;
+                                        size="small"
+                                        scroll={{ x: 'calc(700px + 50%)', y: 500 }}
+                                        pagination={false} />
                                 </Container>
                             }
                         </Card>

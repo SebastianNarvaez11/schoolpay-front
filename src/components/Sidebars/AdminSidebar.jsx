@@ -9,7 +9,6 @@ const Sidebar = (props) => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggle = () => setIsOpen(!isOpen);
 
     return (
         <div className='navbar-vertical fixed-left' id="sidebar-wrapper">
@@ -36,7 +35,7 @@ const Sidebar = (props) => {
                         <i className="fas fa-house-user mr-3 ml-3" style={{ color: '#faad14' }}></i> Grados
                     </NavLink>
                 </li>
-                <li className={isOpen ? 'navActive' : 'navActiveHover'} onClick={toggle}>
+                <li className={isOpen ? 'navActive' : 'navActiveHover'} onClick={() => setIsOpen(true)}>
                     <Link activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela'>
                         <i className="fas fa-balance-scale mr-3 ml-3" style={{ color: '#5257f2' }}></i> Control de Pagos
                     </Link>
@@ -52,7 +51,11 @@ const Sidebar = (props) => {
                             <i className="fas fa-house-user mr-3 ml-3" style={{ color: '#5257f2' }}></i> Por Grado
                         </NavLink>
                     </li>
-
+                    <li className={props.location.pathname === '/admin/compromises' ? 'navActive' : 'navActiveHover'}>
+                        <NavLink exact to='/admin/compromises' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela' style={{ background: '#f6f9fc' }}>
+                            <i className="fas fa-calendar-check mr-3 ml-3" style={{ color: '#5257f2' }}></i> Compromisos
+                        </NavLink>
+                    </li>
                 </Collapse>
                 <li className={props.location.pathname === '/admin/payments/list' ? 'navActive' : 'navActiveHover'} onClick={() => setIsOpen(false)}>
                     <NavLink exact to='/admin/payments/list' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela'>

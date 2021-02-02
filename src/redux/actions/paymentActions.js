@@ -9,6 +9,11 @@ export const FINISH_FETCH_PAYMENTS = 'FINISH_FETCH_PAYMENTS'
 export const FETCH_PAYMENTS = 'FETCH_PAYMENTS'
 export const CREATE_PAYMENT = 'CREATE_PAYMENT'
 export const DELETE_PAYMENT = 'DELETE_PAYMENT'
+export const START_FETCH_COMPROMISES = 'START_FETCH_COMPROMISES'
+export const FINISH_FETCH_COMPROMISES = 'FINISH_FETCH_COMPROMISES'
+export const FETCH_COMPROMISES = 'FETCH_COMPROMISES'
+export const CREATE_COMPROMISE = 'CREATE_COMPROMISE'
+
 
 export const fetchPayments = () => async (dispatch) => {
 
@@ -44,6 +49,17 @@ export const createPaymentManual = (payment) => async (dispatch) => {
         .then(response => {
             console.log(response.data)
             Toast.fire({ icon: 'success', title: 'Pago registrado con exito' })//alert success
+            const pay = response.data.payment
+            pay.student = response.data.student
+            pay.student.user = response.data.student
+
+            dispatch({
+                type: CREATE_PAYMENT,
+                payload: {
+                    payment: pay
+                }
+            })
+
             dispatch({
                 type: UPDATE_STUDENT,
                 payload: {
@@ -83,6 +99,7 @@ export const deletePaymentManual = (id) => async (dispatch) => {
                     user: response.data
                 }
             })
+
             dispatch({
                 type: UPDATE_STUDENT_SELECT,
                 payload: {
@@ -107,12 +124,25 @@ export const createCompromise = (compromise, toggle) => async (dispatch) => {
     await axios.post(url, compromise)
         .then(response => {
             console.log(response)
+
+            const comp = response.data.student.compromises[0]
+            comp.student = response.data.student
+            comp.student.user = response.data
+
+            dispatch({
+                type: CREATE_COMPROMISE,
+                payload: {
+                    compromise: comp
+                }
+            })
+
             dispatch({
                 type: UPDATE_STUDENT,
                 payload: {
                     user: response.data
                 }
             })
+
             dispatch({
                 type: UPDATE_STUDENT_SELECT,
                 payload: {
@@ -130,4 +160,32 @@ export const createCompromise = (compromise, toggle) => async (dispatch) => {
                 text: Object.values(error.response.data)[0]
             })
         })
+}
+
+export const fetchCompromises = () => async (dispatch) => {
+
+    dispatch({ type: START_FETCH_COMPROMISES })
+
+    let url = `${host}api/v1/payments/compromise/list/`
+
+    await axios.get(url)
+        .then(response => {
+            console.log(response.data)
+            dispatch({
+                type: FETCH_COMPROMISES,
+                payload: {
+                    compromises: response.data
+                }
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({ type: FINISH_FETCH_COMPROMISES })
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: 'Upss! Ha ocurrido un error al cargar los compromisos de pago'
+            })
+        })
+
 }

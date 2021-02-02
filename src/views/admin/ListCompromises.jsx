@@ -3,36 +3,20 @@ import { useDispatch, useSelector } from 'react-redux'
 //components
 import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Spinner } from "reactstrap";
+import { Card, CardHeader, Container, Row, Col, Button, Spinner } from "reactstrap";
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
-import { fetchPayments } from '../../redux/actions/paymentActions'
-import ReactHTMLTableToExcel from 'react-html-table-to-excel'
+import { formatNumber } from '../../helpers/functions'
 
 
-const ListPayments = () => {
+const ListCompromises = () => {
 
-    const { payments, isFetchingPayments } = useSelector(state => state.paymentReducer)
+    const { compromises, isFetchingCompromises } = useSelector(state => state.paymentReducer)
 
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        if (payments.length === 0) {
-            dispatch(fetchPayments())
-        }
-
-    }, [dispatch])
-
-
-    useEffect(() => {
-        if (payments.length !== 0) {
-            const table = window.document.querySelectorAll('table');
-            table[1].setAttribute('id', 'table-report');
-        }
-
-    }, [payments.length])
 
     //Logica para la datatable
     const [searchText, setSearchText] = useState('')
@@ -107,25 +91,70 @@ const ListPayments = () => {
             title: 'Valor',
             dataIndex: 'value',
             ...getColumnSearchProps("value"),
-            render: (text, row) => `${row.value}`,
+            render: (text, row) => `$ ${formatNumber(row.value)}`,
         },
         {
-            title: 'Fecha',
+            title: 'Mensualidades a Pagar',
+            dataIndex: 'month_owed',
+            ...getColumnSearchProps("month_owed"),
+            render: (text, row) => `${row.month_owed}`,
+        },
+        {
+            title: 'Fecha Creacion',
             dataIndex: 'create',
             ...getColumnSearchProps("create"),
             render: (text, row) => `${row.create}`,
         },
         {
-            title: 'Descripcion',
-            dataIndex: 'description',
-            ...getColumnSearchProps("description"),
-            render: (text, row) => `${row.description}`,
+            title: 'Fecha Estupilada',
+            dataIndex: 'date_pay',
+            ...getColumnSearchProps("date_pay"),
+            render: (text, row) => `${row.date_pay}`,
         },
         {
-            title: 'Referencia',
-            dataIndex: 'reference',
-            ...getColumnSearchProps("reference"),
-            render: (text, row) => `${row.reference}`,
+            title: 'Estado',
+            dataIndex: 'state',
+            filters: [
+                {
+                    text: 'Pendiente',
+                    value: 1,
+                },
+                {
+                    text: 'Incumplido',
+                    value: 2,
+                },
+                {
+                    text: 'Cumplido',
+                    value: 3,
+                },
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) => String(record.state).indexOf(value) === 0,
+            render: (text, row) => {
+                return (
+                    <>
+                        {row.state === 1 && <div className="badge badge-warning text-wrap">Pendiente</div>}
+                        {row.state === 2 && <div className="badge badge-danger text-wrap">Incumplido</div>}
+                        {row.state === 3 && <div className="badge badge-success text-wrap">Cumplido</div>}
+                    </>
+                )
+            }
+
+        },
+        {
+            title: 'Acciones',
+            dataIndex: 'id',
+            render: (text, row) => {
+                return (
+                    <Row>
+                        <Col>
+                            <span style={{ fontSize: '20px', color: '#f5222d' }} >
+                                <i id='icon-button' className="far fa-trash-alt"></i>
+                            </span>
+                        </Col>
+                    </Row>
+                );
+            },
         },
     ];
 
@@ -138,23 +167,17 @@ const ListPayments = () => {
                     <div className="col">
                         <Card id='card_shadow' className="animate__animated animate__fadeIn">
                             <CardHeader className="border-0">
-                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Pagos</h3>
-                                <ReactHTMLTableToExcel
-                                    id="test-table-xls-button"
-                                    className="btn btn-success float-right  mt--5"
-                                    table="table-report"
-                                    filename="Reporte"
-                                    sheet="Reporte"
-                                    buttonText="Reporte Excel" />
+                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Compromisos de Pago</h3>
+
                             </CardHeader>
-                            {isFetchingPayments ?
+                            {isFetchingCompromises ?
                                 <div style={{ margin: 40, alignSelf: 'center' }}>
                                     <Spinner className="float-right" color="primary" />
                                 </div>
                                 :
                                 <Container fluid>
                                     <Table className='table-responsive'
-                                        dataSource={payments}
+                                        dataSource={compromises}
                                         columns={columns}
                                         rowKey="id"
                                         size="small"
@@ -171,4 +194,4 @@ const ListPayments = () => {
     )
 }
 
-export default ListPayments
+export default ListCompromises

@@ -55,9 +55,6 @@ export const BarPayment = ({ student }) => {
         if (student.coverage) {
             return "info"
         }
-        else if (student.compromises.filter(compromise => compromise.state === 1).length !== 0) {
-            return "primary"
-        }
         else if (n >= 3) {
             return "danger"
         }

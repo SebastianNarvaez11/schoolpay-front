@@ -32,12 +32,12 @@ export const HeaderSearchStudent = () => {
 
   return (
     <>
-      <div className="header bg-gradient-info pb-9  pt-md-4" >
+      <div className="header bg-blue pb-9  pt-md-4" >
         <Container >
           <div className="header-body">
             <Row className="d-flex justify-content-center">
               <Col lg="6" xl="6">
-                <Card className="card-stats mb-4 mb-xl-0">
+                <Card className="card-stats  mb-xl-0">
                   <CardBody>
                     <Row>
                       <div className="col ">
@@ -59,7 +59,7 @@ export const HeaderSearchStudent = () => {
             
           </div>
         </Container>
-        <Button color="success" className='ml-5' onClick={toggleCreate}><i className="fas fa-user-plus"></i> <br/>Crear Estudiante</Button>
+        <Button color="success" className='ml-5 mt--5' onClick={toggleCreate}><i className="fas fa-user-plus"></i> <br/>Crear Estudiante</Button>
       </div>
       <ModalCreateStudent show={showCreate} toggle={toggleCreate} />
     </>

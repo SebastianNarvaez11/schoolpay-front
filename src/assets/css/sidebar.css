@@ -59,12 +59,12 @@
 }
 
 .navActive {
-    border-left: 3px solid #11c2ef;
+    border-left: 3px solid #5257f2;
     color: #1d2129;
 }
 
 .navActiveHover:hover {
-    border-left: 3px solid #11c2ef;
+    border-left: 3px solid #5257f2;
     color: #1d2129;
 }
 
@@ -105,4 +105,12 @@
     -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     border-radius: 100%;
+}
+
+.bg-blue {
+    background-color:#5257f2;
+}
+
+.row-white {
+    width: 100%;
 }

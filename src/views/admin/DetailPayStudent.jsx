@@ -276,7 +276,7 @@ export const DetailPayStudent = () => {
             <HeaderSearchStudent />
             <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
                 {Object.keys(student_full).length === 0
-                    ? <h3 className="d-flex justify-content-center mb-0 mt-5 font-varela" style={{ fontSize: '25px', position: 'relative' }}>Seleccione un estudiante... </h3>
+                    ? <h3 className="d-flex justify-content-center mb-0 mt-5 font-varela" style={{ fontSize: '25px', position: 'relative' }}>Ingresa el codigo o nombre del estudiante </h3>
                     : <Card id='card_shadow' className="animate__animated animate__fadeIn">
                         <CardHeader className="border-0">
                             <h3 className="font-varela float-right" style={{ fontSize: '25px' }}>

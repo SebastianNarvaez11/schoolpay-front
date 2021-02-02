@@ -11,7 +11,7 @@ const HeaderStudent = () => {
 
   return (
     <>
-      <div className="header bg-gradient-info pb-9  pt-md-4" >
+      <div className="header bg-blue pb-9  pt-md-4" >
         <Container >
           <div className="header-body">
             <Row className='d-flex justify-content-center'>

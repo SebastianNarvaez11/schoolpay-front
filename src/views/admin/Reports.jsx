@@ -228,7 +228,7 @@ export const Reports = () => {
 
                                 <ReactHTMLTableToExcel
                                     id="test-table-xls-button"
-                                    className="btn btn-outline-success float-right  mt--5"
+                                    className="btn btn-success float-right  mt--5"
                                     table="table-report"
                                     filename="Reporte"
                                     sheet="Reporte"
