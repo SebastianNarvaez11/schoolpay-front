@@ -27,28 +27,28 @@ const Sidebar = (props) => {
                 </li>
                 <li className={props.location.pathname === '/admin/users' ? 'navActive' : 'navActiveHover'} onClick={() => setIsOpen(false)}>
                     <NavLink exact to='/admin/users' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela'>
-                        <i className="fas fa-user mr-3 ml-3" style={{ color: '#52bdfc' }}></i> Usuarios
+                        <i className="fas fa-user-shield mr-3 ml-3" style={{ color: '#52bdfc' }}></i> Usuarios
                     </NavLink>
                 </li>
                 <li className={props.location.pathname === '/admin/grades' ? 'navActive' : 'navActiveHover'} onClick={() => setIsOpen(false)}>
                     <NavLink exact to='/admin/grades' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela'>
-                        <i className="fas fa-house-user mr-3 ml-3" style={{ color: '#faad14' }}></i> Grados
+                        <i className="fas fa-users mr-3 ml-3" style={{ color: '#faad14' }}></i> Grados
                     </NavLink>
                 </li>
                 <li className={isOpen ? 'navActive' : 'navActiveHover'} onClick={() => setIsOpen(true)}>
                     <Link activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela'>
-                        <i className="fas fa-balance-scale mr-3 ml-3" style={{ color: '#5257f2' }}></i> Control de Pagos
+                        <i className="fas fa-balance-scale-left mr-3 ml-3" style={{ color: '#5257f2' }}></i> Control de Pagos
                     </Link>
                 </li>
                 <Collapse isOpen={isOpen}>
                     <li className={props.location.pathname === '/admin/payments/students' ? 'navActive' : 'navActiveHover'}>
                         <NavLink exact to='/admin/payments/students' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela' style={{ background: '#f6f9fc' }}>
-                            <i className="fas fa-chalkboard-teacher mr-3 ml-3" style={{ color: '#5257f2' }}></i> Por Estudiante
+                            <i className="fas fa-user-graduate mr-3 ml-3" style={{ color: '#5257f2' }}></i> Por Estudiante
                         </NavLink>
                     </li>
                     <li className={props.location.pathname === '/admin/payments/grades' ? 'navActive' : 'navActiveHover'}>
                         <NavLink exact to='/admin/payments/grades' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela' style={{ background: '#f6f9fc' }}>
-                            <i className="fas fa-house-user mr-3 ml-3" style={{ color: '#5257f2' }}></i> Por Grado
+                            <i className="fas fa-users mr-3 ml-3" style={{ color: '#5257f2' }}></i> Por Grado
                         </NavLink>
                     </li>
                     <li className={props.location.pathname === '/admin/compromises' ? 'navActive' : 'navActiveHover'}>
