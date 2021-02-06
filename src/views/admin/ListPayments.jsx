@@ -100,7 +100,7 @@ const ListPayments = () => {
         },
         {
             title: 'Grado',
-            dataIndex: ['student', 'gtade', 'name'],
+            dataIndex: ['student', 'grade', 'name'],
             render: (text, row) => `${row.student.grade.name}`,
         },
         {
