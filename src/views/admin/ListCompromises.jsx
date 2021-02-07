@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 //components
 import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Col, Button, Spinner } from "reactstrap";
+import { Card, CardHeader, Container, Row, Col, Spinner } from "reactstrap";
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
@@ -15,7 +15,6 @@ const ListCompromises = () => {
 
     const { compromises, isFetchingCompromises } = useSelector(state => state.paymentReducer)
 
-    const dispatch = useDispatch()
 
 
     //Logica para la datatable

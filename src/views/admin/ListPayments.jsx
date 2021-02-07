@@ -23,7 +23,7 @@ const ListPayments = () => {
             dispatch(fetchPayments())
         }
 
-    }, [dispatch])
+    }, [dispatch, payments.length])
 
 
     useEffect(() => {

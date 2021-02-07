@@ -48,7 +48,7 @@ export const amountOfDebtors = (grade, schedule, students) => {
 export const totalOwed = (grade, schedule, students) => {
     let total = 0
     const students_filter = students.filter(student => student.student.grade.id === grade && student.student.schedule === schedule)
-    students_filter.map(student => {
+    students_filter.forEach(student => {
         total = total + student.student.amountOwed
     })
     return total

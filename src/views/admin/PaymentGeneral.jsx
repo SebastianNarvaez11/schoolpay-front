@@ -69,7 +69,7 @@ export const PaymentGeneral = () => {
 
     const totalData = (data) => {
         let total = 0
-        data.map(grado => {
+        data.forEach(grado => {
             total = total + grado.value
         })
         return total

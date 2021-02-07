@@ -1,10 +1,8 @@
 import React from "react";
-import { useSelector } from 'react-redux'
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import {  Container } from "reactstrap";
 
 const HeaderAdmin = () => {
 
-  const { students } = useSelector(state => state.studentReducer)
 
   return (
     <div className="header bg-blue pb-9  pt-md-4" >
