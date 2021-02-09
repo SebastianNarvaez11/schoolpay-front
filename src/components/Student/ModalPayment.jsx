@@ -88,7 +88,7 @@ const ModalPayment = ({ show, referenceCode, toggle }) => {
                         <Input name="buyerFullName" type="hidden" value={current_user.first_name + ' ' + current_user.last_name} />
                         <Input name="extra1" type="hidden" value={current_user.student.id} />
                         <Input name="responseUrl" type="hidden" value="https://www.sp-academicoelpoblado.com/student" />
-                        <Input name="confirmationUrl" type="hidden" value="https://schoolpay.herokuapp.com/api/v1/payments/student/create/" />
+                        <Input name="confirmationUrl" type="hidden" value="https://academico-sp.herokuapp.com/api/v1/payments/student/create/" />
                     </Row>
                 </ModalBody>
                 <ModalFooter>
