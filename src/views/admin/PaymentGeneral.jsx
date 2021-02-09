@@ -21,6 +21,7 @@ export const PaymentGeneral = () => {
 
     const [selected, setSelected] = useState('')
     const [selected2, setSelected2] = useState('')
+    const [selected3, setSelected3] = useState('')
 
     const compare = (
         { series, point }, { series: targetSeries, point: targetPoint },
@@ -37,6 +38,13 @@ export const PaymentGeneral = () => {
         const target = targets[0];
         if (target) {
             setSelected2(selected2[0] && compare(selected2[0], target) ? [] : [target])
+        }
+    }
+
+    const handleSelect2 = ({ targets }) => {
+        const target = targets[0];
+        if (target) {
+            setSelected3(selected3[0] && compare(selected3[0], target) ? [] : [target])
         }
     }
 
@@ -119,7 +127,7 @@ export const PaymentGeneral = () => {
                                             Estudiantes en Mora
                                                 </CardTitle>
                                         <span className="h2 font-weight-bold mb-0">
-                                             {formatNumber(totalData(getData2(1)) + totalData(getData2(2)))}
+                                            {formatNumber(totalData(getData2(1)) + totalData(getData2(2)))}
                                         </span>
                                     </div>
                                     <Col className="col-auto">
@@ -237,25 +245,43 @@ export const PaymentGeneral = () => {
                                     ? <> <Spinner type="grow" color="primary" />
                                         <Spinner type="grow" color="primary" />
                                         <Spinner type="grow" color="primary" /> </>
-                                    : <Chart data={getData()}>
-                                        <ValueScale name="value" />
-                                        <ArgumentAxis />
-                                        <ValueAxis scaleName="value" />
+                                    :
 
-                                        <BarSeries
-                                            name="Units Sold"
-                                            scaleName="value"
-                                            valueField="value"
-                                            argumentField="name"
-                                        />
-                                        <Title
-                                            text="Ingresos Generados Por Grados"
-                                        />
-                                        <Animation />
-                                        <EventTracker />
-                                        <Tooltip />
-                                        <HoverState />
-                                    </Chart>
+                                    <div>
+                                        <Row>
+                                            <Col lg={6}>
+                                                <h3 className="font-varela " style={{ fontSize: 20, marginTop: 20 }}>
+                                                    {selected3.length ? getData()[selected3[0].point].name : undefined}<br />
+                                                    {selected3.length ? `$${formatNumber(getData()[selected3[0].point].value)}` : undefined}
+                                                </h3>
+
+                                            </Col>
+                                            <Col lg={6}>
+                                                <h3 className="font-varela float-right " style={{ fontSize: 20, marginTop: 20 }}>
+                                                    Total: ${formatNumber(totalData(getData()))}
+                                                </h3>
+                                            </Col>
+                                        </Row>
+                                        <Chart data={getData()}>
+                                            <ValueScale name="value" />
+                                            <ArgumentAxis />
+                                            <ValueAxis scaleName="value" />
+
+                                            <BarSeries
+                                                name="Units Sold"
+                                                scaleName="value"
+                                                valueField="value"
+                                                argumentField="name"
+                                            />
+                                            <Title
+                                                text="Ingresos Generados Por Grados"
+                                            />
+                                            <Animation />
+                                            <EventTracker />
+                                            <EventTracker onClick={handleSelect2} />
+                                            <SelectionState selection={selected3} />
+                                        </Chart>
+                                    </div>
                                 }
                             </Container>
                         </Card>
