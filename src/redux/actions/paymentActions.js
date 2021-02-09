@@ -50,7 +50,7 @@ export const createPaymentManual = (payment) => async (dispatch) => {
             console.log(response.data)
             Toast.fire({ icon: 'success', title: 'Pago registrado con exito' })//alert success
             const pay = response.data.payment
-            pay.student = response.data.student
+            pay.student = response.data.student.student
             pay.student.user = response.data.student
 
             dispatch({
