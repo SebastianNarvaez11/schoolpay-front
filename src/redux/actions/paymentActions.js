@@ -33,11 +33,11 @@ export const fetchPayments = () => async (dispatch) => {
         .catch(error => {
             console.log(error)
             dispatch({ type: FINISH_FETCH_PAYMENTS })
-            Swal.fire({
-                icon: 'error',
-                showConfirmButton: true,
-                text: 'Upss! Ha ocurrido un error al cargar los pagos'
-            })
+            // Swal.fire({
+            //     icon: 'error',
+            //     showConfirmButton: true,
+            //     text: 'Upss! Ha ocurrido un error al cargar los pagos'
+            // })
         })
 
 }

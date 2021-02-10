@@ -149,8 +149,8 @@ const ModalCreateAdmin = ({ show, toggle }) => {
                                             onBlur={handleBlur('type')}
                                             onChange={handleChange('type')}>
                                             <option value='0' disabled>Seleccione un perfil...</option>
-                                            <option value={2}>Administrador</option>
-                                            <option value={3}>Asistente</option>
+                                            <option value={1}>Administrador</option>
+                                            <option value={2}>Asistente</option>
                                         </Input>
                                         <ErrorMessage name="type" render={msg => <div className='error-text'>{msg}</div>} />
                                     </FormGroup>
