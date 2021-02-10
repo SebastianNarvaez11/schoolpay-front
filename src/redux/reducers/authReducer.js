@@ -31,7 +31,6 @@ const authReducer = (state = initialState, action) => {
             }
 
         case LOGOUT:
-            window.location.reload()
             return {
                 isLoggedIn: false,
                 token: null,
