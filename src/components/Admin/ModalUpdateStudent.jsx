@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 const digitsOnly = (value) => /^\d+$/.test(value)
 const formSchema = yup.object().shape({
     username: yup.string().min(3, 'El nombre de usuario debe tener minimo 3 caracteres').required('El nombre de usuario es obligatorio'),
-    code: yup.string().min(4, 'El codigo debe tener minimo 4 digitos').max(5, 'El codigo debe tener maximo 5 digitos'),
+    code: yup.string().min(1, 'El codigo debe tener minimo 1 digito').max(5, 'El codigo debe tener maximo 5 digitos'),
     email: yup.string().email('Ingrese un email valido').required('El email es obligatorio'),
     first_name: yup.string().min(2, 'El nombre debe tener minimo 2 caracteres')
         .test('alphabets', 'El nombre solo debe contener letras', (value) => { return /^[A-Za-zÑñ ]+$/.test(value); })
