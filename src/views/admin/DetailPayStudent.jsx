@@ -10,7 +10,7 @@ import ModalListCompromise from '../../components/Admin/ModalListCompromise'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
 import { createPaymentManual, deletePaymentManual } from '../../redux/actions/paymentActions'
 import { scheduleFormat, formatNumber, initialCharge } from '../../helpers/functions.js'
-import { email_recordatorio, sms_recordatorio } from '../../helpers/messages'
+import { email_recordatorio, sms_recordatorio, wpp_recordatorio } from '../../helpers/messages'
 import { Table, Input as InputAnd, Button as ButtonAntd } from 'antd';
 import {
     Card, CardHeader, Container, Row, Col, Spinner, FormGroup, InputGroup, InputGroupAddon, InputGroupText,
@@ -452,15 +452,15 @@ export const DetailPayStudent = () => {
                                             </DropdownToggle>
                                             <DropdownMenu>
                                                 <DropdownItem disabled>{student_full.student.phone1}</DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone1)}>
-                                                    Mensaje de Cobro
+                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone1)}>
+                                                    Mensaje de Recordatorio
                                                 </DropdownItem>
                                                 <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone1)}>
                                                     Mensaje de Cobro
                                                 </DropdownItem>
                                                 <DropdownItem disabled>{student_full.student.phone2}</DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone2)}>
-                                                    Mensaje de Cobro
+                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone2)}>
+                                                    Mensaje de Recordatorio
                                                 </DropdownItem>
                                                 <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone2)}>
                                                     Mensaje de Cobro
