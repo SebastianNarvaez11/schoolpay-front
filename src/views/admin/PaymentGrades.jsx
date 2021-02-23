@@ -10,7 +10,7 @@ import { ToastConfirmSendSms } from '../../assets/alerts'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
 import { sendEmailMassive } from '../../redux/actions/contactAction'
 import { formatNumber, scheduleFormat } from '../../helpers/functions'
-import { sms_recordatorio, email_recordatorio, wpp_recordatorio } from '../../helpers/messages'
+import { sms_recordatorio, email_recordatorio, wpp_recordatorio, wpp_recordatorio2 } from '../../helpers/messages'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
@@ -258,12 +258,18 @@ export const PaymentGrades = () => {
                             <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone1)}>
                                 Mensaje de Recordatorio
                             </DropdownItem>
+                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(row), row.student.phone1)}>
+                                Mensaje de Recordatorio 2
+                            </DropdownItem>
                             <DropdownItem onClick={() => senWppSms(sms_recordatorio(row), row.student.phone1)}>
                                 Mensaje de Cobro
                             </DropdownItem>
                             <DropdownItem disabled>{row.student.phone2}</DropdownItem>
                             <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone2)}>
                                 Mensaje de Recordatorio
+                            </DropdownItem>
+                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(row), row.student.phone2)}>
+                                Mensaje de Recordatorio 2
                             </DropdownItem>
                             <DropdownItem onClick={() => senWppSms(sms_recordatorio(row), row.student.phone2)}>
                                 Mensaje de Cobro
