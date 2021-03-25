@@ -1,11 +1,26 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { Modal, ModalBody, ModalFooter, ModalHeader, Button, Container, Row, Col } from 'reactstrap'
 import { formatNumber } from '../../helpers/functions'
 import { Table } from 'antd';
+import { ToastDelete } from '../../assets/alerts'
+import { deleteCompromises } from '../../redux/actions/paymentActions'
 
 
 
 const ModalListCompromise = ({ show, toggle, compromises, student }) => {
+
+    const dispatch = useDispatch()
+    
+    const handleDeleteCompromise = (row) => {
+        ToastDelete(`¿ Esta seguro de eliminar este compromiso de pago ?`)
+            .fire().then((result) => {
+                if (result.value) {
+                    dispatch(deleteCompromises(row.id))
+                }
+            })
+    }
+
 
     const columns = [
         {
@@ -65,7 +80,8 @@ const ModalListCompromise = ({ show, toggle, compromises, student }) => {
                 return (
                     <Row>
                         <Col>
-                            <span style={{ fontSize: '20px', color: '#f5222d' }} >
+                            <span style={{ fontSize: '20px', color: '#f5222d' }}
+                                onClick={() => handleDeleteCompromise(row)}>
                                 <i id='icon-button' className="far fa-trash-alt"></i>
                             </span>
                         </Col>

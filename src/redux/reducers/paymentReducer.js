@@ -1,4 +1,14 @@
-import { FETCH_PAYMENTS, START_FETCH_PAYMENTS, FINISH_FETCH_PAYMENTS, CREATE_PAYMENT, START_FETCH_COMPROMISES, FINISH_FETCH_COMPROMISES, FETCH_COMPROMISES, CREATE_COMPROMISE } from '../actions/paymentActions'
+import {
+    FETCH_PAYMENTS,
+    START_FETCH_PAYMENTS,
+    FINISH_FETCH_PAYMENTS,
+    CREATE_PAYMENT,
+    START_FETCH_COMPROMISES,
+    FINISH_FETCH_COMPROMISES,
+    FETCH_COMPROMISES,
+    CREATE_COMPROMISE,
+    DELETE_COMPROMISE
+} from '../actions/paymentActions'
 
 const initialState = {
     payments: [],
@@ -60,11 +70,11 @@ const paymentReducer = (state = initialState, action) => {
                 compromises: [action.payload.compromise, ...state.compromises],
             }
 
-        // case DELETE_USER:
-        //     return {
-        //         ...state,
-        //         users: state.users.filter(user => user.id !== action.payload.user.id)
-        //     }
+        case DELETE_COMPROMISE:
+            return {
+                ...state,
+                compromises: state.compromises.filter(compromise => compromise.id !== action.payload.compromise)
+            }
 
 
         default:

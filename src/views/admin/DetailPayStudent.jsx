@@ -8,9 +8,9 @@ import { ModalSpinner } from '../../components/Spinner/ModalSpinner'
 import ModalCreateCompromise from '../../components/Admin/ModalCreateCompromise'
 import ModalListCompromise from '../../components/Admin/ModalListCompromise'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
-import { createPaymentManual, deletePaymentManual } from '../../redux/actions/paymentActions'
+import { createPaymentManual, deletePaymentManual, deleteCompromises } from '../../redux/actions/paymentActions'
 import { scheduleFormat, formatNumber, initialCharge } from '../../helpers/functions.js'
-import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_recordatorio2} from '../../helpers/messages'
+import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_recordatorio2 } from '../../helpers/messages'
 import { Table, Input as InputAnd, Button as ButtonAntd } from 'antd';
 import {
     Card, CardHeader, Container, Row, Col, Spinner, FormGroup, InputGroup, InputGroupAddon, InputGroupText,
@@ -38,6 +38,7 @@ const formSchema = yup.object().shape({
 
 export const DetailPayStudent = () => {
 
+    const { current_user } = useSelector(state => state.authReducer)
     const { student_full, isFetching } = useSelector(state => state.studentReducer)
     const { sending } = useSelector(state => state.contactReducer)
     const dispatch = useDispatch()
@@ -152,6 +153,16 @@ export const DetailPayStudent = () => {
     }, [dispatch])
 
     // borrar pago manual
+    const handleDeleteCompromise = (row) => {
+        ToastDelete(`¿ Esta seguro de eliminar este compromiso de pago ?`)
+            .fire().then((result) => {
+                if (result.value) {
+                    dispatch(deleteCompromises(row.id))
+                }
+            })
+    }
+
+    // borrar pago manual
     const handleDelete = (row) => {
         ToastDelete(`¿ Esta seguro de eliminar este pago ?`)
             .fire().then((result) => {
@@ -210,8 +221,8 @@ export const DetailPayStudent = () => {
                     textToHighlight={text.toString()}
                 />
             ) : (
-                    text
-                ),
+                text
+            ),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -256,12 +267,14 @@ export const DetailPayStudent = () => {
             render: (text, row) => {
                 return (
                     <Row>
-                        <Col>{row.method === 'Manual' &&
-                            <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
-                                <i id='icon-button' className="far fa-trash-alt"></i>
-                            </span>
+                        {current_user.type === 1 &&
+                            <Col>{row.method === 'Manual' &&
+                                <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
+                                    <i id='icon-button' className="far fa-trash-alt"></i>
+                                </span>
+                            }
+                            </Col>
                         }
-                        </Col>
                     </Row>
                 );
             },
@@ -281,21 +294,23 @@ export const DetailPayStudent = () => {
                         <CardHeader className="border-0">
                             <h3 className="font-varela float-right" style={{ fontSize: '25px' }}>
                                 {student_full.student.code}
-                                <Row>
-                                    <Col>
-                                        <span style={{ fontSize: '20px', color: '#597ef7' }} onClick={() => toggleState(student_full)}>
-                                            <i id='icon-button' className="fas fa-sync-alt rotateMe"></i>
-                                        </span>
+                                {current_user.type === 1 &&
+                                    <Row>
+                                        <Col>
+                                            <span style={{ fontSize: '20px', color: '#597ef7' }} onClick={() => toggleState(student_full)}>
+                                                <i id='icon-button' className="fas fa-sync-alt rotateMe"></i>
+                                            </span>
 
-                                        <span style={{ fontSize: '20px', color: '#faad14' }} className='ml-4 mr-4' onClick={() => toggleOpenUpdate(student_full)}>
-                                            <i id='icon-button' className="far fa-edit"></i>
-                                        </span>
+                                            <span style={{ fontSize: '20px', color: '#faad14' }} className='ml-4 mr-4' onClick={() => toggleOpenUpdate(student_full)}>
+                                                <i id='icon-button' className="far fa-edit"></i>
+                                            </span>
 
-                                        <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDeleteStudent(student_full)}>
-                                            <i id='icon-button' className="far fa-trash-alt"></i>
-                                        </span>
-                                    </Col>
-                                </Row>
+                                            <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDeleteStudent(student_full)}>
+                                                <i id='icon-button' className="far fa-trash-alt"></i>
+                                            </span>
+                                        </Col>
+                                    </Row>
+                                }
                             </h3>
                             <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>
                                 {student_full.last_name + " " + student_full.first_name}
@@ -309,7 +324,14 @@ export const DetailPayStudent = () => {
                                     {student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0 &&
                                         <>
                                             <h3 className="float-right mt--5 badge badge-warning text-wrap" style={{ fontSize: '14px' }}>
-                                                Compromiso Pendinte: {student_full.student.compromises.filter(compromise => compromise.state === 1)[0].date_pay}
+                                                Compromiso Pendiente: {student_full.student.compromises.filter(compromise => compromise.state === 1)[0].date_pay}
+                                                <span style={{ fontSize: '20px', color: '#faad14', marginLeft: 30, alignSelf: 'center' }} >
+                                                    <i id='icon-button' className="far fa-edit"></i>
+                                                </span>
+                                                <span style={{ fontSize: '20px', color: '#f5222d', marginLeft: 10, alignSelf: 'center' }}
+                                                    onClick={() => handleDeleteCompromise(student_full.student.compromises.filter(compromise => compromise.state === 1)[0])}>
+                                                    <i id='icon-button' className="far fa-trash-alt"></i>
+                                                </span>
                                                 <PDFDownloadLink className="btn btn-success btn-sm ml-3" document={<CompromisePDF compromise={student_full.student.compromises.filter(compromise => compromise.state === 1)[0]} student={student_full} />} fileName="somename.pdf">
                                                     {({ blob, url, loading, error }) => (loading ? 'Loading document...' : ' Descargar ')}
                                                 </PDFDownloadLink>
@@ -370,63 +392,66 @@ export const DetailPayStudent = () => {
 
                                 <Col lg="3" md="12" sm="12">
                                     {!student_full.student.coverage && <>
-                                        <Formik
-                                            initialValues={{
-                                                value: student_full.student.monthly_payment,
-                                                description: 'Pago manual'
+                                        {current_user.type === 1 &&
+                                            <Formik
+                                                initialValues={{
+                                                    value: student_full.student.monthly_payment,
+                                                    description: 'Pago manual'
+                                                }}
+
+                                                enableReinitialize
+
+                                                validationSchema={formSchema}
+
+                                                onSubmit={(values, formikBag) => {
+                                                    const payment = {
+                                                        value: values.value,
+                                                        reference: 'Pago Manual',
+                                                        method: 'Manual',
+                                                        description: values.description,
+                                                        student: student_full.student.id
+                                                    }
+
+                                                    dispatch(createPaymentManual(payment))
+                                                    formikBag.setSubmitting(false)
+                                                }}
+                                            >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
+                                                return (
+                                                    <Form>
+                                                        <Card body outline color="success">
+                                                            <h3 className="mb-0 font-varela" style={{ fontSize: '16px' }}>Registrar Pago: </h3>
+                                                            <FormGroup >
+                                                                <InputGroup >
+                                                                    <Input name='description' placeholder="Concepto" type="text"
+                                                                        value={values.description}
+                                                                        onBlur={handleBlur('description')}
+                                                                        onChange={handleChange('description')} />
+                                                                </InputGroup>
+                                                                <ErrorMessage name="description" render={msg => <div className='error-text'>{msg}</div>} />
+                                                            </FormGroup>
+                                                            <FormGroup >
+                                                                <InputGroup className="mt--2">
+                                                                    <InputGroupAddon addonType="prepend">
+                                                                        <InputGroupText>
+                                                                            <i className="fas fa-dollar-sign" />
+                                                                        </InputGroupText>
+                                                                    </InputGroupAddon>
+                                                                    <Input name='value' placeholder="Ingrese un valor" type="number"
+                                                                        max={student_full.student.total_year - student_full.student.total_paid}
+                                                                        value={values.value}
+                                                                        onBlur={handleBlur('value')}
+                                                                        onChange={handleChange('value')} />
+                                                                </InputGroup>
+                                                                <ErrorMessage name="value" render={msg => <div className='error-text'>{msg}</div>} />
+                                                            </FormGroup>
+                                                            <Button className="mt--2" color="success" type="submit" disabled={isSubmitting || !isValid}>Registrar</Button>
+                                                        </Card>
+                                                    </Form>
+                                                )
                                             }}
+                                            </Formik>
+                                        }
 
-                                            enableReinitialize
-
-                                            validationSchema={formSchema}
-
-                                            onSubmit={(values, formikBag) => {
-                                                const payment = {
-                                                    value: values.value,
-                                                    reference: 'Pago Manual',
-                                                    method: 'Manual',
-                                                    description: values.description,
-                                                    student: student_full.student.id
-                                                }
-
-                                                dispatch(createPaymentManual(payment))
-                                                formikBag.setSubmitting(false)
-                                            }}
-                                        >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
-                                            return (
-                                                <Form>
-                                                    <Card body outline color="success">
-                                                        <h3 className="mb-0 font-varela" style={{ fontSize: '16px' }}>Registrar Pago: </h3>
-                                                        <FormGroup >
-                                                            <InputGroup >
-                                                                <Input name='description' placeholder="Concepto" type="text"
-                                                                    value={values.description}
-                                                                    onBlur={handleBlur('description')}
-                                                                    onChange={handleChange('description')} />
-                                                            </InputGroup>
-                                                            <ErrorMessage name="description" render={msg => <div className='error-text'>{msg}</div>} />
-                                                        </FormGroup>
-                                                        <FormGroup >
-                                                            <InputGroup className="mt--2">
-                                                                <InputGroupAddon addonType="prepend">
-                                                                    <InputGroupText>
-                                                                        <i className="fas fa-dollar-sign" />
-                                                                    </InputGroupText>
-                                                                </InputGroupAddon>
-                                                                <Input name='value' placeholder="Ingrese un valor" type="number"
-                                                                    max={student_full.student.total_year - student_full.student.total_paid}
-                                                                    value={values.value}
-                                                                    onBlur={handleBlur('value')}
-                                                                    onChange={handleChange('value')} />
-                                                            </InputGroup>
-                                                            <ErrorMessage name="value" render={msg => <div className='error-text'>{msg}</div>} />
-                                                        </FormGroup>
-                                                        <Button className="mt--2" color="success" type="submit" disabled={isSubmitting || !isValid}>Registrar</Button>
-                                                    </Card>
-                                                </Form>
-                                            )
-                                        }}
-                                        </Formik>
 
                                         <Card body outline color="primary" className='mt-2'>
                                             <h3 className="mb-0 mt--2 font-varela" style={{ fontSize: '14px' }}>Compromisos de Pago: </h3>
@@ -442,89 +467,89 @@ export const DetailPayStudent = () => {
                                     </>
 
                                     }
+                                    {current_user.type === 1 &&
+                                        <Row className="mt-2 mb-3 d-flex justify-content-center">
+                                            <UncontrolledDropdown direction="left" className="mt-1 mb-1">
+                                                <DropdownToggle>
+                                                    <span style={{ color: '#00e676' }}>
+                                                        <i id='icon-button' className="fab fa-whatsapp fa-3x"></i>
+                                                    </span>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem disabled>{student_full.student.phone1}</DropdownItem>
+                                                    <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone1)}>
+                                                        Mensaje de Recordatorio
+                                                </DropdownItem>
+                                                    <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(student_full), student_full.student.phone1)}>
+                                                        Mensaje de Recordatorio 2
+                                                </DropdownItem>
+                                                    <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone1)}>
+                                                        Mensaje de Cobro
+                                                </DropdownItem>
+                                                    <DropdownItem disabled>{student_full.student.phone2}</DropdownItem>
+                                                    <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone2)}>
+                                                        Mensaje de Recordatorio
+                                                </DropdownItem>
+                                                    <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(student_full), student_full.student.phone2)}>
+                                                        Mensaje de Recordatorio 2
+                                                </DropdownItem>
+                                                    <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone2)}>
+                                                        Mensaje de Cobro
+                                                </DropdownItem>
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
 
-                                    <Row className="mt-2 mb-3 d-flex justify-content-center">
-                                        <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                            <DropdownToggle>
-                                                <span style={{ color: '#00e676' }}>
-                                                    <i id='icon-button' className="fab fa-whatsapp fa-3x"></i>
-                                                </span>
-                                            </DropdownToggle>
-                                            <DropdownMenu>
-                                                <DropdownItem disabled>{student_full.student.phone1}</DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone1)}>
-                                                    Mensaje de Recordatorio
+                                            <UncontrolledDropdown direction="left" className="mt-1 mb-1">
+                                                <DropdownToggle>
+                                                    <span style={{ color: '#f14336' }}>
+                                                        <i id='icon-button' className="far fa-envelope fa-3x"></i>
+                                                    </span>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem
+                                                        onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
+                                                        Recordatorio de Meses en mora
                                                 </DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(student_full), student_full.student.phone1)}>
-                                                    Mensaje de Recordatorio 2
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                    <DropdownItem
+                                                        onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
+                                                        Circular de Cobro
                                                 </DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone1)}>
-                                                    Mensaje de Cobro
-                                                </DropdownItem>
-                                                <DropdownItem disabled>{student_full.student.phone2}</DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone2)}>
-                                                    Mensaje de Recordatorio
-                                                </DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(student_full), student_full.student.phone2)}>
-                                                    Mensaje de Recordatorio 2
-                                                </DropdownItem>
-                                                <DropdownItem onClick={() => senWppSms(sms_recordatorio(student_full), student_full.student.phone2)}>
-                                                    Mensaje de Cobro
-                                                </DropdownItem>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
 
-                                        <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                            <DropdownToggle>
-                                                <span style={{ color: '#f14336' }}>
-                                                    <i id='icon-button' className="far fa-envelope fa-3x"></i>
-                                                </span>
-                                            </DropdownToggle>
-                                            <DropdownMenu>
-                                                <DropdownItem
-                                                    onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
-                                                    Recordatorio de Meses en mora
+                                            <UncontrolledDropdown direction="left" className="mt-1 mb-1">
+                                                <DropdownToggle>
+                                                    <span style={{ color: '#f7c02e' }}>
+                                                        <i id='icon-button' className="fas fa-sms fa-3x"></i>
+                                                    </span>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                    <DropdownItem
+                                                        onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
+                                                        Enviar SMS
                                                 </DropdownItem>
-                                                <DropdownItem disabled>Action</DropdownItem>
-                                                <DropdownItem
-                                                    onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
-                                                    Circular de Cobro
-                                                </DropdownItem>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                    <DropdownItem>Another Action</DropdownItem>
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
 
-                                        <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                            <DropdownToggle>
-                                                <span style={{ color: '#f7c02e' }}>
-                                                    <i id='icon-button' className="fas fa-sms fa-3x"></i>
-                                                </span>
-                                            </DropdownToggle>
-                                            <DropdownMenu>
-                                                <DropdownItem disabled>Action</DropdownItem>
-                                                <DropdownItem
-                                                    onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
-                                                    Enviar SMS
-                                                </DropdownItem>
-                                                <DropdownItem disabled>Action</DropdownItem>
-                                                <DropdownItem>Another Action</DropdownItem>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
-
-                                        <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                            <DropdownToggle>
-                                                <span style={{ color: '#297b8f' }}>
-                                                    <i id='icon-button' className="fas fa-file-invoice-dollar fa-3x"></i>
-                                                </span>
-                                            </DropdownToggle>
-                                            <DropdownMenu>
-                                                <DropdownItem disabled>Action</DropdownItem>
-                                                <DropdownItem>Another Action</DropdownItem>
-                                                <DropdownItem disabled>Action</DropdownItem>
-                                                <DropdownItem>Another Action</DropdownItem>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
-                                    </Row>
-
+                                            <UncontrolledDropdown direction="left" className="mt-1 mb-1">
+                                                <DropdownToggle>
+                                                    <span style={{ color: '#297b8f' }}>
+                                                        <i id='icon-button' className="fas fa-file-invoice-dollar fa-3x"></i>
+                                                    </span>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                    <DropdownItem>Another Action</DropdownItem>
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                    <DropdownItem>Another Action</DropdownItem>
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
+                                        </Row>
+                                    }
                                 </Col>
                             </Row>
                         </Container>
