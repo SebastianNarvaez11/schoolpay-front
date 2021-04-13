@@ -13,6 +13,7 @@ export const START_FETCH_COMPROMISES = 'START_FETCH_COMPROMISES'
 export const FINISH_FETCH_COMPROMISES = 'FINISH_FETCH_COMPROMISES'
 export const FETCH_COMPROMISES = 'FETCH_COMPROMISES'
 export const CREATE_COMPROMISE = 'CREATE_COMPROMISE'
+export const UPDATE_COMPROMISE_SINCE_LIST = 'UPDATE_COMPROMISE_SINCE_LIST'
 export const DELETE_COMPROMISE = 'DELETE_COMPROMISE'
 
 
@@ -192,6 +193,78 @@ export const fetchCompromises = () => async (dispatch) => {
 }
 
 
+export const updateCompromiseSinceList = (compromise) => async (dispatch) => {
+
+    let url = `${host}api/v1/payments/compromise/update/${compromise.id}/`
+
+    axios.put(url, compromise)
+        .then(response => {
+            console.log(response.data)
+            dispatch({
+                type: UPDATE_COMPROMISE_SINCE_LIST,
+                payload: {
+                    compromise: response.data
+                }
+            })
+
+            Toast.fire({ icon: 'success', title: 'Compromiso actualizado correctamente' })//alert success
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: Object.values(error.response.data)[0]
+            })
+        })
+}
+
+export const updateCompromiseSinceDetail = (compromise) => async (dispatch) => {
+
+    let url = `${host}api/v1/payments/compromise/update2/${compromise.id}/`
+
+    await axios.put(url, compromise)
+        .then(response => {
+            console.log(response)
+
+            const comp = response.data.student.compromises[0]
+            comp.student = response.data.student
+            comp.student.user = response.data
+
+            dispatch({
+                type: UPDATE_COMPROMISE_SINCE_LIST,
+                payload: {
+                    compromise: comp
+                }
+            })
+
+            dispatch({
+                type: UPDATE_STUDENT,
+                payload: {
+                    user: response.data
+                }
+            })
+
+            dispatch({
+                type: UPDATE_STUDENT_SELECT,
+                payload: {
+                    user: response.data
+                }
+            })
+
+            Toast.fire({ icon: 'success', title: 'Compromiso actualizado correctamente' })//alert success
+            
+        })
+        .catch(error => {
+            console.log(error)
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: Object.values(error.response.data)[0]
+            })
+        })
+}
+
+
 export const deleteCompromises = (id) => async (dispatch) => {
 
     let url = `${host}api/v1/payments/compromises/delete/${id}/`
@@ -220,7 +293,7 @@ export const deleteCompromises = (id) => async (dispatch) => {
                     user: response.data
                 }
             })
-            
+
             Toast.fire({ icon: 'success', title: 'Compromiso eliminado correctamente' })//alert success
         })
         .catch(error => {

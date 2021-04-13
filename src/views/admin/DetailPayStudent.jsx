@@ -8,7 +8,7 @@ import { ModalSpinner } from '../../components/Spinner/ModalSpinner'
 import ModalCreateCompromise from '../../components/Admin/ModalCreateCompromise'
 import ModalListCompromise from '../../components/Admin/ModalListCompromise'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
-import { createPaymentManual, deletePaymentManual, deleteCompromises } from '../../redux/actions/paymentActions'
+import { createPaymentManual, deletePaymentManual, deleteCompromises, updateCompromiseSinceDetail } from '../../redux/actions/paymentActions'
 import { scheduleFormat, formatNumber, initialCharge } from '../../helpers/functions.js'
 import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_recordatorio2 } from '../../helpers/messages'
 import { Table, Input as InputAnd, Button as ButtonAntd } from 'antd';
@@ -178,6 +178,25 @@ export const DetailPayStudent = () => {
         window.open(url, 'Whatsapp', "width=500,height=500,scrollbars=NO")
     }
 
+
+
+    // logica para cambiar el estado del compromiso
+    const toggleAccomplished = (row) => {
+        if (row.state !== 3) {
+            row.state = 3
+            row.student = student_full.student.id
+            dispatch(updateCompromiseSinceDetail(row))
+        }
+    }
+
+    const toggleBreached = (row) => {
+        if (row.state !== 2) {
+            row.state = 2
+            row.student = student_full.student.id
+            dispatch(updateCompromiseSinceDetail(row))
+        }
+    }
+
     //Logica para la datatable
     const [searchText, setSearchText] = useState('')
     const [searchedColumn, setSearchedColumn] = useState('')
@@ -323,18 +342,28 @@ export const DetailPayStudent = () => {
                                 <Col lg="9" md="12" sm="12">
                                     {student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0 &&
                                         <>
-                                            <h3 className="float-right mt--5 badge badge-warning text-wrap" style={{ fontSize: '14px' }}>
+                                            <h3 className="float-right mt--5 badge badge-warning text-wrap d-flex align-items-center" style={{ fontSize: '14px' }}>
                                                 Compromiso Pendiente: {student_full.student.compromises.filter(compromise => compromise.state === 1)[0].date_pay}
-                                                <span style={{ fontSize: '20px', color: '#faad14', marginLeft: 30, alignSelf: 'center' }} >
-                                                    <i id='icon-button' className="far fa-edit"></i>
+
+                                                <span style={{ fontSize: '20px', color: '#2dce89', marginLeft: 30, alignSelf: 'center' }}
+                                                    onClick={() => toggleAccomplished(student_full.student.compromises.filter(compromise => compromise.state === 1)[0])}>
+                                                    <i id='icon-button' className="fas fa-check"></i>
                                                 </span>
+
+                                                <span style={{ fontSize: '20px', color: '#f5222d', marginLeft: 30, alignSelf: 'center' }} 
+                                                onClick={() => toggleBreached(student_full.student.compromises.filter(compromise => compromise.state === 1)[0])}
+                                                >
+                                                    <i id='icon-button' className="fas fa-times"></i>
+                                                </span>
+
+                                                <PDFDownloadLink className="btn btn-success btn-sm ml-3" document={<CompromisePDF compromise={student_full.student.compromises.filter(compromise => compromise.state === 1)[0]} student={student_full} />} fileName="somename.pdf">
+                                                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : ' Descargar ')}
+                                                </PDFDownloadLink>
+
                                                 <span style={{ fontSize: '20px', color: '#f5222d', marginLeft: 10, alignSelf: 'center' }}
                                                     onClick={() => handleDeleteCompromise(student_full.student.compromises.filter(compromise => compromise.state === 1)[0])}>
                                                     <i id='icon-button' className="far fa-trash-alt"></i>
                                                 </span>
-                                                <PDFDownloadLink className="btn btn-success btn-sm ml-3" document={<CompromisePDF compromise={student_full.student.compromises.filter(compromise => compromise.state === 1)[0]} student={student_full} />} fileName="somename.pdf">
-                                                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : ' Descargar ')}
-                                                </PDFDownloadLink>
                                             </h3>
 
                                         </>

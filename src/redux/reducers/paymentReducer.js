@@ -7,7 +7,8 @@ import {
     FINISH_FETCH_COMPROMISES,
     FETCH_COMPROMISES,
     CREATE_COMPROMISE,
-    DELETE_COMPROMISE
+    DELETE_COMPROMISE,
+    UPDATE_COMPROMISE_SINCE_LIST
 } from '../actions/paymentActions'
 
 const initialState = {
@@ -68,6 +69,12 @@ const paymentReducer = (state = initialState, action) => {
             return {
                 ...state,
                 compromises: [action.payload.compromise, ...state.compromises],
+            }
+
+        case UPDATE_COMPROMISE_SINCE_LIST:
+            return {
+                ...state,
+                compromises: state.compromises.map(compromise => compromise.id === action.payload.compromise.id ? (compromise = action.payload.compromise) : compromise)
             }
 
         case DELETE_COMPROMISE:

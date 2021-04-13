@@ -2,7 +2,7 @@ import Swal from 'sweetalert2'
 
 export const Toast = Swal.mixin({
     toast: true,
-    position: 'top',
+    position: 'bottom-end',
     hideClass: {
         popup: 'animate__animated animate__fadeOutUp'
       },

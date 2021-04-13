@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 //components
 import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
@@ -9,12 +9,37 @@ import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 import { formatNumber } from '../../helpers/functions'
+import { updateCompromiseSinceList } from '../../redux/actions/paymentActions'
 
 
 const ListCompromises = () => {
 
     const { compromises, isFetchingCompromises } = useSelector(state => state.paymentReducer)
+    const dispatch = useDispatch()
 
+    const toggleAccomplished = (row) => {
+        if (row.state !== 3) {
+            row.state = 3
+            row.student = row.student.id
+            dispatch(updateCompromiseSinceList(row))
+        }
+    }
+
+    const toggleBreached = (row) => {
+        if (row.state !== 2) {
+            row.state = 2
+            row.student = row.student.id
+            dispatch(updateCompromiseSinceList(row))
+        }
+    }
+
+    const togglepPending = (row) => {
+        if (row.state !== 1) {
+            row.state = 1
+            row.student = row.student.id
+            dispatch(updateCompromiseSinceList(row))
+        }
+    }
 
 
     //Logica para la datatable
@@ -60,8 +85,8 @@ const ListCompromises = () => {
                     textToHighlight={text.toString()}
                 />
             ) : (
-                    text
-                ),
+                text
+            ),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -147,8 +172,18 @@ const ListCompromises = () => {
                 return (
                     <Row>
                         <Col>
-                            <span style={{ fontSize: '20px', color: '#f5222d' }} >
-                                <i id='icon-button' className="far fa-trash-alt"></i>
+                            <span style={{ fontSize: '20px', color: '#2dce89' }} onClick={() => toggleAccomplished(row)}>
+                                <i id='icon-button' className="fas fa-check"></i>
+                            </span>
+                        </Col>
+                        <Col>
+                            <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => toggleBreached(row)}>
+                                <i id='icon-button' className="fas fa-times"></i>
+                            </span>
+                        </Col>
+                        <Col>
+                            <span style={{ fontSize: '20px', color: '#faad14' }} onClick={() => togglepPending(row)}>
+                                <i id='icon-button' className="far fa-clock"></i>
                             </span>
                         </Col>
                     </Row>
