@@ -100,7 +100,7 @@ export const Reports = () => {
             render: (text, row) => `${row.first_name} `,
         },
         {
-            title: 'Covertura',
+            title: 'Cobertura',
             dataIndex: ['student', 'coverage'],
             filters: [
                 {

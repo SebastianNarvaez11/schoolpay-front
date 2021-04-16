@@ -29,6 +29,7 @@
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-charts": "^3.0.15",
     "react-highlight-words": "^0.16.0",
     "react-html-table-to-excel": "^2.0.0",
     "react-redux": "^7.2.0",

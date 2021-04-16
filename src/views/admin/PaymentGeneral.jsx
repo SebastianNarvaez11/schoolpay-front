@@ -13,11 +13,12 @@ import {
 import '@devexpress/dx-react-chart-bootstrap4/dist/dx-react-chart-bootstrap4.css';
 import { EventTracker, ValueScale, Animation, HoverState, SelectionState } from '@devexpress/dx-react-chart';
 import { amountOfDebtors, totalOwed, formatNumber } from '../../helpers/functions'
+import { Chart as ChartGoogle } from "react-google-charts";
 
 export const PaymentGeneral = () => {
 
     const { grades } = useSelector(state => state.gradeReducer)
-    const { isFetchingData, data_graphics } = useSelector(state => state.studentReducer)
+    const { isFetchingData, data_graphics, students } = useSelector(state => state.studentReducer)
 
     const [selected, setSelected] = useState('')
     const [selected2, setSelected2] = useState('')
@@ -90,55 +91,154 @@ export const PaymentGeneral = () => {
             <NavbarGeneralPayment />
             <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
                 <Row className='d-flex justify-content-center'>
-                    <Col lg={3} className='mb-3'>
-                        <Card className="card-stats mb-xl-0">
-                            <CardBody>
-                                <Row>
-                                    <div className="col">
-                                        <CardTitle
-                                            tag="h5"
-                                            className="text-uppercase text-muted mb-0 font-varela"
-                                        >
-                                            Valor en Mora
-                                                </CardTitle>
-                                        <span className="h2 font-weight-bold mb-0">
-                                            $ {formatNumber(totalData(getData3(1)) + totalData(getData3(2)))}
-                                        </span>
-                                    </div>
-                                    <Col className="col-auto">
-                                        <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                            <i className="fas fa-chart-bar" />
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </CardBody>
-                        </Card>
 
-                    </Col>
-                    <Col lg={3} className='mb-3'>
-                        <Card className="card-stats mb-xl-0">
-                            <CardBody>
-                                <Row>
-                                    <div className="col">
-                                        <CardTitle
-                                            tag="h5"
-                                            className="text-uppercase text-muted mb-0 font-varela"
-                                        >
-                                            Estudiantes en Mora
-                                                </CardTitle>
-                                        <span className="h2 font-weight-bold mb-0">
-                                            {formatNumber(totalData(getData2(1)) + totalData(getData2(2)))}
-                                        </span>
-                                    </div>
-                                    <Col className="col-auto">
-                                        <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                            <i className="fas fa-chart-bar" />
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </CardBody>
-                        </Card>
+                    <Col lg={12} className="mb-4">
+                        <Card id='card_shadow' className="animate__animated animate__fadeIn">
+                            <Container fluid>
+                                {isFetchingData
+                                    ? <> <Spinner type="grow" color="primary" />
+                                        <Spinner type="grow" color="primary" />
+                                        <Spinner type="grow" color="primary" /> </>
+                                    :
+                                    <div style={{ padding: 30 }}>
+                                        <Row className='d-flex justify-content-center'>
+                                            <h3 className='font-varela mb-5' style={{fontSize: 30}}>
+                                                Estadísticas Generales
+                                            </h3>
+                                        </Row>
+                                        <Row>
+                                            <Col lg={6} className="d-flex justify-content-center">
+                                                <Row>
+                                                    <Col lg={6} className="d-flex justify-content-center mb-5 ">
+                                                        <span style={{color: '#6eb561'}}>
+                                                            <i class="fas fa-money-bill-alt fa-3x"></i>
+                                                        </span>
+                                                        <Col>
+                                                            <CardTitle tag="h5" className="text-uppercase text-muted mb-0 font-varela" >
+                                                                Valor en Mora
+                                                    </CardTitle>
+                                                            <span className="h2 font-weight-bold mb-0">
+                                                                $ {formatNumber(totalData(getData3(1)) + totalData(getData3(2)))}
+                                                            </span>
+                                                        </Col>
 
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-center mb-5 ">
+                                                        <span style={{color: '#f5232e'}}>
+                                                            <i class="fas fa-exclamation-circle fa-3x"></i>
+                                                        </span>
+                                                        <Col>
+                                                            <CardTitle tag="h5" className="text-uppercase text-muted mb-0 font-varela" >
+                                                                Estudiantes en Mora
+                                                    </CardTitle>
+                                                            <span className="h2 font-weight-bold mb-0">
+                                                                {data_graphics.filter(data => data.student.monthOwed !== 0).length}
+                                                            </span>
+                                                        </Col>
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-center mb-5 ">
+                                                        <span style={{color: '#2dce89'}}>
+                                                            <i class="fas fa-check fa-3x"></i>
+                                                        </span>
+                                                        <Col>
+                                                            <CardTitle tag="h5" className="text-uppercase text-muted mb-0 font-varela" >
+                                                                Estudiantes al dia
+                                                            </CardTitle>
+                                                            <span className="h2 font-weight-bold mb-0">
+                                                                {data_graphics.filter(data => data.student.monthOwed === 0).length}
+                                                            </span>
+                                                        </Col>
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-center mb-5 ">
+                                                        <span style={{color: '#11cdef'}}>
+                                                            <i class="fas fa-certificate fa-3x"></i>
+                                                        </span>
+                                                        <Col>
+                                                            <CardTitle tag="h5" className="text-uppercase text-muted mb-0 font-varela" >
+                                                                Estudiantes en Cobertura
+                                                            </CardTitle>
+                                                            <span className="h2 font-weight-bold mb-0">
+                                                                {students.length - data_graphics.filter(data => data.student.monthOwed === 0).length - data_graphics.filter(data => data.student.monthOwed !== 0).length}
+                                                            </span>
+                                                        </Col>
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-center mb-5 ">
+                                                        <span style={{color: '#faad14'}}>
+                                                            <i class="fas fa-exclamation-triangle fa-3x"></i>
+                                                        </span>
+                                                        <Col>
+                                                            <CardTitle tag="h5" className="text-uppercase text-muted mb-0 font-varela" >
+                                                                1 Mes de Mora
+                                                            </CardTitle>
+                                                            <span className="h2 font-weight-bold mb-0">
+                                                                {data_graphics.filter(data => data.student.monthOwed === 1).length}
+                                                            </span>
+                                                        </Col>
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-center mb-5 ">
+                                                        
+                                                        <span style={{color: '#ff6f41'}}>
+                                                            <i class="fas fa-exclamation-circle fa-3x"></i>
+                                                        </span>
+                                                        <Col>
+                                                            <CardTitle tag="h5" className="text-uppercase text-muted mb-0 font-varela" >
+                                                                2 Meses de Mora
+                                                            </CardTitle>
+                                                            <span className="h2 font-weight-bold mb-0">
+                                                                {data_graphics.filter(data => data.student.monthOwed === 2).length}
+                                                            </span>
+                                                        </Col>
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-center mb-5 ">
+                                                        <span style={{color: '#f5232e'}}>
+                                                            <i class="fas fa-radiation-alt fa-3x"></i>
+                                                        </span>
+                                                        <Col>
+                                                            <CardTitle tag="h5" className="text-uppercase text-muted mb-0 font-varela" >
+                                                                3 Meses o Mas
+                                                            </CardTitle>
+                                                            <span className="h2 font-weight-bold mb-0">
+                                                                {data_graphics.filter(data => data.student.monthOwed >= 3).length}
+                                                            </span>
+                                                        </Col>
+                                                    </Col>
+                                                </Row>
+
+                                            </Col>
+                                            <Col lg={6}>
+                                                <ChartGoogle
+                                                    className="float-right"
+                                                    width={'120%'} style={{ position: 'absolute', marginTop: '-3rem', marginLeft: '-3rem' }}
+                                                    height={'120%'}
+                                                    chartType="PieChart"
+                                                    loader={<div>Loading Chart</div>}
+                                                    data={[
+                                                        ['Task', 'Hours per Day'],
+                                                        ['Al Dia', data_graphics.filter(data => data.student.monthOwed === 0).length],
+                                                        ['1 Mes', data_graphics.filter(data => data.student.monthOwed === 1).length],
+                                                        ['2 Meses', data_graphics.filter(data => data.student.monthOwed === 2).length],
+                                                        ['3 Meses o mas', data_graphics.filter(data => data.student.monthOwed >= 3).length],
+                                                    ]}
+                                                    options={{
+                                                        // Just add this option
+                                                        is3D: true,
+                                                        backgroundColor: 'transparent',
+                                                        slices: {
+                                                            0: { color: '#2dce89' },
+                                                            1: { color: '#faad14' },
+                                                            2: { color: '#ff6f41' },
+                                                            3: { color: '#f5232e' },
+                                                        },
+                                                    }}
+                                                    rootProps={{ 'data-testid': '2' }}
+                                                />
+                                            </Col>
+
+                                        </Row>
+                                    </div>
+                                }
+                            </Container>
+                        </Card>
                     </Col>
                     <Col lg={12} className="mb-4">
                         <Card id='card_shadow' className="animate__animated animate__fadeIn">

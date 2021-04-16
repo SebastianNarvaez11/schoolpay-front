@@ -151,7 +151,7 @@ export const PaymentGrades = () => {
             render: (text, row) => `${row.last_name} ${row.first_name}`,
         },
         {
-            title: 'Covertura',
+            title: 'Cobertura',
             dataIndex: ['student', 'coverage'],
             width: 100,
             filters: [
