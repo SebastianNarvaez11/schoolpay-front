@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import NavbarGeneralPayment from '../../components/Headers/admin/NavbarGeneralPayment'
 import { useSelector } from 'react-redux'
-import { Card, Container, Row, Col, Spinner, CardBody, CardTitle } from "reactstrap";
+import { Card, Container, Row, Col, Spinner, CardTitle } from "reactstrap";
 import {
     Chart,
     BarSeries,
