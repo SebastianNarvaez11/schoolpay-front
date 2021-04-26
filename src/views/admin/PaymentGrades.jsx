@@ -18,7 +18,6 @@ import isequal from "lodash.isequal";
 import Loader from "react-loader-spinner";
 import search_img from '../../assets/img/search-img.png'
 import { Chart as ChartGoogle } from "react-google-charts";
-import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 
 export const PaymentGrades = () => {
 
@@ -34,15 +33,6 @@ export const PaymentGrades = () => {
     const tres_meses = students_filter.filter(data => data.student.monthOwed >= 3).length
 
     const [buttonActive, setButtonActive] = useState('')
-
-    useEffect(() => {
-        if (students_filter.length !== 0) {
-            const table = window.document.querySelectorAll('table');
-            table[1].setAttribute('id', 'table-report');
-        }
-
-    }, [students_filter.length])
-
 
     //efecto para limpiar el studen_select y el students_filter
     useEffect(() => {
@@ -379,13 +369,6 @@ export const PaymentGrades = () => {
                                                     <DropdownItem disabled>Action</DropdownItem>
                                                 </DropdownMenu>
                                             </UncontrolledDropdown>
-                                            <ReactHTMLTableToExcel 
-                                                id="test-table-xls-button"
-                                                className="btn btn-success"
-                                                table="table-report"
-                                                filename="Reporte"
-                                                sheet="Reporte"
-                                                buttonText="Excel" />
                                         </div>
                                         <Table style={{ width: '100%' }}
                                             className='animate__animated animate__fadeIn mt-5'
