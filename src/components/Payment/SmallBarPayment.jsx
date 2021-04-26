@@ -12,37 +12,37 @@ export const SmallBarPayment = ({ student }) => {
         const months_pay = Math.floor(total_paid / monthly_payment)
 
         if (student.coverage) {
-            return <p>COBERTURA</p>;
+            return <p>COB</p>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 1) {
-            return <p>FEBRERO</p>;
+            return <p>FEB</p>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 2) {
-            return <Fragment><p>MARZO</p></Fragment>;
+            return <Fragment><p>MAR</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 3) {
-            return <Fragment><p>ABRIL</p></Fragment>;
+            return <Fragment><p>ABR</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 4) {
-            return <Fragment><p>MAYO</p></Fragment>;
+            return <Fragment><p>MAY</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 5) {
-            return <Fragment><p>JUNIO</p></Fragment>;
+            return <Fragment><p>JUN</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 6) {
-            return <Fragment><p>JULIO</p></Fragment>;
+            return <Fragment><p>JUL</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 7) {
-            return <Fragment><p>AGOSTO</p></Fragment>;
+            return <Fragment><p>AGO</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 8) {
-            return <Fragment><p>SEPTIEMBRE</p></Fragment>;
+            return <Fragment><p>SEP</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 9) {
-            return <Fragment><p>OCTUBRE</p></Fragment>;
+            return <Fragment><p>OCT</p></Fragment>;
 
         } else if ((months_pay + (10 - student.initial_charge)) === 10) {
-            return <Fragment><p>NOVIEMBRE</p></Fragment>;
+            return <Fragment><p>NOV</p></Fragment>;
         }
 
     }
@@ -68,7 +68,7 @@ export const SmallBarPayment = ({ student }) => {
 
     return (
         <Progress style={{ height: '20px' }} color={changeColorBar()} value={student.coverage ? total_year : total_paid} max={total_year}>
-            <div className="d-flex justify-content-around mt-3 font-varela">
+            <div className="d-flex justify-content-around mt-3 ">
                 {renderMonths()}
             </div>
         </Progress>

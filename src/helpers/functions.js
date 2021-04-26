@@ -19,23 +19,23 @@ export const scheduleFormat = (e) => {
 
 export const initialCharge = (e) => {
     if (e === 10) {
-        return 'Febrero-Noviembre'
+        return 'Feb-Nov'
     } else if (e === 9) {
-        return 'Marzo-Noviembre'
+        return 'Mar-Nov'
     } else if (e === 8) {
-        return 'Abril-Noviembre'
+        return 'Abr-Nov'
     } else if (e === 7) {
-        return 'Mayo-Noviembre'
+        return 'May-Nov'
     } else if (e === 6) {
-        return 'Junio-Noviembre'
+        return 'Jun-Nov'
     } else if (e === 5) {
-        return 'Julio-Noviembre'
+        return 'Jul-Nov'
     } else if (e === 4) {
-        return 'Agosto-Noviembre'
+        return 'Ago-Nov'
     } else if (e === 3) {
-        return 'Septiembre-Noviembre'
+        return 'Sep-Nov'
     } else if (e === 2) {
-        return 'Octubre-Noviembre'
+        return 'Oct-Nov'
     }
 }
 

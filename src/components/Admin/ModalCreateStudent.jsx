@@ -120,7 +120,7 @@ export const ModalCreateStudent = ({ show, toggle }) => {
             >{({ values, isSubmittig, handleBlur, handleChange, isValid }) => {
                 return (
                     <Form>
-                        <ModalHeader className='font-varela'>
+                        <ModalHeader >
                             <i className="fas fa-users mr-1" style={{ fontSize: '20px' }}></i> <strong style={{ fontSize: '20px' }}>Crear Estudiante</strong>
                         </ModalHeader>
                         <ModalBody>

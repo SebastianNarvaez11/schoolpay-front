@@ -1,3 +1,25 @@
 #card_shadow {
     box-shadow: 0 2px 6px rgba(50, 50, 93, 0.78), 0px 0px 0px 0px rgba(0, 0, 0, 0.82);
 }
+
+.card_shadown {
+    box-shadow: -1px 0px 10px 3px rgb(50 50 93 / 25%), 0px 0px 0px 0px rgb(0 0 0)
+}
+
+.icon_shadown {
+    box-shadow: 0 2px 6px rgba(50, 50, 93, 0.78), 0px 0px 0px 0px rgba(0, 0, 0, 0.82);
+}
+
+.calendar{
+    border-radius: 25px;
+    border: white;
+    box-shadow: -1px 0px 10px 3px rgb(50 50 93 / 25%), 0px 0px 0px 0px rgb(0 0 0)
+}
+
+.input_search_student{
+    border: 0px;
+}
+
+.row_compromise:hover{
+    cursor: pointer;
+}

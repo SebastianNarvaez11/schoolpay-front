@@ -10,7 +10,14 @@
 }
 
 #input-group-login {
-    box-shadow: 0 10px 10px rgba(21, 21, 23, 0.6), 0 0px 0 rgba(0, 0, 0, 0.76);
+    border-radius: 25px;
+    box-shadow: 0px 0px 12px 2px rgb(21 21 23 / 9%), 0 0px 18px 0px rgb(0 0 0 / 0%);
+    transition: box-shadow .15s ease;
+}
+
+#input-group-form {
+    border-radius: 25px;
+    box-shadow: 0px 0px 12px 2px rgb(21 21 23 / 3%), 0 0px 18px 0px rgb(0 0 0 / 0%);
     transition: box-shadow .15s ease;
 }
 

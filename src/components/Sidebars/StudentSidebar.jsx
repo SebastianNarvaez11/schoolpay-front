@@ -16,7 +16,7 @@ const Sidebar = (props) => {
             </div>
             <ul className="list-group list-group-flush">
                 <li className={props.location.pathname === '/student' ? 'navActive' : 'navActiveHover'}>
-                    <NavLink exact to='/student' activeClassName='navActive' className="list-group-item list-group-item-action" id='font-varela'>
+                    <NavLink exact to='/student' activeClassName='navActive' className="list-group-item list-group-item-action" >
                         <i className="fas fa-home mr-3 ml-3"></i> Inicio
                     </NavLink>
                 </li>

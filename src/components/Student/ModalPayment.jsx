@@ -36,7 +36,7 @@ const ModalPayment = ({ show, referenceCode, toggle }) => {
     return (
         <Modal isOpen={show} toggle={toggle} >
             <Form action='https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/' method='post'>
-                <ModalHeader className='font-varela'>
+                <ModalHeader >
                     <i className="fas fa-users mr-1" style={{ fontSize: '20px' }}></i> <strong style={{ fontSize: '20px' }}>Pago</strong>
                 </ModalHeader>
                 <ModalBody>
@@ -72,8 +72,8 @@ const ModalPayment = ({ show, referenceCode, toggle }) => {
                             </FormGroup>
                         </Col>
                         <Col lg='12' className='d-flex justify-content-between'>
-                            <strong className='font-varela' style={{ fontSize: '30px' }}>Total a pagar:</strong>
-                            <strong className='font-varela' style={{ fontSize: '30px' }}>$ {formatNumber(useValue.value)}</strong>
+                            <strong  style={{ fontSize: '30px' }}>Total a pagar:</strong>
+                            <strong  style={{ fontSize: '30px' }}>$ {formatNumber(useValue.value)}</strong>
                         </Col>
                         <Input name="merchantId" type="hidden" value="508029" />
                         <Input name="accountId" type="hidden" value="512321" />

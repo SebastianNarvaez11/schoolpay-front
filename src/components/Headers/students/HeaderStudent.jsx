@@ -22,7 +22,7 @@ const HeaderStudent = () => {
                       <div className="col">
                         <CardTitle
                           tag="h5"
-                          className="text-uppercase text-muted mb-0 font-varela"
+                          className="text-uppercase text-muted mb-0 "
                         >
                           {current_user.first_name} {current_user.last_name}
                         </CardTitle>
@@ -47,7 +47,7 @@ const HeaderStudent = () => {
                       <div className="col">
                         <CardTitle
                           tag="h5"
-                          className="text-uppercase font-varela text-muted mb-0"
+                          className="text-uppercase  text-muted mb-0"
                         >
                           No. Meses en Mora
                           </CardTitle>
@@ -64,7 +64,7 @@ const HeaderStudent = () => {
                       <div className="col">
                         <CardTitle
                           tag="h5"
-                          className="text-uppercase font-varela text-muted mb-0"
+                          className="text-uppercase  text-muted mb-0"
                         >
                           Valor en mora
                           </CardTitle>

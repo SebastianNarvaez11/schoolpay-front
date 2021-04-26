@@ -8,14 +8,23 @@ import {
     FETCH_COMPROMISES,
     CREATE_COMPROMISE,
     DELETE_COMPROMISE,
-    UPDATE_COMPROMISE_SINCE_LIST
+    UPDATE_COMPROMISE_SINCE_LIST,
+    START_FETCH_STUDENT_COMPROMISE,
+    FINISH_FETCH_STUDENT_COMPROMISE,
+    GET_STUDENT_FULL,
+    RESET_STUDENT_FULL,
+    START_FETCH_PAYMENTS_BY_PERIOD,
+    FINISH_FETCH_PAYMENTS_BY_PERIOD
 } from '../actions/paymentActions'
 
 const initialState = {
     payments: [],
     isFetchingPayments: false,
+    isFetchingPaymentsByPeriod: false,
     compromises: [],
-    isFetchingCompromises: false
+    studentFull: {},
+    isFetchingCompromises: false,
+    isFetchingStudentFull: false
 }
 
 const paymentReducer = (state = initialState, action) => {
@@ -37,7 +46,8 @@ const paymentReducer = (state = initialState, action) => {
             return {
                 ...state,
                 payments: action.payload.payments,
-                isFetchingPayments: false
+                isFetchingPayments: false,
+                isFetchingPaymentsByPeriod: false,
             }
 
         case CREATE_PAYMENT:
@@ -81,6 +91,43 @@ const paymentReducer = (state = initialState, action) => {
             return {
                 ...state,
                 compromises: state.compromises.filter(compromise => compromise.id !== action.payload.compromise)
+            }
+
+        case GET_STUDENT_FULL:
+            return {
+                ...state,
+                studentFull: action.payload.user,
+                isFetchingStudentFull: false
+            }
+
+        case START_FETCH_STUDENT_COMPROMISE:
+            return {
+                ...state,
+                isFetchingStudentFull: true
+            }
+
+        case FINISH_FETCH_STUDENT_COMPROMISE:
+            return {
+                ...state,
+                isFetchingStudentFull: false
+            }
+
+        case RESET_STUDENT_FULL:
+            return {
+                ...state,
+                studentFull: {}
+            }
+
+        case START_FETCH_PAYMENTS_BY_PERIOD:
+            return {
+                ...state,
+                isFetchingPaymentsByPeriod: true
+            }
+
+        case FINISH_FETCH_PAYMENTS_BY_PERIOD:
+            return {
+                ...state,
+                isFetchingPaymentsByPeriod: false
             }
 
 

@@ -15,6 +15,13 @@ export const FETCH_COMPROMISES = 'FETCH_COMPROMISES'
 export const CREATE_COMPROMISE = 'CREATE_COMPROMISE'
 export const UPDATE_COMPROMISE_SINCE_LIST = 'UPDATE_COMPROMISE_SINCE_LIST'
 export const DELETE_COMPROMISE = 'DELETE_COMPROMISE'
+export const GET_STUDENT_FULL = 'GET_STUDENT_FULL'
+export const START_FETCH_STUDENT_COMPROMISE = 'START_FETCH_STUDENT_COMPROMISE'
+export const FINISH_FETCH_STUDENT_COMPROMISE = 'FINISH_FETCH_STUDENT_COMPROMISE'
+export const RESET_STUDENT_FULL = 'RESET_STUDENT_FULL'
+
+export const START_FETCH_PAYMENTS_BY_PERIOD = 'START_FETCH_PAYMENTS_BY_PERIOD'
+export const FINISH_FETCH_PAYMENTS_BY_PERIOD = 'FINISH_FETCH_PAYMENTS_BY_PERIOD'
 
 
 export const fetchPayments = () => async (dispatch) => {
@@ -35,13 +42,39 @@ export const fetchPayments = () => async (dispatch) => {
         .catch(error => {
             console.log(error)
             dispatch({ type: FINISH_FETCH_PAYMENTS })
-            // Swal.fire({
-            //     icon: 'error',
-            //     showConfirmButton: true,
-            //     text: 'Upss! Ha ocurrido un error al cargar los pagos'
-            // })
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: 'Upss! Ha ocurrido un error al cargar los pagos'
+            })
         })
 
+}
+
+export const fetchPaymentsByPeriod = (period) => async (dispatch) => {
+
+    dispatch({ type: START_FETCH_PAYMENTS_BY_PERIOD })
+
+    let url = `${host}api/v1/payments/period/${period}/`
+    await axios.get(url)
+        .then(response => {
+            console.log(response)
+            dispatch({
+                type: FETCH_PAYMENTS,
+                payload: {
+                    payments: response.data
+                }
+            })
+        })
+        .catch(error => {
+            dispatch({ type: FINISH_FETCH_PAYMENTS_BY_PERIOD })
+            console.log(error)
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: 'Upps! Ha ocurrido un error al cargar los pagos'
+            })
+        })
 }
 
 export const createPaymentManual = (payment) => async (dispatch) => {
@@ -252,7 +285,7 @@ export const updateCompromiseSinceDetail = (compromise) => async (dispatch) => {
             })
 
             Toast.fire({ icon: 'success', title: 'Compromiso actualizado correctamente' })//alert success
-            
+
         })
         .catch(error => {
             console.log(error)
@@ -304,4 +337,34 @@ export const deleteCompromises = (id) => async (dispatch) => {
                 text: Object.values(error.response.data)[0]
             })
         })
+}
+
+
+export const getStudentFullCompromise = (id) => async (dispatch) => {
+    console.log(id)
+    dispatch({ type: START_FETCH_STUDENT_COMPROMISE })
+
+    let url = `${host}api/v1/users/student/get/${id}/`
+    await axios.get(url)
+        .then(response => {
+            dispatch({
+                type: GET_STUDENT_FULL,
+                payload: {
+                    user: response.data
+                }
+            })
+        })
+        .catch(error => {
+            dispatch({ type: FINISH_FETCH_STUDENT_COMPROMISE })
+            console.log(error)
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: Object.values(error.response.data)[0]
+            })
+        })
+}
+
+export const resetStudentFullCompromises = () => async (dispatch) => {
+    dispatch({ type: RESET_STUDENT_FULL })
 }

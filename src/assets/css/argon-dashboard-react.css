@@ -15,6 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 :root {
   --blue: #5e72e4;
   --indigo: #5603ad;
@@ -71,16 +73,22 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
 
 body {
-  margin: 0;
-  font-family: Open Sans, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #525f7f;
-  text-align: left;
-  background-color: #5257f2;
-  overflow-x: hidden; 
+  font-family: 'Varela Round', sans-serif;
+  background-image: url(../img/bg.jpg);
+  /* Para dejar la imagen de fondo centrada, vertical y horizontalmente */
+  background-position: center;
+  /* Para que la imagen de fondo no se repita */
+  background-repeat: no-repeat;
+  /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
+  background-attachment: fixed;
+  /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
+  background-size: cover;
+  /*quita el scroll horizontal*/
+  overflow-x: hidden;
+  background-color: rgba(255, 255, 255, .15); 
 }
+
+
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -92,11 +100,13 @@ hr {
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
-  margin-bottom: 0.5rem; }
+  margin-bottom: 0.5rem;
+  font-family: 'Varela Round'; }
 
 p {
   margin-top: 0;
-  margin-bottom: 1rem; }
+  margin-bottom: 1rem;
+  font-family: 'Varela Round' }
 
 abbr[title],
 abbr[data-original-title] {
@@ -3418,8 +3428,8 @@ input[type="button"].btn-block {
     background-color: #0da5c0; }
 
 .badge-warning {
-  color: #ff3709;
-  background-color: rgba(254, 201, 189, 0.5); }
+  color: #faad16;
+  background-color: #fff2b2; }
   .badge-warning[href]:hover, .badge-warning[href]:focus {
     color: #fff;
     text-decoration: none;

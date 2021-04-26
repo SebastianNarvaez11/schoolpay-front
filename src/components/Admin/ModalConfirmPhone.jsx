@@ -25,7 +25,7 @@ export const ModalConfirmPhone = ({ show, selectedRow, msg, toggle }) => {
     return (
         <Modal isOpen={show} toggle={toggle} size='sm' centered>
             <Form onSubmit={onSubmit}>
-                <ModalHeader className='font-varela'>
+                <ModalHeader >
                     <i className="far fa-envelope mr-1" style={{ fontSize: '20px' }}></i> <strong style={{ fontSize: '20px' }}>¿A que numero desea enviar los SMS?</strong>
                 </ModalHeader>
                 <ModalBody>

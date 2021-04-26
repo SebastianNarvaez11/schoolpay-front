@@ -93,7 +93,7 @@ const ModalListCompromise = ({ show, toggle, compromises, student }) => {
 
     return (
         <Modal isOpen={show} toggle={toggle} size='lg'>
-            <ModalHeader className='font-varela'>
+            <ModalHeader>
                 <i className="fas fa-file-invoice-dollar mr-2" style={{ fontSize: '25px', color: '#faad14' }}></i> <strong style={{ fontSize: '20px' }}>Historial de Compromisos</strong>
             </ModalHeader>
             <ModalBody>

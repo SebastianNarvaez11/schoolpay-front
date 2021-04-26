@@ -1,21 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 //components
-import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Col, Spinner } from "reactstrap";
+import {  Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, } from "reactstrap";
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 import { formatNumber } from '../../helpers/functions'
-import { updateCompromiseSinceList } from '../../redux/actions/paymentActions'
+import { wpp_recordatorio_compromiso } from '../../helpers/messages'
+import { updateCompromiseSinceList, getStudentFullCompromise, resetStudentFullCompromises } from '../../redux/actions/paymentActions'
+import Loader from "react-loader-spinner";
+import SmallBarPayment from '../../components/Payment/SmallBarPayment'
+import search_student from '../../assets/img/search-student.png'
 
 
 const ListCompromises = () => {
 
-    const { compromises, isFetchingCompromises } = useSelector(state => state.paymentReducer)
+    const { compromises, isFetchingCompromises, isFetchingStudentFull, studentFull } = useSelector(state => state.paymentReducer)
     const dispatch = useDispatch()
+
+    const pendientes = compromises.filter(compromise => compromise.state === 1).length
+    const incumplidos = compromises.filter(compromise => compromise.state === 2).length
+    const cumplidos = compromises.filter(compromise => compromise.state === 3).length
+
+    const [buttonActive, setButtonActive] = useState('')
 
     const toggleAccomplished = (row) => {
         if (row.state !== 3) {
@@ -38,6 +47,36 @@ const ListCompromises = () => {
             row.state = 1
             row.student = row.student.id
             dispatch(updateCompromiseSinceList(row))
+        }
+    }
+
+    //efecto para limpiar el studenFull
+    useEffect(() => {
+        return () => {
+            console.log('desmontado')
+            dispatch(resetStudentFullCompromises())
+        }
+    }, [dispatch])
+
+
+    // envio de whatsapp
+    const senWppSms = (sms, phone) => {
+        let url = `https://api.whatsapp.com/send?phone=57${phone}&text=${sms}`
+        window.open(url, 'Whatsapp', "width=500,height=500,scrollbars=NO")
+    }
+
+    const renderIcons = () => {
+        const n = studentFull.student.monthOwed
+        const e = studentFull.student.amountOwed
+
+        if (n >= 3) {
+            return <i class="fas fa-exclamation-circle fa-2x icon_shadown" style={{ backgroundColor: '#f5232e', color: '#ffffff', padding: 8, borderRadius: 10, margin: 5 }}></i>
+        }
+        else if (n >= 1 || e !== 0) {
+            return <i class="fas fa-exclamation-triangle fa-2x icon_shadown" style={{ backgroundColor: '#faad15', color: '#ffffff', padding: 8, borderRadius: 10, margin: 5 }}></i>
+        }
+        else if (n === 0) {
+            return <i class="fas fa-check fa-2x icon_shadown" style={{ backgroundColor: '#2ece89', color: '#ffffff', padding: 8, borderRadius: 10, margin: 5 }}></i>
         }
     }
 
@@ -103,41 +142,43 @@ const ListCompromises = () => {
     const columns = [
         {
             title: 'Estudiante',
+            width: 200,
             dataIndex: ['student', 'user', 'last_name'],
             render: (text, row) => `${row.student.user.last_name} ${row.student.user.first_name} `,
         },
         {
             title: 'Grado',
+            width: 100,
             dataIndex: ['student', 'gtade', 'name'],
             render: (text, row) => `${row.student.grade.name}`,
         },
         {
             title: 'Valor',
-            dataIndex: 'value',
+            dataIndex: 'value', width: 100,
             ...getColumnSearchProps("value"),
             render: (text, row) => `$ ${formatNumber(row.value)}`,
         },
         {
             title: 'Mensualidades a Pagar',
-            dataIndex: 'month_owed',
+            dataIndex: 'month_owed', width: 100,
             ...getColumnSearchProps("month_owed"),
             render: (text, row) => `${row.month_owed}`,
         },
         {
             title: 'Fecha Creacion',
-            dataIndex: 'create',
+            dataIndex: 'create', width: 100,
             ...getColumnSearchProps("create"),
             render: (text, row) => `${row.create}`,
         },
         {
-            title: 'Fecha Estupilada',
-            dataIndex: 'date_pay',
+            title: 'Fecha Estipulada',
+            dataIndex: 'date_pay', width: 100,
             ...getColumnSearchProps("date_pay"),
             render: (text, row) => `${row.date_pay}`,
         },
         {
             title: 'Estado',
-            dataIndex: 'state',
+            dataIndex: 'state', width: 100,
             filters: [
                 {
                     text: 'Pendiente',
@@ -167,26 +208,38 @@ const ListCompromises = () => {
         },
         {
             title: 'Acciones',
-            dataIndex: 'id',
+            dataIndex: 'id', width: 130,
             render: (text, row) => {
                 return (
-                    <Row>
-                        <Col>
-                            <span style={{ fontSize: '20px', color: '#2dce89' }} onClick={() => toggleAccomplished(row)}>
-                                <i id='icon-button' className="fas fa-check"></i>
-                            </span>
-                        </Col>
-                        <Col>
-                            <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => toggleBreached(row)}>
-                                <i id='icon-button' className="fas fa-times"></i>
-                            </span>
-                        </Col>
-                        <Col>
-                            <span style={{ fontSize: '20px', color: '#faad14' }} onClick={() => togglepPending(row)}>
-                                <i id='icon-button' className="far fa-clock"></i>
-                            </span>
-                        </Col>
-                    </Row>
+                    <>
+                        <span style={{ fontSize: '20px', color: '#2dce89' }} onClick={() => toggleAccomplished(row)}>
+                            <i id='icon-button' className="fas fa-check"></i>
+                        </span>
+
+                        <span style={{ fontSize: '20px', color: '#f5222d', marginLeft: 15, marginRight: 15 }} onClick={() => toggleBreached(row)}>
+                            <i id='icon-button' className="fas fa-times"></i>
+                        </span>
+
+                        <span style={{ fontSize: '20px', color: '#faad14', marginRight: 15 }} onClick={() => togglepPending(row)}>
+                            <i id='icon-button' className="far fa-clock"></i>
+                        </span>
+
+                        <UncontrolledDropdown direction="left" className="mt-1 mb-1" onClick={() => setButtonActive(row.id)}>
+                            <DropdownToggle style={{ padding: '5px', backgroundColor: 'transparent', border: 0 }}>
+                                <i id='icon-button' className="fab fa-whatsapp" style={{ color: buttonActive === row.id ? '#6266ea' : '#08e77a', fontSize: '25px' }}></i>
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem disabled>{row.student.phone1}</DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_compromiso(row), row.student.phone1)}>
+                                    Mensaje de Recordatorio
+                                </DropdownItem>
+                                <DropdownItem disabled>{row.student.phone2}</DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_compromiso(row), row.student.phone2)}>
+                                    Mensaje de Recordatorio
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>
+                    </>
                 );
             },
         },
@@ -195,34 +248,169 @@ const ListCompromises = () => {
 
     return (
         <>
-            <HeaderAdmin />
-            <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
-                <Row>
-                    <div className="col">
-                        <Card id='card_shadow' className="animate__animated animate__fadeIn">
-                            <CardHeader className="border-0">
-                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Compromisos de Pago</h3>
-
-                            </CardHeader>
-                            {isFetchingCompromises ?
-                                <div style={{ margin: 40, alignSelf: 'center' }}>
-                                    <Spinner className="float-right" color="primary" />
-                                </div>
-                                :
-                                <Container fluid>
-                                    <Table className='table-responsive'
-                                        dataSource={compromises}
-                                        columns={columns}
-                                        rowKey="id"
-                                        size="small"
-                                        scroll={{ x: 'calc(700px + 50%)', y: 500 }}
-                                        pagination={false} />
-                                </Container>
-                            }
-                        </Card>
+            {isFetchingCompromises ?
+                <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                    <div className='text-center'>
+                        <Loader
+                            type="BallTriangle"
+                            color="#5257f2"
+                            height={100}
+                            width={100}
+                        />
+                        <h1 className=' mt-3'>Cargando Compromisos</h1>
+                        <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
                     </div>
+                </div>
+                : <Row style={{ paddingLeft: 30, paddingRight: 30 }}>
+                    <Col lg={9} md={9}>
+                        <Row className='mb-4'>
+                            <Col lg={2} md={4} sm={6} className="d-flex justify-content-center">
+                                <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                    <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#2dce89', padding: 5, borderRadius: 10 }}>
+                                        <i class="fas fa-check fa-3x"></i>
+                                    </span>
+                                    <Col>
+                                        <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                            Cumplidos
+                                                </h5>
+                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                            {cumplidos}
+                                        </span>
+                                    </Col>
+                                </div>
+                            </Col>
+                            <Col lg={2} md={4} sm={6} className="d-flex justify-content-center">
+                                <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                    <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#faad14', padding: 5, borderRadius: 10 }}>
+                                        <i class="fas fa-exclamation-triangle fa-3x"></i>
+                                    </span>
+                                    <Col>
+                                        <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                            Pendientes
+                                                </h5>
+                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                            {pendientes}
+                                        </span>
+                                    </Col>
+                                </div>
+                            </Col>
+                            <Col lg={2} md={4} sm={6} className="d-flex justify-content-center">
+                                <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                    <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#f5232e', padding: 5, borderRadius: 10 }}>
+                                        <i class="fas fa-radiation-alt fa-3x"></i>
+                                    </span>
+                                    <Col>
+                                        <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                            Incumplidos
+                                        </h5>
+                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                            {incumplidos}
+                                        </span>
+                                    </Col>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Table
+                            style={{ width: '100%' }}
+                            className='animate__animated animate__fadeIn'
+                            rowClassName='row_compromise'
+                            dataSource={compromises}
+                            columns={columns}
+                            rowKey={record => record}
+                            size="small"
+                            scroll={{ y: 600 }}
+                            pagination={false}
+                            onRow={(record, rowIndex) => {
+                                return {
+                                    onClick: event => { record.student.user && dispatch(getStudentFullCompromise(record.student.user.id)) },
+                                };
+                            }} />
+                    </Col>
+                    <Col lg={3} md={3} style={{ paddingLeft: 50, paddingTop: 90 }}>
+                        {isFetchingStudentFull ?
+                            <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                                <div className='text-center'>
+                                    <Loader
+                                        type="BallTriangle"
+                                        color="#5257f2"
+                                        height={100}
+                                        width={100}
+                                    />
+                                    <h1 className=' mt-3'>Cargando Informacion</h1>
+                                    <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
+                                </div>
+                            </div>
+                            :
+                            <>
+                                {Object.keys(studentFull).length === 0 ?
+                                    <>
+                                        <div className='d-flex justify-content-center mt-7 animate__animated animate__fadeIn'>
+                                            <img width='70%' alt="search" src={search_student} />
+                                        </div>
+                                        <div className='d-flex justify-content-center animate__animated animate__fadeIn'>
+                                            <h3 className="d-flex justify-content-center text-center" style={{ fontSize: '15px', position: 'relative' }}>
+                                                Haz clic en una fila para ver los datos<br />actuales del estudiante
+                                            </h3>
+                                        </div>
+                                    </>
+                                    :
+                                    <div className="card_shadown animate__animated animate__fadeIn mt-5" style={{ borderRadius: 25, paddingTop: 20, paddingBottom: 30, paddingRight: 40, paddingLeft: 40, marginLeft: 10, marginRight: 20 }}>
+                                        <h3 style={{ fontStyle: 40 }}>{studentFull.last_name} {studentFull.first_name}</h3>
+                                        <SmallBarPayment student={studentFull.student} />
+                                        <div className='card_shadown d-flex justify-content-center' style={{ padding: 10, borderRadius: 10, backgroundColor: '#ffffff' }}>
+                                            {renderIcons()}
+                                            <Col>
+                                                <h5 tag="h5" className="text-uppercase text-muted mb-0 " >
+                                                    Meses en mora
+                                                </h5>
+                                                <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                    {studentFull.student.monthOwed}
+                                                </span>
+                                            </Col>
+                                        </div>
+                                        <div className='card_shadown d-flex justify-content-center mt-4' style={{ padding: 10, borderRadius: 10, backgroundColor: '#ffffff' }}>
+                                            {renderIcons()}
+                                            <Col>
+                                                <h5 tag="h5" className="text-uppercase text-muted mb-0 " >
+                                                    Valor en Mora
+                                                </h5>
+                                                <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                    $ {formatNumber(studentFull.student.amountOwed)}
+                                                </span>
+                                            </Col>
+                                        </div>
+                                        <div className='card_shadown d-flex justify-content-center mt-4' style={{ padding: 10, borderRadius: 10, backgroundColor: '#ffffff' }}>
+                                            <i class="fas fa-dollar-sign fa-2x icon_shadown d-flex align-items-center"
+                                                style={{ backgroundColor: '#86bb02', color: '#ffffff', paddingTop: 8, paddingBottom: 8, paddingLeft: 11, paddingRight: 11, borderRadius: 10, margin: 5 }}>
+                                            </i>
+                                            <Col>
+                                                <h5 tag="h5" className="text-uppercase text-muted mb-0 " >
+                                                    Ultimo Pago
+                                                </h5>
+                                                {studentFull.student.payments.length === 0
+                                                    ?
+                                                    <p>No ah realizado ningun pago</p>
+                                                    :
+                                                    <>
+                                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                            $ {formatNumber(studentFull.student.payments[0].value)}
+                                                        </span>
+                                                        <Row>
+                                                            <span className="font-weight-bold ml-2" style={{ fontSize: 13 }}>
+                                                                {studentFull.student.payments[0].create}
+                                                            </span>
+                                                        </Row>
+                                                    </>
+                                                }
+                                            </Col>
+                                        </div>
+                                    </div>
+                                }
+                            </>
+                        }
+                    </Col>
                 </Row>
-            </Container >
+            }
         </>
 
     )

@@ -64,7 +64,7 @@ const Login = () => {
                                                 <i className="fas fa-user"></i>
                                             </InputGroupText>
                                         </InputGroupAddon>
-                                        <Input className="form-control-alternative" name='username' placeholder="Username" type="text" onChange={handleChange} />
+                                        <Input className="form-control-alternative" name='username' placeholder="Usuario" type="text" onChange={handleChange} />
                                     </InputGroup>
                                 </FormGroup>
                                 <FormGroup>

@@ -170,7 +170,7 @@ const ListPayments = () => {
                 <div className="col">
                     <Card id='card_shadow'>
                         <CardHeader className="border-0">
-                            <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Pagos</h3>
+                            <h3 className="mb-0 " style={{ fontSize: '25px' }}>Pagos</h3>
                             {(total_restante > 0) ? <Button className='btn btn-outline-success float-right  mt--5' color="success" type="button" onClick={() => toggleModal()}>
                                 Realizar un Nuevo Pago <i className="fas fa-plus ml-1"></i>
                             </Button> : <p>Genial! ya esta a paz y salvo</p>}

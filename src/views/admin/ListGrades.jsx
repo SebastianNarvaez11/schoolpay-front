@@ -2,17 +2,17 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteGrade } from '../../redux/actions/gradeActions'
 //components
-import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import ModalCreateGrade from '../../components/Admin/ModalCreateGrade'
 import ModalUpdateGrade from '../../components/Admin/ModalUpdateGrade'
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Col, Button, Spinner } from "reactstrap";
+import {Row,  Button } from "reactstrap";
 import { ToastDelete } from '../../assets/alerts'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 import { formatNumber } from '../../helpers/functions'
+import Loader from "react-loader-spinner";
 
 
 const ListGrades = () => {
@@ -103,8 +103,8 @@ const ListGrades = () => {
                     textToHighlight={text.toString()}
                 />
             ) : (
-                    text
-                ),
+                text
+            ),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -126,6 +126,12 @@ const ListGrades = () => {
             render: (text, row) => `${row.name} `,
         },
         {
+            title: 'Abreviación',
+            dataIndex: "abbreviation",
+            ...getColumnSearchProps("abbreviation"),
+            render: (text, row) => `${row.abbreviation} `,
+        },
+        {
             title: 'Mensualidad',
             dataIndex: 'monthly_pay',
             ...getColumnSearchProps("monthly_pay"),
@@ -141,18 +147,15 @@ const ListGrades = () => {
             title: 'Acciones',
             dataIndex: 'id',
             render: (text, row) => {
-                return (
-                    <Row>
-                        <Col>
-                            <span style={{ fontSize: '20px', color: '#faad14' }} className='mr-4' onClick={() => toggleOpenUpdate(row)}>
-                                <i id='icon-button' className="far fa-edit"></i>
-                            </span>
+                return (<>
+                    <span style={{ fontSize: '20px', color: '#faad14' }} className='mr-4' onClick={() => toggleOpenUpdate(row)}>
+                        <i id='icon-button' className="far fa-edit"></i>
+                    </span>
 
-                            <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
-                                <i id='icon-button' className="far fa-trash-alt"></i>
-                            </span>
-                        </Col>
-                    </Row>
+                    <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
+                        <i id='icon-button' className="far fa-trash-alt"></i>
+                    </span>
+                </>
                 );
             },
         },
@@ -161,40 +164,39 @@ const ListGrades = () => {
 
     return (
         <>
-            <HeaderAdmin />
-            <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
-                <Row>
-                    <div className="col">
-                        <Card id='card_shadow' className="animate__animated animate__fadeIn">
-                            <CardHeader className="border-0">
-                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Grados</h3>
-                                <Button className='btn btn-success float-right  mt--5' color="success" type="button" onClick={toggleCreate}  >
-                                    Nuevo <i className="fas fa-plus ml-1"></i>
-                                </Button>
-                            </CardHeader>
-                            {isFetchingGrades ?
-                                <div style={{ margin: 40, alignSelf: 'center' }}>
-                                    <Spinner className="float-right" color="primary" />
-                                </div>
-                                :
-                                <Container fluid>
-                                    <Table className='table-responsive'
-                                        dataSource={grades}
-                                        columns={columns}
-                                        rowKey="id"
-                                        size="small"
-                                        scroll={{ x: 'calc(700px + 50%)', y: 500 }}
-                                        pagination={false} />
-                                </Container>
-                            }
-                        </Card>
+            {isFetchingGrades
+                ?
+                <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                    <div className='text-center'>
+                        <Loader
+                            type="BallTriangle"
+                            color="#5257f2"
+                            height={100}
+                            width={100}
+                        />
+                        <h1 className=' mt-3'>Cargando Grados</h1>
+                        <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
                     </div>
-                </Row>
-                <ModalCreateGrade show={showCreate} toggle={toggleCreate} />
-                {showUpdate.data && <ModalUpdateGrade show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
-            </Container >
+                </div>
+                :
+                <>
+                    <Row style={{ paddingLeft: 50, paddingRight: 50 }}>
+                        <Button className='btn mb-4' style={{ backgroundColor: '#6266ea', border: 0 }} type="button" onClick={toggleCreate}  >
+                            <i className="fas fa-plus mr-2"></i> Añadir Grado
+                        </Button>
+                        <Table style={{ width: '100%' }}
+                            className='animate__animated animate__fadeIn'
+                            dataSource={grades}
+                            columns={columns}
+                            rowKey="id"
+                            scroll={{ y: 600 }}
+                            pagination={false} />
+                    </Row>
+                    <ModalCreateGrade show={showCreate} toggle={toggleCreate} />
+                    {showUpdate.data && <ModalUpdateGrade show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
+                </>
+            }
         </>
-
     )
 }
 

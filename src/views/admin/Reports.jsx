@@ -2,25 +2,26 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import HeaderReports from '../../components/Headers/admin/HeaderReports'
 import { Table, Input, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Spinner } from "reactstrap";
+import { Row } from "reactstrap";
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 import { formatNumber } from '../../helpers/functions'
+import Loader from "react-loader-spinner";
 
 export const Reports = () => {
 
-    const { data_graphics, isFetchingData } = useSelector(state => state.studentReducer)
+    const { data_reports, isFetchingDataReports } = useSelector(state => state.studentReducer)
 
     useEffect(() => {
-        if (data_graphics.length !== 0) {
+        if (data_reports.length !== 0) {
             const table = window.document.querySelectorAll('table');
             table[1].setAttribute('id', 'table-report');
         }
 
-    }, [data_graphics.length])
+    }, [data_reports.length])
 
     //Logica para la datatable
     const [searchText, setSearchText] = useState('')
@@ -65,8 +66,8 @@ export const Reports = () => {
                     textToHighlight={text.toString()}
                 />
             ) : (
-                    text
-                ),
+                text
+            ),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -219,41 +220,45 @@ export const Reports = () => {
     return (
         <>
             <HeaderReports />
-            <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
-                <Row>
-                    <div className="col">
-                        <Card id='card_shadow'>
-                            <CardHeader className="border-0">
-                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Estudiantes</h3>
-
-                                <ReactHTMLTableToExcel
-                                    id="test-table-xls-button"
-                                    className="btn btn-success float-right  mt--5"
-                                    table="table-report"
-                                    filename="Reporte"
-                                    sheet="Reporte"
-                                    buttonText="Reporte Excel" />
-
-                            </CardHeader>
-                            <Container fluid>
-                                {isFetchingData
-                                    ?
-                                    <Spinner className="d-flex justify-content-center mb-5" color="primary" style={{ width: '3rem', height: '3rem', margin: 'auto' }} />
-                                    :
-                                    <Table className='table-responsive'
-                                        dataSource={data_graphics}
-                                        columns={columns}
-                                        rowKey="id"
-                                        size="small"
-                                        scroll={{ x: 'calc(700px + 50%)', y: 500 }}
-                                        pagination={false}
-                                        />
-                                }
-                            </Container>
-                        </Card>
+            {isFetchingDataReports
+                ?
+                <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                    <div className='text-center'>
+                        <Loader
+                            type="BallTriangle"
+                            color="#5257f2"
+                            height={100}
+                            width={100}
+                        />
+                        <h1 className=' mt-3'>Cargando Datos</h1>
+                        <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
                     </div>
-                </Row>
-            </Container >
+                </div>
+                :
+                <>
+                    <Row style={{ paddingLeft: 50, paddingRight: 50 }}>
+                        <ReactHTMLTableToExcel
+                            id="test-table-xls-button"
+                            className="btn btn-success float-right mb-3"
+                            table="table-report"
+                            filename="Reporte"
+                            sheet="Reporte"
+                            buttonText="Reporte Excel" />
+                    </Row>
+                    <Row style={{ paddingLeft: 50, paddingRight: 50 }}>
+                        <Table style={{ width: '100%' }}
+                            className='animate__animated animate__fadeIn'
+                            dataSource={data_reports}
+                            columns={columns}
+                            rowKey="id"
+                            size="small"
+                            scroll={{ y: 500 }}
+                            pagination={false}
+                        />
+                    </Row>
+                </>
+
+            }
         </>
     )
 }

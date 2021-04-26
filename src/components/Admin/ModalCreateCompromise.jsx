@@ -54,7 +54,7 @@ const ModalCreateCompromise = ({ show, toggle, student }) => {
             >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
                 return (
                     <Form>
-                        <ModalHeader className='font-varela'>
+                        <ModalHeader >
                             <i className="fas fa-file-invoice-dollar mr-2" style={{ fontSize: '25px', color: '#faad14' }}></i> <strong style={{ fontSize: '20px' }}>Crear Compromiso de Pago</strong>
                         </ModalHeader>
                         <ModalBody>

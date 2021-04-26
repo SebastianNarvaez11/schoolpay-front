@@ -30,9 +30,9 @@ const RouterIndex = ({ match }) => {
         dispatch(fetchPayments())
     }, [dispatch]);
 
-    return (<div >
+    return (
         <div className={stateSidebar ? "d-flex" : "d-flex toggled"}
-            id="wrapper" >
+            id="wrapper" style={{height: '100%'}}>
             <AdminSidebar />
             <div id="page-content-wrapper" >
                 <NavbarAdmin />
@@ -49,7 +49,6 @@ const RouterIndex = ({ match }) => {
                 </Switch>
             </div>
         </div>
-    </div>
     );
 };
 

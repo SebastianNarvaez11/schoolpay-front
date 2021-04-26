@@ -18,6 +18,16 @@ export const FETCH_DATA_GRAPHICS = 'FETCH_DATA_GRAPHICS'
 export const START_FETCH_DATA_GRAPHICS = 'START_FETCH_DATA_GRAPHICS'
 export const FINISH_FETCH_DATA_GRAPHICS = 'FINISH_FETCH_DATA_GRAPHICS'
 
+export const START_FETCH_STUDENT = 'START_FETCH_STUDENT'
+export const FINISH_FETCH_STUDENT = 'FINISH_FETCH_STUDENT'
+
+export const START_FETCH_STUDENT_BY_GRADE = 'START_FETCH_STUDENT_BY_GRADE'
+export const FINISH_FETCH_STUDENT_BY_GRADE = 'FINISH_FETCH_STUDENT_BY_GRADE'
+
+export const FETCH_DATA_REPORTS = 'FETCH_DATA_REPORTS'
+export const START_FETCH_DATA_REPORTS = 'START_FETCH_DATA_REPORTS'
+export const FINISH_FETCH_DATA_REPORTS = 'FINISH_FETCH_DATA_REPORTS'
+
 export const fetchStudents = () => async (dispatch) => {
 
     dispatch({ type: FETCHING_STUDENTS })
@@ -45,10 +55,11 @@ export const fetchStudents = () => async (dispatch) => {
 
 export const getStudentFull = (id) => async (dispatch) => {
 
+    dispatch({ type: START_FETCH_STUDENT })
+
     let url = `${host}api/v1/users/student/get/${id}/`
     await axios.get(url)
         .then(response => {
-            console.log(response.data)
             dispatch({
                 type: UPDATE_STUDENT_FULL,
                 payload: {
@@ -57,6 +68,7 @@ export const getStudentFull = (id) => async (dispatch) => {
             })
         })
         .catch(error => {
+            dispatch({ type: FINISH_FETCH_STUDENT })
             console.log(error)
             Swal.fire({
                 icon: 'error',
@@ -113,7 +125,9 @@ export const updateStudent = (student, user, grade, toggle) => async (dispatch) 
         .then(response => {
             response.data.grade = grade
             user.student = response.data
-            console.log(user)
+            user.student.compromises = student.compromises
+            user.student.payments = student.payments
+
             dispatch({
                 type: UPDATE_STUDENT,
                 payload: {
@@ -168,6 +182,7 @@ export const deleteStudent = (student, user) => async (dispatch) => {
 }
 
 export const filterStudents = (text) => async (dispatch) => {
+
     dispatch({
         type: FILTER_STUDENT,
         payload: {
@@ -191,13 +206,11 @@ export const resetStudentSelect = () => async (dispatch) => {
 
 export const filterStudentsGrade = (grade, schedule) => async (dispatch) => {
 
-    console.log(grade, schedule)
-    dispatch({ type: FETCHING_STUDENTS })
+    dispatch({ type: START_FETCH_STUDENT_BY_GRADE })
 
     let url = `${host}api/v1/users/student/list/${grade.id}/${schedule}/`
     await axios.get(url)
         .then(response => {
-            console.log(response.data)
 
             dispatch({
                 type: SELECT_GRADE,
@@ -215,6 +228,7 @@ export const filterStudentsGrade = (grade, schedule) => async (dispatch) => {
             })
         })
         .catch(error => {
+            dispatch({ type: FINISH_FETCH_STUDENT_BY_GRADE })
             console.log(error)
             Swal.fire({
                 icon: 'error',
@@ -241,6 +255,31 @@ export const fetchDataGraphics = () => async (dispatch) => {
         .catch(error => {
             console.log(error)
             dispatch({ type: FINISH_FETCH_DATA_GRAPHICS })
+            Swal.fire({
+                icon: 'error',
+                showConfirmButton: true,
+                text: 'Upss! Ha ocurrido un error al cargar los datos'
+            })
+        })
+}
+
+export const fetchDataReports = () => async (dispatch) => {
+
+    dispatch({ type: START_FETCH_DATA_REPORTS })
+
+    let url = `${host}api/v1/users/student/list/report/`
+    axios.get(url)
+        .then(response => {
+            dispatch({
+                type: FETCH_DATA_REPORTS,
+                payload: {
+                    students: response.data
+                }
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({ type: FINISH_FETCH_DATA_REPORTS })
             Swal.fire({
                 icon: 'error',
                 showConfirmButton: true,

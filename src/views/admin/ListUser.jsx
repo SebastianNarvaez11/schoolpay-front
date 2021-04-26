@@ -2,12 +2,10 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateAdmin, deleteUser } from '../../redux/actions/adminActions'
 import { host } from '../../helpers/host.js'
-//components
-import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import ModalCreateAdmin from '../../components/Admin/ModalCreateAdmin'
 import ModalUpdateAdmin from '../../components/Admin/ModalUpdateAdmin'
 import { Table, Input, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Col, Button, Spinner } from "reactstrap";
+import {  Row, Button } from "reactstrap";
 import { ToastDelete } from '../../assets/alerts'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -15,6 +13,7 @@ import get from "lodash.get";
 import isequal from "lodash.isequal";
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import Loader from "react-loader-spinner";
 
 
 const ListUser = () => {
@@ -123,8 +122,8 @@ const ListUser = () => {
                     textToHighlight={text.toString()}
                 />
             ) : (
-                    text
-                ),
+                text
+            ),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -139,6 +138,12 @@ const ListUser = () => {
     };
 
     const columns = [
+        {
+            title: 'Nombre',
+            dataIndex: ['first_name'],
+            ...getColumnSearchProps("first_name"),
+            render: (text, row) => `${row.first_name} ${row.last_name}`,
+        },
         {
             title: 'Usuario',
             dataIndex: ['username'],
@@ -198,21 +203,19 @@ const ListUser = () => {
             dataIndex: 'id',
             render: (text, row) => {
                 return (
-                    <Row>
-                        <Col>
-                            <span style={{ fontSize: '20px', color: '#597ef7' }} onClick={() => toggleState(row)}>
-                                <i id='icon-button' className="fas fa-sync-alt rotateMe"></i>
-                            </span>
+                    <>
+                        <span style={{ fontSize: '20px', color: '#597ef7' }} onClick={() => toggleState(row)}>
+                            <i id='icon-button' className="fas fa-sync-alt rotateMe"></i>
+                        </span>
 
-                            <span style={{ fontSize: '20px', color: '#faad14' }} className='ml-4 mr-4' onClick={() => toggleOpenUpdate(row)}>
-                                <i id='icon-button' className="far fa-edit"></i>
-                            </span>
+                        <span style={{ fontSize: '20px', color: '#faad14', marginLeft: 20, marginRight: 20 }} className='ml-4 mr-4' onClick={() => toggleOpenUpdate(row)}>
+                            <i id='icon-button' className="far fa-edit"></i>
+                        </span>
 
-                            <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
-                                <i id='icon-button' className="far fa-trash-alt"></i>
-                            </span>
-                        </Col>
-                    </Row>
+                        <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
+                            <i id='icon-button' className="far fa-trash-alt"></i>
+                        </span>
+                    </>
                 );
             },
         },
@@ -223,39 +226,39 @@ const ListUser = () => {
 
     return (
         <>
-            <HeaderAdmin />
-            <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
-                <Row>
-                    <div className="col">
-                        <Card id='card_shadow' className="animate__animated animate__fadeIn d-flex justify-content-center">
-                            <CardHeader className="border-0">
-                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Usuarios</h3>
-                                <Button className='btn btn-success float-right  mt--5' color="success" type="button" onClick={toggleCreate} >
-                                    Nuevo <i className="fas fa-plus ml-1"></i>
-                                </Button>
-                            </CardHeader>
-                            {isFetchingUsers
-                                ?
-                                <div style={{ margin: 40, alignSelf: 'center' }}>
-                                    <Spinner className="float-right" color="primary" />
-                                </div>
-                                :
-                                <Container fluid>
-                                    <Table className='table-responsive'
-                                        dataSource={users}
-                                        columns={columns}
-                                        rowKey="id"
-                                        pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20', '30'] }} />
-                                </Container>
-                            }
-                        </Card>
+            {isFetchingUsers
+                ?
+                <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                    <div className='text-center'>
+                        <Loader
+                            type="BallTriangle"
+                            color="#5257f2"
+                            height={100}
+                            width={100}
+                        />
+                        <h1 className=' mt-3'>Cargando Usuarios</h1>
+                        <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
                     </div>
-                </Row>
-                <ModalCreateAdmin show={showCreate} toggle={toggleCreate} />
-                {showUpdate.data && <ModalUpdateAdmin show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
-            </Container >
+                </div>
+                :
+                <>
+                    <Row style={{ paddingLeft: 50, paddingRight: 50 }}>
+                        <Button className='btn mb-4' style={{ backgroundColor: '#6266ea', border: 0 }} type="button" onClick={toggleCreate} >
+                            <i className="fas fa-plus mr-2"></i> Añadir Usuario
+                        </Button>
+                        <Table style={{ width: '100%' }}
+                            className='animate__animated animate__fadeIn'
+                            dataSource={users}
+                            columns={columns}
+                            rowKey={record => record}
+                            scroll={{ y: 600 }}
+                            pagination={false} />
+                    </Row>
+                    <ModalCreateAdmin show={showCreate} toggle={toggleCreate} />
+                    {showUpdate.data && <ModalUpdateAdmin show={showUpdate.show} data={showUpdate.data} toggle={toggleCloseUpdate} />}
+                </>
+            }
         </>
-
     )
 }
 

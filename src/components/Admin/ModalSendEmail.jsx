@@ -43,7 +43,7 @@ export const ModalSendEmail = ({ show, msg, user, email, toggle }) => {
             >{({ values, isSubmittig, handleBlur, handleChange, isValid }) => {
                 return (
                     <Form>
-                        <ModalHeader className='font-varela'>
+                        <ModalHeader >
                             <i className="far fa-envelope mr-1" style={{ fontSize: '20px' }}></i> <strong style={{ fontSize: '20px' }}>Envio de Correos</strong>
                         </ModalHeader>
                         <ModalBody>

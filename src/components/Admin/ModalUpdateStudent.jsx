@@ -38,7 +38,6 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
 
     const grades = useSelector(state => state.gradeReducer.grades)
     const dispatch = useDispatch()
-    console.log(data)
 
     return (
         <Modal isOpen={show} toggle={toggle} size='lg'>
@@ -106,9 +105,6 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                         })
                         
                     formikBag.setSubmitting(false)
-                    console.log(user)
-                    console.log(student)
-                    console.log(typeof (student.grade))
                 }}
 
             >{({ values, handleBlur, handleChange, isSubmitting, isValid }) => {

@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 //components
-import HeaderAdmin from '../../components/Headers/admin/HeaderAdmin'
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Spinner } from "reactstrap";
+import {  Row, Col } from "reactstrap";
+import SelectPeriodPayment from '../../components/Headers/admin/SelectPeriodPayment'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
-import { fetchPayments } from '../../redux/actions/paymentActions'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
+import Loader from "react-loader-spinner";
+import { formatNumber } from '../../helpers/functions'
 
 
 const ListPayments = () => {
 
-    const { payments, isFetchingPayments } = useSelector(state => state.paymentReducer)
+    const { payments, isFetchingPayments, isFetchingPaymentsByPeriod } = useSelector(state => state.paymentReducer)
 
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (payments.length === 0) {
-            dispatch(fetchPayments())
-        }
-
-    }, [dispatch, payments.length])
-
+    const valorRecaudado = () => {
+        let total = 0
+        payments.forEach(payment => {
+            total = total + payment.value
+        })
+        return total
+    }
 
     useEffect(() => {
         if (payments.length !== 0) {
@@ -77,8 +76,8 @@ const ListPayments = () => {
                     textToHighlight={text.toString()}
                 />
             ) : (
-                    text
-                ),
+                text
+            ),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -107,7 +106,7 @@ const ListPayments = () => {
             title: 'Valor',
             dataIndex: 'value',
             ...getColumnSearchProps("value"),
-            render: (text, row) => `${row.value}`,
+            render: (text, row) => `$ ${formatNumber(row.value)}`,
         },
         {
             title: 'Fecha',
@@ -132,42 +131,100 @@ const ListPayments = () => {
 
     return (
         <>
-            <HeaderAdmin />
-            <Container className="mt--8 pl-5 pr-5 pb-3" fluid>
-                <Row>
-                    <div className="col">
-                        <Card id='card_shadow' className="animate__animated animate__fadeIn">
-                            <CardHeader className="border-0">
-                                <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>Pagos</h3>
-                                <ReactHTMLTableToExcel
-                                    id="test-table-xls-button"
-                                    className="btn btn-success float-right  mt--5"
-                                    table="table-report"
-                                    filename="Reporte"
-                                    sheet="Reporte"
-                                    buttonText="Reporte Excel" />
-                            </CardHeader>
-                            {isFetchingPayments ?
-                                <div style={{ margin: 40, alignSelf: 'center' }}>
-                                    <Spinner className="float-right" color="primary" />
-                                </div>
-                                :
-                                <Container fluid>
-                                    <Table className='table-responsive'
-                                        dataSource={payments}
-                                        columns={columns}
-                                        rowKey="id"
-                                        size="small"
-                                        scroll={{ x: 'calc(700px + 50%)', y: 500 }}
-                                        pagination={false} />
-                                </Container>
-                            }
-                        </Card>
+            {isFetchingPayments
+                ?
+                <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                    <div className='text-center'>
+                        <Loader
+                            type="BallTriangle"
+                            color="#5257f2"
+                            height={100}
+                            width={100}
+                        />
+                        <h1 className=' mt-3'>Cargando Pagos</h1>
+                        <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
                     </div>
-                </Row>
-            </Container >
-        </>
+                </div>
+                :
+                <>
+                    <Row>
+                        <SelectPeriodPayment />
+                    </Row>
+                    {isFetchingPaymentsByPeriod
+                        ?
+                        <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                            <div className='text-center'>
+                                <Loader
+                                    type="BallTriangle"
+                                    color="#5257f2"
+                                    height={100}
+                                    width={100}
+                                />
+                                <h1 className=' mt-3'>Cargando Pagos</h1>
+                                <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
+                            </div>
+                        </div>
+                        :
+                        <>
+                            <Row className='mb-4' style={{ paddingLeft: 50, paddingRight: 50 }}>
 
+                                <Col lg={2} md={4} sm={6} >
+                                    <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                        <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#2dce89', padding: 5, borderRadius: 10 }}>
+                                            <i class="fas fa-check fa-3x"></i>
+                                        </span>
+                                        <Col>
+                                            <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                Total Realizados
+                                                </h5>
+                                            <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                {payments.length}
+                                            </span>
+                                        </Col>
+                                    </div>
+                                </Col>
+                                <Col lg={2} md={4} sm={6} >
+                                    <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                        <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#2dce89', padding: 5, borderRadius: 10 }}>
+                                            <i class="fas fa-donate fa-3x"></i>
+                                        </span>
+                                        <Col>
+                                            <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                Total Recaudado
+                                                </h5>
+                                            <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                $ {formatNumber(valorRecaudado())}
+                                            </span>
+                                        </Col>
+                                    </div>
+                                </Col>
+                                <Col lg={8} md={8} sm={6} >
+                                    <ReactHTMLTableToExcel
+                                        id="test-table-xls-button"
+                                        className="btn btn-success float-right"
+                                        table="table-report"
+                                        filename="Reporte"
+                                        sheet="Reporte"
+                                        buttonText="Reporte Excel" />
+                                </Col>
+
+                            </Row>
+                            <Row style={{ paddingLeft: 50, paddingRight: 50 }}>
+
+                                <Table style={{ width: '100%' }}
+                                    className='animate__animated animate__fadeIn'
+                                    dataSource={payments}
+                                    columns={columns}
+                                    rowKey="id"
+                                    size="small"
+                                    scroll={{ y: 500 }}
+                                    pagination={false} />
+                            </Row>
+                        </>
+                    }
+                </>
+            }
+        </>
     )
 }
 

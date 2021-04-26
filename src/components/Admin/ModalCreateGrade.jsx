@@ -24,6 +24,7 @@ const ModalCreateGrade = ({ show, toggle }) => {
             <Formik
                 initialValues={{
                     name: '',
+                    abbreviation: '',
                     monthly_pay: '',
                     enrollment: ''
                 }}
@@ -33,6 +34,7 @@ const ModalCreateGrade = ({ show, toggle }) => {
                 onSubmit={(values, formikBag) => {
                     const grade = {
                         name: values.name,
+                        abbreviation: values.abbreviation,
                         monthly_pay: values.monthly_pay,
                         enrollment: values.enrollment,
                     }
@@ -42,7 +44,7 @@ const ModalCreateGrade = ({ show, toggle }) => {
             >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
                 return (
                     <Form>
-                        <ModalHeader className='font-varela'>
+                        <ModalHeader>
                             <i className="fas fa-chalkboard-teacher mr-2" style={{ fontSize: '25px', color: '#faad14' }}></i> <strong style={{ fontSize: '20px' }}>Crear Grado</strong>
                         </ModalHeader>
                         <ModalBody>
@@ -61,6 +63,23 @@ const ModalCreateGrade = ({ show, toggle }) => {
                                                 onChange={handleChange('name')} />
                                         </InputGroup>
                                         <ErrorMessage name="name" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
+                                    </FormGroup>
+                                </Col>
+                                <Col lg='12'>
+                                    <FormGroup >
+                                        <InputGroup className="mb-4">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="fas fa-text-width" />
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name='abbreviation' placeholder="Abreviación: Ej: 1°" type="text"
+                                                maxlength={4}
+                                                value={values.abbreviation}
+                                                onBlur={handleBlur('abbreviation')}
+                                                onChange={handleChange('abbreviation')} />
+                                        </InputGroup>
+                                        <ErrorMessage name="abbreviation" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
                                     </FormGroup>
                                 </Col>
                                 <Col lg='12'>

@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { Card, CardBody, Container, Row, Col, FormGroup, Input, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
-import { sms_recordatorio, email_recordatorio } from '../../../helpers/messages'
-import { ModalConfirmPhone } from '../../Admin/ModalConfirmPhone'
-import { ModalSpinner } from '../../Spinner/ModalSpinner'
+// import { Card, CardBody, Container, Row, Col, FormGroup, Input, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+// import { sms_recordatorio, email_recordatorio } from '../../../helpers/messages'
+// import { ModalConfirmPhone } from '../../Admin/ModalConfirmPhone'
+// import { ModalSpinner } from '../../Spinner/ModalSpinner'
 import { fetchDataGraphics } from '../../../redux/actions/studentActions'
-import { ToastConfirmSendSms } from '../../../assets/alerts'
-import { sendEmailMassive } from '../../../redux/actions/contactAction'
+// import { ToastConfirmSendSms } from '../../../assets/alerts'
+// import { sendEmailMassive } from '../../../redux/actions/contactAction'
 
 export const NavbarGeneralPayment = () => {
 
     const dispatch = useDispatch()
-    const { data_graphics, isFetchingData } = useSelector(state => state.studentReducer)
-    const { sending } = useSelector(state => state.contactReducer)
-    const [value, setValue] = useState('0');
+    const {
+        data_graphics,
+        // isFetchingData
+    } = useSelector(state => state.studentReducer)
+
+    // const { sending } = useSelector(state => state.contactReducer)
+    // const [value, setValue] = useState('0');
 
     useEffect(() => {
         if (data_graphics.length === 0) {
@@ -22,46 +26,46 @@ export const NavbarGeneralPayment = () => {
         //  eslint-disable-next-line
     }, [dispatch]);
 
-    const changeFilter = (e) => {
-        setValue(e.target.value)
-    }
+    // const changeFilter = (e) => {
+    //     setValue(e.target.value)
+    // }
 
-    const [modalSms, setModalSms] = useState({
-        show: false,
-        message: '',
-        users: []
-    })
+    // const [modalSms, setModalSms] = useState({
+    //     show: false,
+    //     message: '',
+    //     users: []
+    // })
 
-    const toggleCreateSms = (msg) => {
-        const users = data_graphics.filter(user => user.student.monthOwed >= value)
-        setModalSms({
-            show: !modalSms.show,
-            message: msg,
-            users: users
-        })
-    }
+    // const toggleCreateSms = (msg) => {
+    //     const users = data_graphics.filter(user => user.student.monthOwed >= value)
+    //     setModalSms({
+    //         show: !modalSms.show,
+    //         message: msg,
+    //         users: users
+    //     })
+    // }
 
 
     //confirmacion de envio emails
-    const sentEmails = (sms) => {
-        const users = data_graphics.filter(user => user.student.monthOwed >= value)
-        ToastConfirmSendSms(`Se enviarán ${users.length} correos. deseas continuar?`)
-            .fire().then((result) => {
-                if (result.value) {
-                    dispatch(sendEmailMassive(users, sms))
-                }
-            })
-    }
+    // const sentEmails = (sms) => {
+    //     const users = data_graphics.filter(user => user.student.monthOwed >= value)
+    //     ToastConfirmSendSms(`Se enviarán ${users.length} correos. deseas continuar?`)
+    //         .fire().then((result) => {
+    //             if (result.value) {
+    //                 dispatch(sendEmailMassive(users, sms))
+    //             }
+    //         })
+    // }
 
     return (
         <>
-            <div className="header bg-blue pb-9  pt-md-4" >
+            {/* <div className="header bg-blue pb-9  pt-md-4" >
                 <Container >
                     <div className="header-body">
                         <Row className="d-flex justify-content-center">
                             <Card className="card-stats mt--4 mb-4">
                                 <CardBody>
-                                    <h3 className="mb-0 font-varela ml-3" style={{ fontSize: '20px' }}>Envio Masivo</h3>
+                                    <h3 className="mb-0  ml-3" style={{ fontSize: '20px' }}>Envio Masivo</h3>
                                     <Row>
                                         <Col lg='6' xl='6'>
                                             <FormGroup >
@@ -126,7 +130,7 @@ export const NavbarGeneralPayment = () => {
                 <ModalConfirmPhone show={modalSms.show} selectedRow={modalSms.users} msg={modalSms.message} toggle={toggleCreateSms} />
                 <ModalSpinner isLoading={sending} text={'Enviando ...'} />
                 <ModalSpinner isLoading={isFetchingData} text={'Cargando Datos ...'} />
-            </div>
+            </div> */}
         </>
     )
 }

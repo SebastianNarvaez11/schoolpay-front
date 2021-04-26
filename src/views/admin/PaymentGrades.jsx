@@ -5,28 +5,39 @@ import { SmallBarPayment } from '../../components/Payment/SmallBarPayment'
 import { ModalSpinner } from '../../components/Spinner/ModalSpinner'
 import { ModalConfirmPhone } from '../../components/Admin/ModalConfirmPhone'
 import { Table, Input, Button as ButtonAntd } from 'antd';
-import { Card, CardHeader, Container, Row, Spinner, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import {Row, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Col, Button, UncontrolledPopover, PopoverHeader, PopoverBody} from "reactstrap";
 import { ToastConfirmSendSms } from '../../assets/alerts'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
 import { sendEmailMassive } from '../../redux/actions/contactAction'
 import { formatNumber, scheduleFormat } from '../../helpers/functions'
-import { sms_recordatorio, email_recordatorio, wpp_recordatorio, wpp_recordatorio2 } from '../../helpers/messages'
+import { sms_recordatorio, email_recordatorio, wpp_recordatorio, wpp_cobro } from '../../helpers/messages'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
 import isequal from "lodash.isequal";
+import Loader from "react-loader-spinner";
+import search_img from '../../assets/img/search-img.png'
+import { Chart as ChartGoogle } from "react-google-charts";
 
 export const PaymentGrades = () => {
 
-    const { isFetching, schedule_select, students_filter } = useSelector(state => state.studentReducer)
+    const { isFetchingStudentByGrade, schedule_select, students_filter } = useSelector(state => state.studentReducer)
     const { sending } = useSelector(state => state.contactReducer)
-    const grade_select = useSelector(state => state.gradeReducer.grade_select)
+    const { grade_select, isFetchingGrades } = useSelector(state => state.gradeReducer)
     const dispatch = useDispatch()
+
+    // const en_mora = students_filter.filter(data => data.student.monthOwed !== 0).length
+    const al_dia = students_filter.filter(data => data.student.monthOwed === 0).length
+    const un_mes = students_filter.filter(data => data.student.monthOwed === 1).length
+    const dos_meses = students_filter.filter(data => data.student.monthOwed === 2).length
+    const tres_meses = students_filter.filter(data => data.student.monthOwed >= 3).length
+
+    const [buttonActive, setButtonActive] = useState('')
+
 
     //efecto para limpiar el studen_select y el students_filter
     useEffect(() => {
         return () => {
-            console.log('desmontado')
             dispatch(resetStudentSelect())
         }
     }, [dispatch])
@@ -118,8 +129,8 @@ export const PaymentGrades = () => {
                     textToHighlight={text.toString()}
                 />
             ) : (
-                    text
-                ),
+                text
+            ),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -144,7 +155,7 @@ export const PaymentGrades = () => {
         {
             title: 'Nombre',
             dataIndex: 'last_name',
-            width: 350,
+            width: 200,
             ...getColumnSearchProps("last_name"),
             sorter: (a, b) => { return a.last_name.localeCompare(b.last_name) },
             sortDirections: ['ascend', 'descend'],
@@ -228,7 +239,7 @@ export const PaymentGrades = () => {
         },
         {
             title: 'Progreso',
-            width: 500,
+            width: 300,
             dataIndex: 'meses',
             render: (text, row) => {
                 return (
@@ -242,40 +253,45 @@ export const PaymentGrades = () => {
         //     render: (text, row) => `${initialCharge(row.student.initial_charge)}`,
         // },
         {
-            title: 'Wpp',
+            title: 'Acciones',
             dataIndex: 'id',
-            width: 50,
+            width: 100,
             render: (text, row) => {
                 return (
-                    <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                        <DropdownToggle style={{padding: '0px', paddingLeft: '5px',paddingRight: '5px'}}>
-                            <span style={{ fontSize: '20px', color: '#00e676' }}>
-                                <i id='icon-button' className="fab fa-whatsapp"></i>
-                            </span>
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem disabled>{row.student.phone1}</DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone1)}>
-                                Mensaje de Recordatorio
+                    <>
+                        {row.student.note !== '' &&
+                            <>
+                                <Button id={'UncontrolledPopover' + row.id} type="button" style={{ padding: '5px', backgroundColor: 'transparent', border: 0 }}>
+                                    <i className="far fa-bell" style={{ color: '#1ea5f3', fontSize: '25px' }}></i>
+                                </Button>
+                                <UncontrolledPopover placement="right" target={'UncontrolledPopover' + row.id} trigger="focus">
+                                    <PopoverHeader>Nota</PopoverHeader>
+                                    <PopoverBody>{row.student.note}</PopoverBody>
+                                </UncontrolledPopover>
+                            </>
+                        }
+                        <UncontrolledDropdown direction="left" className="mt-1 mb-1" onClick={() => setButtonActive(row.id)}>
+                            <DropdownToggle style={{ padding: '5px', backgroundColor: 'transparent', border: 0 }}>
+                                <i id='icon-button' className="fab fa-whatsapp" style={{ color: buttonActive === row.id ? '#6266ea' : '#08e77a', fontSize: '25px' }}></i>
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem disabled>{row.student.phone1}</DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone1)}>
+                                    Mensaje de Recordatorio
                             </DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(row), row.student.phone1)}>
-                                Mensaje de Recordatorio 2
+                                <DropdownItem onClick={() => senWppSms(wpp_cobro(row), row.student.phone1)}>
+                                    Mensaje de Cobro
                             </DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(sms_recordatorio(row), row.student.phone1)}>
-                                Mensaje de Cobro
+                                <DropdownItem disabled>{row.student.phone2}</DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone2)}>
+                                    Mensaje de Recordatorio
                             </DropdownItem>
-                            <DropdownItem disabled>{row.student.phone2}</DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone2)}>
-                                Mensaje de Recordatorio
+                                <DropdownItem onClick={() => senWppSms(wpp_cobro(row), row.student.phone2)}>
+                                    Mensaje de Cobro
                             </DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio2(row), row.student.phone2)}>
-                                Mensaje de Recordatorio 2
-                            </DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(sms_recordatorio(row), row.student.phone2)}>
-                                Mensaje de Cobro
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>
+                    </>
                 );
             },
         },
@@ -284,81 +300,186 @@ export const PaymentGrades = () => {
 
     return (
         <>
-            <NavbarGrades />
-            <Container className="mt--9 pl-5 pr-5 pb-3" fluid>
-                {Object.keys(grade_select).length === 0
-                    ? <h3 className="d-flex justify-content-center mb-0 mt-5 font-varela" style={{ fontSize: '25px', position: 'relative' }}>Seleccione un grado... </h3>
-                    : <Row>
-                        <div className="col">
-                            <Card id='card_shadow' className="animate__animated animate__fadeIn">
-                                <CardHeader className="border-0"> <div className="float-right mt--2">
-                                    <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                        <DropdownToggle disabled={selectedRow.length === 0}>
-                                            <span style={{ color: '#ffe000' }}>
-                                                <i id='icon-button' className="fas fa-sms fa-3x"></i>
-                                            </span>
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                            <DropdownItem
-                                                onClick={() => toggleCreateSms(sms_recordatorio)}>
-                                                Recordatorio de Meses en mora
-                                                </DropdownItem>
-                                            <DropdownItem disabled>Action</DropdownItem>
-                                            <DropdownItem
-                                                onClick={console.log()}>
-                                                Circular de Cobro
-                                                </DropdownItem>
-                                        </DropdownMenu>
-                                    </UncontrolledDropdown>
-                                    <UncontrolledDropdown direction="left" className="mt-1 mb-1">
-                                        <DropdownToggle disabled={selectedRow.length === 0}>
-                                            <span style={{ color: '#f14336' }}>
-                                                <i id='icon-button' className="far fa-envelope fa-3x"></i>
-                                            </span>
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                            <DropdownItem
-                                                onClick={() => sentEmails(email_recordatorio)}>
-                                                Recordatorio de Meses en mora
-                                                </DropdownItem>
-                                            <DropdownItem disabled>Action</DropdownItem>
-                                            <DropdownItem
-                                                onClick={console.log()}>
-                                                Circular de Cobro
-                                                </DropdownItem>
-                                        </DropdownMenu>
-                                    </UncontrolledDropdown>
-
-                                </div>
-                                    <h3 className="mb-0 font-varela" style={{ fontSize: '25px' }}>{grade_select.name} - {scheduleFormat(schedule_select)}</h3>
-
-                                </CardHeader>
-                                <Container fluid>
-                                    {isFetching
-                                        ?
-                                        <Spinner className="d-flex justify-content-center mb-5" color="primary" style={{ width: '3rem', height: '3rem', margin: 'auto' }} />
-                                        :
-                                        <>
-                                            <Table className='table-responsive'
-                                                dataSource={students_filter}
-                                                rowSelection={rowSelection}
-                                                columns={columns}
-                                                rowKey={record => record}
-                                                size="small"
-                                                scroll={{ x: 'calc(700px + 50%)', y: 500 }}
-                                                pagination={false} />
-                                            <h5 tag="h5" className="text-uppercase text-muted mb-0 font-varela">Mensualidad: $ {formatNumber(grade_select.monthly_pay)}</h5>
-                                            <h5 tag="h5" className="text-uppercase text-muted mb-0 font-varela">Matricula: $ {formatNumber(grade_select.enrollment)}</h5>
-                                        </>
-                                    }
-                                </Container>
-                            </Card>
+            {isFetchingGrades ?
+                <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                    <div className='text-center'>
+                        <Loader
+                            type="BallTriangle"
+                            color="#5257f2"
+                            height={100}
+                            width={100}
+                        />
+                        <h1 className=' mt-3'>Cargando Grados</h1>
+                        <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
+                    </div>
+                </div>
+                :
+                <>
+                    <NavbarGrades />
+                    {isFetchingStudentByGrade ?
+                        <div className='d-flex flex-column justify-content-center mt-9 animate__animated animate__fadeIn'>
+                            <div className='text-center'>
+                                <Loader
+                                    type="BallTriangle"
+                                    color="#5257f2"
+                                    height={100}
+                                    width={100}
+                                />
+                                <h1 className=' mt-3'>Cargando Estudiantes</h1>
+                                <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
+                            </div>
                         </div>
-                    </Row>
-                }
-                <ModalSpinner isLoading={sending} text={'Enviando ...'}/>
-                <ModalConfirmPhone show={modalSms.show} selectedRow={selectedRow} msg={modalSms.message} toggle={toggleCreateSms} />
-            </Container >
+                        :
+                        <>
+                            {Object.keys(grade_select).length === 0 ?
+                                <>
+                                    <div className='d-flex justify-content-center mt-7 animate__animated animate__fadeIn'>
+                                        <img width='20%' alt="search" src={search_img} />
+                                    </div>
+                                    <div className='d-flex justify-content-center animate__animated animate__fadeIn'>
+                                        <h3 className="d-flex justify-content-center " style={{ fontSize: '15px', position: 'relative' }}>
+                                            Selecciona un grado y una jornada
+                                        </h3>
+                                    </div>
+                                </>
+                                :
+                                <Row style={{ paddingLeft: 30, paddingRight: 30 }}>
+                                    <Col lg={9} md={9}>
+                                        <div className='float-right mt--5'>
+                                            <UncontrolledDropdown direction="left" className="mt-3">
+                                                <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#1ea5f3', border: 0, padding: 10 }} disabled={selectedRow.length === 0}>
+                                                    <i className="fas fa-sms fa-2x"></i>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem
+                                                        onClick={() => toggleCreateSms(sms_recordatorio)}>
+                                                        Recordatorio de Meses en mora
+                                                </DropdownItem>
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
+                                            <UncontrolledDropdown direction="left" className="mt-1 mb-1">
+                                                <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#e34133', border: 0, padding: 10 }} disabled={selectedRow.length === 0}>
+                                                    <i className="far fa-envelope fa-2x"></i>
+                                                </DropdownToggle>
+                                                <DropdownMenu>
+                                                    <DropdownItem
+                                                        onClick={() => sentEmails(email_recordatorio)}>
+                                                        Recordatorio de Meses en mora
+                                                </DropdownItem>
+                                                    <DropdownItem disabled>Action</DropdownItem>
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
+                                        </div>
+                                        <Table style={{ width: '100%' }}
+                                            className='animate__animated animate__fadeIn mt-5'
+                                            dataSource={students_filter}
+                                            rowSelection={rowSelection}
+                                            columns={columns}
+                                            rowKey={record => record}
+                                            size="small"
+                                            scroll={{ y: 600 }}
+                                            pagination={false} />
+                                    </Col>
+                                    <Col lg={3} md={3} style={{ paddingLeft: 50 }} className='mt--6'>
+                                        <div className='d-flex justify-content-center align-items-center mt-3'>
+                                            <h1 style={{ fontSize: 80 }}>{grade_select.abbreviation}</h1>
+                                            <h1 style={{ fontSize: 30 }} className="ml-3">{scheduleFormat(schedule_select)}</h1>
+                                        </div>
+                                        <Row>
+                                            <Col lg={6} md={6} sm={12} className="d-flex justify-content-center">
+                                                <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                                    <i class="fas fa-check fa-2x icon_shadown" style={{ backgroundColor: '#2ece89', color: '#ffffff', padding: 8, borderRadius: 10, margin: 5 }}></i>
+                                                    <Col>
+                                                        <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                            Al Día
+                                                        </h5>
+                                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                            {al_dia}
+                                                        </span>
+                                                    </Col>
+                                                </div>
+                                            </Col>
+                                            <Col lg={6} md={6} sm={12} className="d-flex justify-content-center">
+                                                <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                                    <i class="fas fa-exclamation-triangle fa-2x icon_shadown" style={{ backgroundColor: '#faad15', color: '#ffffff', padding: 8, borderRadius: 10, margin: 5 }}></i>
+                                                    <Col>
+                                                        <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                            1 Mes
+                                                                        </h5>
+                                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                            {un_mes}
+                                                        </span>
+                                                    </Col>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <Row className='mt-2'>
+                                            <Col lg={6} md={6} sm={12} className="d-flex justify-content-center">
+                                                <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: 10, borderRadius: 10 }}>
+                                                    <i class="fas fa-exclamation-circle fa-2x icon_shadown" style={{ backgroundColor: '#ff7042', color: '#ffffff', padding: 8, borderRadius: 10, margin: 5 }}></i>
+                                                    <Col>
+                                                        <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                            2 Meses
+                                                                        </h5>
+                                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                            {dos_meses}
+                                                        </span>
+                                                    </Col>
+                                                </div>
+                                            </Col>
+                                            <Col lg={6} md={6} sm={12} className="d-flex justify-content-center">
+                                                <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: 10, borderRadius: 10 }}>
+                                                    <i class="fas fa-radiation-alt fa-2x icon_shadown" style={{ backgroundColor: '#f5242f', color: '#ffffff', padding: 8, borderRadius: 10, margin: 5 }}></i>
+                                                    <Col>
+                                                        <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                            3 ó Mas
+                                                        </h5>
+                                                        <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                            {tres_meses}
+                                                        </span>
+                                                    </Col>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <div className='card_shadown animate__animated animate__fadeIn mt-3' style={{ padding: 20, borderRadius: 20, height: 250 }}>
+                                            <ChartGoogle
+                                                width={'110%'}
+                                                style={{ position: 'absolute', marginTop: -40, marginLeft: -40 }}
+                                                height={400}
+                                                chartType="PieChart"
+                                                loader={<div>Loading Chart</div>}
+                                                data={[
+                                                    ['Task', 'Hours per Day'],
+                                                    ['Al Día', al_dia],
+                                                    ['1 Mes', un_mes],
+                                                    ['2 Meses', dos_meses],
+                                                    ['3 ó Mas', tres_meses],
+                                                ]}
+                                                options={{
+                                                    pieHole: 0.4,
+                                                    backgroundColor: 'transparent',
+                                                    slices: {
+                                                        0: { color: '#2dce89' },
+                                                        1: { color: '#faad14' },
+                                                        2: { color: '#ff6f41' },
+                                                        3: { color: '#f5232e' },
+                                                    },
+                                                }}
+                                                rootProps={{ 'data-testid': '3' }}
+                                            />
+                                        </div>
+                                        <ModalSpinner isLoading={sending} text={'Enviando ...'} />
+                                        <ModalConfirmPhone show={modalSms.show} selectedRow={selectedRow} msg={modalSms.message} toggle={toggleCreateSms} />
+                                    </Col>
+                                </Row>
+                            }
+                        </>
+                    }
+                </>
+            }
         </>
     )
 }
