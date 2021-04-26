@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import NavbarGeneralPayment from '../../components/Headers/admin/NavbarGeneralPayment'
 import { useSelector } from 'react-redux'
-import { Container, Row, Col} from "reactstrap";
-import { amountOfDebtors, totalOwed, formatNumber } from '../../helpers/functions'
+import { Container, Row, Col } from "reactstrap";
+import { amountOfDebtors, totalOwed, formatNumber, enMora, alDia, unMes, dosMeses, tresMeses } from '../../helpers/functions'
 import { Chart as ChartGoogle } from "react-google-charts";
 import Loader from "react-loader-spinner";
 
@@ -11,13 +11,43 @@ export const PaymentGeneral = () => {
     const { grades } = useSelector(state => state.gradeReducer)
     const { isFetchingData, data_graphics, students } = useSelector(state => state.studentReducer)
 
-    const en_mora = data_graphics.filter(data => data.student.monthOwed !== 0).length
-    const al_dia = data_graphics.filter(data => data.student.monthOwed === 0).length
-    const un_mes = data_graphics.filter(data => data.student.monthOwed === 1).length
-    const dos_meses = data_graphics.filter(data => data.student.monthOwed === 2).length
-    const tres_meses = data_graphics.filter(data => data.student.monthOwed >= 3).length
-    const cobertura = students.length - en_mora - al_dia
 
+    const en_mora = useMemo(() => enMora(data_graphics),
+        //  eslint-disable-next-line
+        [data_graphics])
+
+
+    const al_dia = useMemo(() => alDia(data_graphics),
+        //  eslint-disable-next-line
+        [data_graphics])
+
+
+    const un_mes = useMemo(() => unMes(data_graphics),
+        //  eslint-disable-next-line
+        [data_graphics])
+
+
+    const dos_meses = useMemo(() => dosMeses(data_graphics),
+        //  eslint-disable-next-line
+        [data_graphics])
+
+
+    const tres_meses = useMemo(() => tresMeses(data_graphics),
+        //  eslint-disable-next-line
+        [data_graphics])
+
+
+    const cobertura = () => {
+        if (data_graphics !== undefined) {
+            if (students !== undefined) {
+                return students.length - en_mora - al_dia
+            } else {
+                return 0
+            }
+        } else {
+            return 0
+        }
+    }
 
 
     const adeudadoPorJornada = (schedule) => {
@@ -26,7 +56,6 @@ export const PaymentGeneral = () => {
             const item = [grade.abbreviation, totalOwed(grade.id, schedule, data_graphics)]
             return data.push(item)
         })
-        console.log(data)
         return data
     }
 
@@ -55,7 +84,6 @@ export const PaymentGeneral = () => {
             const item = { name: `${grade.name}`, value: totalOwed(grade.id, schedule, data_graphics) }
             return data.push(item)
         })
-
         return data
     }
 
@@ -88,7 +116,7 @@ export const PaymentGeneral = () => {
                                 width={100}
                             />
                             <h1 className=' mt-3'>Generando Estadisticas</h1>
-                            <h3  style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
+                            <h3 style={{ fontStyle: 30 }}>Esto puede tardar un momento</h3>
                         </div>
                     </div>
                     :
@@ -157,7 +185,7 @@ export const PaymentGeneral = () => {
                                         </div>
                                     </Col>
                                     <Col lg={2} md={4} sm={6} className="d-flex justify-content-center">
-                                        <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10}}>
+                                        <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
                                             <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#f5232e', padding: 5, borderRadius: 10 }}>
                                                 <i class="fas fa-radiation-alt fa-3x"></i>
                                             </span>
@@ -181,7 +209,7 @@ export const PaymentGeneral = () => {
                                                     Cobertura
                                                 </h5>
                                                 <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
-                                                    {cobertura}
+                                                    {cobertura()}
                                                 </span>
                                             </Col>
                                         </div>
@@ -234,7 +262,7 @@ export const PaymentGeneral = () => {
                                         </div>
                                     </Col>
                                     <Col lg={6}>
-                                        <div className="card_shadown animate__animated animate__fadeIn" style={{ height: 300, borderRadius: 25}}>
+                                        <div className="card_shadown animate__animated animate__fadeIn" style={{ height: 300, borderRadius: 25 }}>
                                             <Container fluid>
                                                 <div style={{ padding: 5 }}>
                                                     <ChartGoogle
@@ -257,7 +285,7 @@ export const PaymentGeneral = () => {
                                                         data={[
                                                             ['Task', 'Hours per Day'],
                                                             ['Al Dia', al_dia],
-                                                            ['Cobertura', cobertura],
+                                                            ['Cobertura', cobertura()],
                                                             ['En Mora', en_mora],
                                                         ]}
                                                         options={{

@@ -41,15 +41,65 @@ export const initialCharge = (e) => {
 
 // cantidad de deudores
 export const amountOfDebtors = (grade, schedule, students) => {
-    return students.filter(student => student.student.grade.id === grade && student.student.schedule === schedule && student.student.monthOwed !== 0).length
+    if (students !== undefined) {
+        return students.filter(student => student.student.grade.id === grade && student.student.schedule === schedule && student.student.monthOwed !== 0).length
+    }else {
+        return 0
+    }
 }
 
 //total adeudado por grado
 export const totalOwed = (grade, schedule, students) => {
     let total = 0
-    const students_filter = students.filter(student => student.student.grade.id === grade && student.student.schedule === schedule)
-    students_filter.forEach(student => {
-        total = total + student.student.amountOwed
-    })
+    if (students !== undefined) {
+        const students_filter = students.filter(student => student.student.grade.id === grade && student.student.schedule === schedule)
+        students_filter.forEach(student => {
+            total = total + student.student.amountOwed
+        })
+    }
     return total
+}
+
+export const enMora = (data) => {
+    if (data !== undefined) {
+        return data.filter(data => data.student.monthOwed !== 0).length
+    } else {
+        return 0
+    }
+}
+
+
+export const alDia = (data) => {
+    if (data !== undefined) {
+        return data.filter(data => data.student.monthOwed === 0).length
+    } else {
+        return 0
+    }
+}
+
+
+export const unMes = (data) => {
+    if (data !== undefined) {
+        return data.filter(data => data.student.monthOwed === 1).length
+    } else {
+        return 0
+    }
+}
+
+
+export const dosMeses = (data) => {
+    if (data !== undefined) {
+        return data.filter(data => data.student.monthOwed === 2).length
+    } else {
+        return 0
+    }
+}
+
+
+export const tresMeses = (data) => {
+    if (data !== undefined) {
+        return data.filter(data => data.student.monthOwed >= 3).length
+    } else {
+        return 0
+    }
 }

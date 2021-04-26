@@ -6,6 +6,9 @@ import { UPDATE_STUDENT, UPDATE_STUDENT_SELECT } from '../actions/studentActions
 
 export const START_FETCH_PAYMENTS = 'START_FETCH_PAYMENTS'
 export const FINISH_FETCH_PAYMENTS = 'FINISH_FETCH_PAYMENTS'
+
+export const START_CREATE_PAYMENT_MANUAL = 'START_CREATE_PAYMENT_MANUAL'
+export const FINISH_CREATE_PAYMENT_MANUAL = 'FINISH_CREATE_PAYMENT_MANUAL'
 export const FETCH_PAYMENTS = 'FETCH_PAYMENTS'
 export const CREATE_PAYMENT = 'CREATE_PAYMENT'
 export const DELETE_PAYMENT = 'DELETE_PAYMENT'
@@ -79,6 +82,8 @@ export const fetchPaymentsByPeriod = (period) => async (dispatch) => {
 
 export const createPaymentManual = (payment) => async (dispatch) => {
 
+    dispatch({ type: START_CREATE_PAYMENT_MANUAL })
+
     let url = `${host}api/v1/payments/student/create/manual/`
     await axios.post(url, payment)
         .then(response => {
@@ -109,6 +114,7 @@ export const createPaymentManual = (payment) => async (dispatch) => {
             })
         })
         .catch(error => {
+            dispatch({ type: FINISH_CREATE_PAYMENT_MANUAL })
             console.log(error)
             Swal.fire({
                 icon: 'error',

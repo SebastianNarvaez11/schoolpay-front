@@ -4,7 +4,8 @@ import Swal from 'sweetalert2'
 import { host } from '../../helpers/host.js'
 import { SELECT_GRADE, RESET_GRADE } from './gradeActions'
 
-export const FETCHING_STUDENTS = 'FETCHING_STUDENTS'
+export const START_FETCH_STUDENTS = 'START_FETCH_STUDENTS'
+export const FINISH_FETCH_STUDENTS = 'FINISH_FETCH_STUDENTS'
 export const FETCH_STUDENTS = 'FETCH_STUDENTS'
 export const CREATE_STUDENT = 'CREATE_STUDENT'
 export const UPDATE_STUDENT = 'UPDATE_STUDENT'
@@ -30,7 +31,7 @@ export const FINISH_FETCH_DATA_REPORTS = 'FINISH_FETCH_DATA_REPORTS'
 
 export const fetchStudents = () => async (dispatch) => {
 
-    dispatch({ type: FETCHING_STUDENTS })
+    dispatch({ type: START_FETCH_STUDENTS })
 
 
     let url = `${host}api/v1/users/student/list/`
@@ -44,6 +45,7 @@ export const fetchStudents = () => async (dispatch) => {
             })
         })
         .catch(error => {
+            dispatch({ type: FINISH_FETCH_STUDENTS })
             console.log(error)
             Swal.fire({
                 icon: 'error',

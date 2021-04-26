@@ -20,8 +20,10 @@ export const NavbarGeneralPayment = () => {
     // const [value, setValue] = useState('0');
 
     useEffect(() => {
-        if (data_graphics.length === 0) {
-            dispatch(fetchDataGraphics())
+        if (data_graphics !== undefined) {
+            if (data_graphics.length === 0) {
+                dispatch(fetchDataGraphics())
+            }
         }
         //  eslint-disable-next-line
     }, [dispatch]);

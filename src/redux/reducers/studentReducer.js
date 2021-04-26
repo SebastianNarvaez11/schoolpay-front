@@ -1,5 +1,6 @@
 import {
-    FETCHING_STUDENTS, FETCH_STUDENTS,
+    START_FETCH_STUDENTS, FINISH_FETCH_STUDENTS,
+    FETCH_STUDENTS,
     CREATE_STUDENT, UPDATE_STUDENT,
     DELETE_STUDENT, FILTER_STUDENT,
     RESET_STUDENT_SELECT, UPDATE_STUDENT_SELECT,
@@ -18,7 +19,7 @@ import {
 const initialState = {
     students: [],//usuario de tipo student que se usan para filtrar en el input
     student_full: {},//student completo de donde se leen los datos
-    isFetching: false,
+    isFetching: false,//cargando estudiantyes que filtran en el input
     isFetchingStudent: false,// cuando se hace la busqueda en el input
     isFetchingStudentByGrade: false,
     student_select: {},//student que activa el cambio para que no haya ciclo
@@ -33,10 +34,16 @@ const initialState = {
 const studentReducer = (state = initialState, action) => {
     switch (action.type) {
 
-        case FETCHING_STUDENTS:
+        case START_FETCH_STUDENTS:
             return {
                 ...state,
                 isFetching: true
+            }
+
+        case FINISH_FETCH_STUDENTS:
+            return {
+                ...state,
+                isFetching: false
             }
 
         case FETCH_STUDENTS:

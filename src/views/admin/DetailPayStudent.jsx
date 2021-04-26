@@ -14,7 +14,7 @@ import { scheduleFormat, formatNumber, initialCharge } from '../../helpers/funct
 import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_cobro } from '../../helpers/messages'
 import { Table, Input as InputAnd, Button as ButtonAntd } from 'antd';
 import {
-     Row, Col, FormGroup, InputGroup, InputGroupAddon, InputGroupText,
+    Row, Col, FormGroup, InputGroup, InputGroupAddon, InputGroupText,
     Input, Button, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledPopover, PopoverHeader, PopoverBody
 } from "reactstrap";
 import { updateStudent, deleteStudent } from '../../redux/actions/studentActions'
@@ -44,6 +44,7 @@ export const DetailPayStudent = () => {
     const { current_user } = useSelector(state => state.authReducer)
     const { student_full, isFetching } = useSelector(state => state.studentReducer)
     const { sending } = useSelector(state => state.contactReducer)
+    const { isCreatingPayment } = useSelector(state => state.paymentReducer)
     const dispatch = useDispatch()
 
     // modal de creacion de compromiso
@@ -309,16 +310,17 @@ export const DetailPayStudent = () => {
             dataIndex: 'id',
             render: (text, row) => {
                 return (
-                    <Row>
+                    <>
                         {current_user.type === 1 &&
-                            <Col>{row.method === 'Manual' &&
-                                <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
-                                    <i id='icon-button' className="far fa-trash-alt"></i>
-                                </span>
-                            }
-                            </Col>
+                            <>
+                                {row.method === 'Manual' &&
+                                    <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => handleDelete(row)}>
+                                        <i id='icon-button' className="far fa-trash-alt"></i>
+                                    </span>
+                                }
+                            </>
                         }
-                    </Row>
+                    </>
                 );
             },
         },
@@ -548,7 +550,8 @@ export const DetailPayStudent = () => {
                                             columns={columns}
                                             rowKey="id"
                                             size="small"
-                                            pagination={{ defaultPageSize: 4, showSizeChanger: true, pageSizeOptions: ['4', '10', '20', '30'] }} />
+                                            scroll={{ y: 180 }}
+                                            pagination={false} />
                                     </Row>
                                     {showNota.data && <ModalCreateNote show={showNota.show} toggle={toggleCloseNota} data={showNota.data} />}
                                     <ModalSendEmail show={modalEmail.show} msg={modalEmail.message} user={student_full} email={student_full.email} toggle={toggleCreateEmail} />
@@ -622,7 +625,16 @@ export const DetailPayStudent = () => {
                                                                     <Button color="success" type="submit" disabled={isSubmitting || !isValid}>
                                                                         Registrar <i className="fas fa-arrow-right ml-5" ></i>
                                                                     </Button>
-
+                                                                    {isCreatingPayment &&
+                                                                        <div className='float-right animate__animated animate__fadeIn mt--3'>
+                                                                            <Loader
+                                                                                type="BallTriangle"
+                                                                                color="#5257f2"
+                                                                                height={60}
+                                                                                width={60}
+                                                                            />
+                                                                        </div>
+                                                                    }
                                                                 </Form>
                                                             )
                                                         }}

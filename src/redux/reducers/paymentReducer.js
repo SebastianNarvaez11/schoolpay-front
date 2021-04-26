@@ -1,5 +1,7 @@
 import {
     FETCH_PAYMENTS,
+    START_CREATE_PAYMENT_MANUAL,
+    FINISH_CREATE_PAYMENT_MANUAL,
     START_FETCH_PAYMENTS,
     FINISH_FETCH_PAYMENTS,
     CREATE_PAYMENT,
@@ -24,7 +26,8 @@ const initialState = {
     compromises: [],
     studentFull: {},
     isFetchingCompromises: false,
-    isFetchingStudentFull: false
+    isFetchingStudentFull: false,
+    isCreatingPayment: false
 }
 
 const paymentReducer = (state = initialState, action) => {
@@ -50,10 +53,23 @@ const paymentReducer = (state = initialState, action) => {
                 isFetchingPaymentsByPeriod: false,
             }
 
+        case START_CREATE_PAYMENT_MANUAL:
+            return {
+                ...state,
+                isCreatingPayment: true
+            }
+
+        case FINISH_CREATE_PAYMENT_MANUAL:
+            return {
+                ...state,
+                isCreatingPayment: false
+            }
+
         case CREATE_PAYMENT:
             return {
                 ...state,
                 payments: [action.payload.payment, ...state.payments],
+                isCreatingPayment: false
             }
 
         case START_FETCH_COMPROMISES:

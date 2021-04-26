@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 //components
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import {  Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, } from "reactstrap";
+import { Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, } from "reactstrap";
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
@@ -13,6 +13,7 @@ import { updateCompromiseSinceList, getStudentFullCompromise, resetStudentFullCo
 import Loader from "react-loader-spinner";
 import SmallBarPayment from '../../components/Payment/SmallBarPayment'
 import search_student from '../../assets/img/search-student.png'
+import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 
 
 const ListCompromises = () => {
@@ -25,6 +26,14 @@ const ListCompromises = () => {
     const cumplidos = compromises.filter(compromise => compromise.state === 3).length
 
     const [buttonActive, setButtonActive] = useState('')
+
+    useEffect(() => {
+        if (compromises.length !== 0) {
+            const table = window.document.querySelectorAll('table');
+            table[1].setAttribute('id', 'table-report');
+        }
+
+    }, [compromises.length])
 
     const toggleAccomplished = (row) => {
         if (row.state !== 3) {
@@ -309,7 +318,15 @@ const ListCompromises = () => {
                                     </Col>
                                 </div>
                             </Col>
+                            
                         </Row>
+                        <ReactHTMLTableToExcel
+                                id="test-table-xls-button"
+                                className="btn btn-success float-right mt--6"
+                                table="table-report"
+                                filename="Reporte"
+                                sheet="Reporte"
+                                buttonText="Excel" />
                         <Table
                             style={{ width: '100%' }}
                             className='animate__animated animate__fadeIn'
