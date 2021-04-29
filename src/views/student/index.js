@@ -1,10 +1,10 @@
 import React from 'react'
 import { Switch, Route } from "react-router-dom";
-import HeaderStudent from '../../components/Headers/students/HeaderStudent'
 import { useSelector } from 'react-redux'
 import NavbarAdmin from '../../components/Navbars/NavbarAdmin'
 import StudentSidebar from '../../components/Sidebars/StudentSidebar'
 import ListPayments from './ListPayments'
+import Error_404 from '../errors/Error_404'
 
 
 const RouterIndex = ({ match }) => {
@@ -15,10 +15,9 @@ const RouterIndex = ({ match }) => {
                 <StudentSidebar />
                 <div id="page-content-wrapper">
                     <NavbarAdmin />
-                    <HeaderStudent />
                     <Switch>
                         <Route exact path={match.path} component={ListPayments} />
-                        {/* <Route exact path={`${match.path}/payments`} component={ListPayments} /> */}
+                        <Route path='*' component={Error_404} />
                     </Switch>
                 </div>
             </div>

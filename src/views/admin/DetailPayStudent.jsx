@@ -29,7 +29,7 @@ import * as yup from 'yup';
 import { ToastDelete } from '../../assets/alerts'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { PDFDownloadLink } from '@react-pdf/renderer'
+import { PDFDownloadLink} from '@react-pdf/renderer'
 import CompromisePDF from '../reports/CompromisePDF'
 import Loader from "react-loader-spinner";
 import search_img from '../../assets/img/search-img.png'
@@ -435,8 +435,10 @@ export const DetailPayStudent = () => {
                                                         <i id='icon-button' className="fas fa-times"></i>
                                                     </span>
 
-                                                    <PDFDownloadLink className="btn btn-success btn-sm ml-3" document={<CompromisePDF compromise={student_full.student.compromises.filter(compromise => compromise.state === 1)[0]} student={student_full} />} fileName="somename.pdf">
-                                                        {({ blob, url, loading, error }) => (loading ? 'Loading document...' : ' Descargar ')}
+                                                    <PDFDownloadLink className="btn btn-success btn-sm ml-3" style={{ color: 'white' }}
+                                                        document={<CompromisePDF compromise={student_full.student.compromises.filter(compromise => compromise.state === 1)[0]}
+                                                            student={student_full} />} fileName={student_full.last_name + '.pdf'}>
+                                                        {({ blob, url, loading, error }) => (loading ? 'Generando...' : ' Descargar ')}
                                                     </PDFDownloadLink>
 
                                                     <span style={{ fontSize: '20px', color: '#f5222d', marginLeft: 10, alignSelf: 'center' }}
@@ -543,9 +545,10 @@ export const DetailPayStudent = () => {
                                             <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ fontSize: '12px' }}>{student_full.email}</h5>
                                         </Col>
                                     </Row>
-                                    <h3 className="mt-3" style={{ fontSize: '20px' }}>Pagos Realizados</h3>
+                                    <h3 className="mt-3 mb-3" style={{ fontSize: '20px' }}>Pagos Realizados</h3>
                                     <Row className='mt-1 animate__animated animate__fadeIn'>
                                         <Table style={{ width: '100%' }}
+                                            className='animate__animated animate__fadeIn '
                                             dataSource={student_full.student.payments}
                                             columns={columns}
                                             rowKey="id"

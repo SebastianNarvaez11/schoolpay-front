@@ -89,7 +89,7 @@ const Sidebar = (props) => {
                         </li>
                     }
                     <li className={props.location.pathname === '/admin/compromises' ? 'navActive' : 'navActiveHover'}>
-                        <NavLink exact to='/admin/compromises' activeClassName='navActive' className="list-group-item list-group-item-action" 
+                        <NavLink exact to='/admin/compromises' activeClassName='navActive' className="list-group-item list-group-item-action text-wrap" 
                             style={{ backgroundColor: 'transparent', borderBottom: 0 }}>
                             <div className={props.location.pathname === '/admin/compromises' && "itemActive"}>
                                 <i className="fas fa-handshake mr-2 ml-3" ></i>Compromisos

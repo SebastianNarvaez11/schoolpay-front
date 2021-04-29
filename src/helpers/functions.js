@@ -17,6 +17,16 @@ export const scheduleFormat = (e) => {
     }
 }
 
+export const typeDocument = (e) => {
+    if (e === 1) {
+        return 'T.I'
+    } else if (e === 2) {
+        return 'R.C'
+    } else if (e === 3) {
+        return 'C.C'
+    }
+}
+
 export const initialCharge = (e) => {
     if (e === 10) {
         return 'Feb-Nov'
@@ -43,7 +53,7 @@ export const initialCharge = (e) => {
 export const amountOfDebtors = (grade, schedule, students) => {
     if (students !== undefined) {
         return students.filter(student => student.student.grade.id === grade && student.student.schedule === schedule && student.student.monthOwed !== 0).length
-    }else {
+    } else {
         return 0
     }
 }

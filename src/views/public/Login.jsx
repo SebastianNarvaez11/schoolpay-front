@@ -32,8 +32,11 @@ const Login = () => {
 
 
     if (isLoggedIn) {
-        if (current_user.type === 1 || current_user.type === 2) {
+        if (current_user.type === 1 ) {
             return <Redirect to='/admin' />
+        }
+        if (current_user.type === 2) {
+            return <Redirect to='/assistant' />
         }
         if (current_user.type === 3) {
             return <Redirect to='/student' />
