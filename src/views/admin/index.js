@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import { fetchGrades } from "../../redux/actions/gradeActions";
 import { fetchStudents } from "../../redux/actions/studentActions";
-import { fetchAdminUsers } from "../../redux/actions/adminActions";
-import { fetchCompromises } from '../../redux/actions/paymentActions'
+// import { fetchAdminUsers } from "../../redux/actions/adminActions";
+// import { fetchCompromises } from '../../redux/actions/paymentActions'
 // import { fetchPayments } from '../../redux/actions/paymentActions'
 import NavbarAdmin from "../../components/Navbars/NavbarAdmin";
 import AdminSidebar from "../../components/Sidebars/AdminSidebar";
@@ -27,8 +27,8 @@ const RouterIndex = ({ match }) => {
     useEffect(() => {
         dispatch(fetchStudents());
         dispatch(fetchGrades());
-        dispatch(fetchAdminUsers());
-        dispatch(fetchCompromises())
+        // dispatch(fetchAdminUsers());
+        // dispatch(fetchCompromises())
         // dispatch(fetchPayments())
     }, [dispatch]);
 

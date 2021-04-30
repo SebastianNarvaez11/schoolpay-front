@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 //components
 import { Table, Input as InputAntd, Button as ButtonAntd } from 'antd';
-import {  Row, Col } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import SelectPeriodPayment from '../../components/Headers/admin/SelectPeriodPayment'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -11,6 +11,7 @@ import isequal from "lodash.isequal";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 import Loader from "react-loader-spinner";
 import { formatNumber } from '../../helpers/functions'
+import search_img from '../../assets/img/search-img.png'
 
 
 const ListPayments = () => {
@@ -166,60 +167,76 @@ const ListPayments = () => {
                         </div>
                         :
                         <>
-                            <Row className='mb-4' style={{ paddingLeft: 50, paddingRight: 50 }}>
-
-                                <Col lg={2} md={4} sm={6} >
-                                    <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
-                                        <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#2dce89', padding: 5, borderRadius: 10 }}>
-                                            <i class="fas fa-check fa-3x"></i>
-                                        </span>
-                                        <Col>
-                                            <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
-                                                Total Realizados
-                                                </h5>
-                                            <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
-                                                {payments.length}
-                                            </span>
-                                        </Col>
+                            {payments.length === 0
+                                ?
+                                <>
+                                    <div className='d-flex justify-content-center mt-9 animate__animated animate__fadeIn'>
+                                        <img width='20%' alt="search" src={search_img} />
                                     </div>
-                                </Col>
-                                <Col lg={2} md={4} sm={6} >
-                                    <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
-                                        <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#2dce89', padding: 5, borderRadius: 10 }}>
-                                            <i class="fas fa-donate fa-3x"></i>
-                                        </span>
-                                        <Col>
-                                            <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
-                                                Total Recaudado
-                                                </h5>
-                                            <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
-                                                $ {formatNumber(valorRecaudado())}
-                                            </span>
-                                        </Col>
+                                    <div className='d-flex justify-content-center animate__animated animate__fadeIn'>
+                                        <h3 className="d-flex justify-content-center " style={{ fontSize: '15px', position: 'relative' }}>
+                                            Seleccione un periodo
+                                        </h3>
                                     </div>
-                                </Col>
-                                <Col lg={8} md={8} sm={6} >
-                                    <ReactHTMLTableToExcel
-                                        id="test-table-xls-button"
-                                        className="btn btn-success float-right"
-                                        table="table-report"
-                                        filename="Reporte"
-                                        sheet="Reporte"
-                                        buttonText="Reporte Excel" />
-                                </Col>
+                                </>
+                                :
+                                <>
+                                    <Row className='mb-4' style={{ paddingLeft: 50, paddingRight: 50 }}>
+                                        <Col lg={2} md={4} sm={6} >
+                                            <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                                <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#2dce89', padding: 5, borderRadius: 10 }}>
+                                                    <i class="fas fa-check fa-3x"></i>
+                                                </span>
+                                                <Col>
+                                                    <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                        Total Realizados
+                                                </h5>
+                                                    <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                        {payments.length}
+                                                    </span>
+                                                </Col>
+                                            </div>
+                                        </Col>
+                                        <Col lg={2} md={4} sm={6} >
+                                            <div className='card_shadown d-flex justify-content-center animate__animated animate__fadeIn' style={{ padding: 10, borderRadius: 10 }}>
+                                                <span className='icon_shadown d-flex align-items-center' style={{ color: '#ffffff', backgroundColor: '#2dce89', padding: 5, borderRadius: 10 }}>
+                                                    <i class="fas fa-donate fa-3x"></i>
+                                                </span>
+                                                <Col>
+                                                    <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
+                                                        Total Recaudado
+                                                </h5>
+                                                    <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
+                                                        $ {formatNumber(valorRecaudado())}
+                                                    </span>
+                                                </Col>
+                                            </div>
+                                        </Col>
+                                        <Col lg={8} md={8} sm={6} >
+                                            <ReactHTMLTableToExcel
+                                                id="test-table-xls-button"
+                                                className="btn btn-success float-right"
+                                                table="table-report"
+                                                filename="Reporte"
+                                                sheet="Reporte"
+                                                buttonText="Reporte Excel" />
+                                        </Col>
 
-                            </Row>
-                            <Row style={{ paddingLeft: 50, paddingRight: 50 }}>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 50, paddingRight: 50 }}>
 
-                                <Table style={{ width: '100%' }}
-                                    className='animate__animated animate__fadeIn'
-                                    dataSource={payments}
-                                    columns={columns}
-                                    rowKey="id"
-                                    size="small"
-                                    scroll={{ y: 500 }}
-                                    pagination={false} />
-                            </Row>
+                                        <Table style={{ width: '100%' }}
+                                            className='animate__animated animate__fadeIn'
+                                            dataSource={payments}
+                                            columns={columns}
+                                            rowKey="id"
+                                            size="small"
+                                            scroll={{ y: 500 }}
+                                            pagination={false} />
+                                    </Row>
+                                </>
+                            }
+
                         </>
                     }
                 </>

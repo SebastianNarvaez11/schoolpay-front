@@ -1,6 +1,7 @@
 import React from 'react';
 import { Page, View, Document, StyleSheet, Image, Text } from '@react-pdf/renderer';
 import logo from '../../assets/img/colegio.jpg'
+import logo_sp from '../../assets/img/logo_wather.jpg'
 import { scheduleFormat, formatNumber, typeDocument } from '../../helpers/functions'
 // Create styles
 const styles = StyleSheet.create({
@@ -15,6 +16,10 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         marginLeft: 120,
+    },
+    image_logo: {
+        height: 20,
+        width: 80
     }
 });
 
@@ -56,7 +61,7 @@ const CompromisePDF = ({ compromise, student }) => {
                     <Text style={{ marginTop: 30, fontSize: 12, textAlign: 'justify', marginHorizontal: 40, lineHeight: 1.3 }}>
                         Para constancia de lo acordado, se firma en Santiago de Cali a los {create.getDate() + 1} dia(s) del mes {create.getMonth() + 1} del {create.getFullYear()}.
                     </Text>
-                    <View style={{ flexDirection: 'row', marginHorizontal: 40, marginTop: 200, justifyContent: 'space-around' }}>
+                    <View style={{ flexDirection: 'row', marginHorizontal: 40, marginTop: 170 }}>
                         <View style={{ width: '40%', borderTop: 2 }}>
                             <Text style={{ fontSize: 12, lineHeight: 1.3, paddingTop: 5 }}>
                                 {(compromise.person_charge).toUpperCase()}{`\n`}
@@ -64,13 +69,9 @@ const CompromisePDF = ({ compromise, student }) => {
                                 Acudiente
                             </Text>
                         </View>
-                        <View style={{ width: '40%', borderTop: 2 }}>
-                            <Text style={{ fontSize: 12, lineHeight: 1.3, paddingTop: 5 }}>
-                                VLADIMIR MORA PEREZ{`\n`}
-                                CC. 94.497.531{`\n`}
-                                Director Financiero
-                            </Text>
-                        </View>
+                    </View>
+                    <View style={{marginTop:110}}>
+                        <Image style={styles.image_logo} src={logo_sp} />
                     </View>
                 </View>
             </Page>

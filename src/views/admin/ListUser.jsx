@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateAdmin, deleteUser } from '../../redux/actions/adminActions'
+import { fetchAdminUsers, updateAdmin, deleteUser } from '../../redux/actions/adminActions'
 import { host } from '../../helpers/host.js'
 import ModalCreateAdmin from '../../components/Admin/ModalCreateAdmin'
 import ModalUpdateAdmin from '../../components/Admin/ModalUpdateAdmin'
 import { Table, Input, Button as ButtonAntd } from 'antd';
-import {  Row, Button } from "reactstrap";
+import { Row, Button } from "reactstrap";
 import { ToastDelete } from '../../assets/alerts'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -18,9 +18,19 @@ import Loader from "react-loader-spinner";
 
 const ListUser = () => {
 
+
+
     const { users, isFetchingUsers } = useSelector(state => state.adminReducer)
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (users.length === 0) {
+            dispatch(fetchAdminUsers());
+        }
+        // eslint-disable-next-line
+    }, [users.length]);
+
 
     //logica modales
     const [showCreate, setShowCreate] = useState(false)

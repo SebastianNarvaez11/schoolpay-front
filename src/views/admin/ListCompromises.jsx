@@ -9,7 +9,7 @@ import get from "lodash.get";
 import isequal from "lodash.isequal";
 import { formatNumber } from '../../helpers/functions'
 import { wpp_recordatorio_compromiso } from '../../helpers/messages'
-import { updateCompromiseSinceList, getStudentFullCompromise, resetStudentFullCompromises } from '../../redux/actions/paymentActions'
+import { fetchCompromises, updateCompromiseSinceList, getStudentFullCompromise, resetStudentFullCompromises } from '../../redux/actions/paymentActions'
 import Loader from "react-loader-spinner";
 import SmallBarPayment from '../../components/Payment/SmallBarPayment'
 import search_student from '../../assets/img/search-student.png'
@@ -20,6 +20,13 @@ const ListCompromises = () => {
 
     const { compromises, isFetchingCompromises, isFetchingStudentFull, studentFull } = useSelector(state => state.paymentReducer)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (compromises.length === 0) {
+            dispatch(fetchCompromises())
+        }
+        // eslint-disable-next-line
+    }, [compromises.length])
 
     const pendientes = compromises.filter(compromise => compromise.state === 1).length
     const incumplidos = compromises.filter(compromise => compromise.state === 2).length
@@ -318,15 +325,15 @@ const ListCompromises = () => {
                                     </Col>
                                 </div>
                             </Col>
-                            
+
                         </Row>
                         <ReactHTMLTableToExcel
-                                id="test-table-xls-button"
-                                className="btn btn-success float-right mt--6"
-                                table="table-report"
-                                filename="Reporte"
-                                sheet="Reporte"
-                                buttonText="Excel" />
+                            id="test-table-xls-button"
+                            className="btn btn-success float-right mt--6"
+                            table="table-report"
+                            filename="Reporte"
+                            sheet="Reporte"
+                            buttonText="Excel" />
                         <Table
                             style={{ width: '100%' }}
                             className='animate__animated animate__fadeIn'
