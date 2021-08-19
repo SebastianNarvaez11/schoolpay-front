@@ -23,3 +23,8 @@ export const wpp_recordatorio_compromiso = (compromise) => {
 export const wpp_recordatorio_examenes = () => {
     return `COLEGIO ACADÉMICO EL POBLADO *Recordatorio Exámenes Finales 1er Periodo.* Señor padre de familia cordial saludo, se informa que a partir del *lunes 03 de mayo* se estarán realizando los exámenes finales del 1er periodo; le recordamos *estar al día con el pago de las mensualidades*, ya que la institución depende financieramente del pago oportuno que ustedes realicen. Agradecemos su atención. *Atte Departamento Financiero*`
 }
+
+export const wpp_cobro_citacion = (user) => {
+    return `Cordial saludo. Sr(a) *${user.student.attending}* quien registra en calidad de acudiente; Se  le informa que a la fecha, el estudiante *${user.first_name} ${user.last_name}* (Código: *${user.student.code}*), de grado ${user.student.grade.name}, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}*, por concepto de *${user.student.monthOwed}* mensualidad(es) atrasada(s). Recomendamos colocarse al dia; de lo contrario *SERÁ CITADO A LA INTITUCION*, ya que, dependemos  de los recaudos por concepto de pensión para solventar los gastos y obligaciones salariales de nuestro personal. Se le recuerda al acudiente que los pagos deben realizarse los primeros 10 días del mes y *se debe enviar la foto del comprobante de pago a este WhatsApp para su registro.* Recomendamos efectuar el pago del valor adeudado lo más pronto posible. Agradecemos su atención y quedamos atentos a una pronta respuesta.`
+}
+

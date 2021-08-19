@@ -11,7 +11,7 @@ import ModalCreateNote from '../../components/Admin/ModalCreateNote'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
 import { createPaymentManual, deletePaymentManual, deleteCompromises, updateCompromiseSinceDetail } from '../../redux/actions/paymentActions'
 import { scheduleFormat, formatNumber, initialCharge } from '../../helpers/functions.js'
-import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes } from '../../helpers/messages'
+import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes, wpp_cobro_citacion } from '../../helpers/messages'
 import { Table, Input as InputAnd, Button as ButtonAntd } from 'antd';
 import {
     Row, Col, FormGroup, InputGroup, InputGroupAddon, InputGroupText,
@@ -566,10 +566,12 @@ export const DetailPayStudent = () => {
                                 </Col>
                                 <Col lg={4} md={4} className='mt--7'>
                                     <div style={{ marginLeft: 60, marginRight: 50 }}>
+
                                         {!student_full.student.coverage &&
                                             <>
                                                 {current_user.type === 1 &&
                                                     <div className='animate__animated animate__fadeIn mt-3' style={{ padding: 20, borderRadius: 20, backgroundColor: 'white', marginLeft: 50 }}>
+
                                                         <Formik
                                                             initialValues={{
                                                                 value: student_full.student.monthly_payment,
@@ -597,8 +599,8 @@ export const DetailPayStudent = () => {
                                                                 <Form>
                                                                     <h3 className="mb-2" style={{ fontSize: '16px' }}>
                                                                         <i className="icon_shadown fas fa-dollar-sign fa-2x float-right" style={{ color: '#ffffff', padding: 10, paddingLeft: 15, paddingRight: 15, marginTop: -34, backgroundColor: '#2ece89', borderRadius: 10 }}></i>
-                                                                    Registrar Pago:
-                                                                </h3>
+                                                                        Registrar Pago:
+                                                                    </h3>
                                                                     <FormGroup >
                                                                         <InputGroup id='input-group-form' className="input-group-alternative mb-4">
                                                                             <Input className="input_search" style={{ borderRadius: 20, backgroundColor: 'transparent', paddingLeft: 30 }}
@@ -641,35 +643,40 @@ export const DetailPayStudent = () => {
                                                                 </Form>
                                                             )
                                                         }}
+
                                                         </Formik>
                                                     </div>
                                                 }
+
                                                 <div className='animate__animated animate__fadeIn mt-5' style={{ padding: 20, borderRadius: 20, backgroundColor: 'white', marginLeft: 50 }}>
+
                                                     <h3 className="mb-2" style={{ fontSize: '16px' }}>
                                                         <i className="icon_shadown fas fa-handshake fa-2x float-right" style={{ color: '#ffffff', padding: 10, paddingLeft: 15, paddingRight: 15, marginTop: -34, backgroundColor: '#5257f2', borderRadius: 10 }}></i>
-                                                    Compromisos:
-                                                </h3>
+                                                        Compromisos:
+                                                    </h3>
+
                                                     <Row>
                                                         <Col lg='6'>
                                                             <Button className="mt-2 btn-block" style={{ backgroundColor: '#5257f2' }}
                                                                 disabled={student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0}
                                                                 onClick={toggleCompromise}>
                                                                 <i className="fas fa-plus mr-2" ></i>Nuevo
-                                                        </Button>
+                                                            </Button>
                                                         </Col>
                                                         <Col lg='6'>
                                                             <Button className="mt-2 btn-block" color="warning"
                                                                 disabled={student_full.student.compromises.length === 0 && true}
                                                                 onClick={toggleHistorial}>
                                                                 <i className="fas fa-history mr-2" ></i>
-                                                            Historial
-                                                        </Button>
+                                                                Historial
+                                                            </Button>
                                                         </Col>
                                                     </Row>
                                                 </div>
 
                                                 {current_user.type === 1 &&
                                                     <Row className="mt-5 mb-3 d-flex justify-content-center animate__animated animate__fadeIn" style={{ marginLeft: 50 }}>
+
                                                         <UncontrolledDropdown direction="up" className="mt-1 mb-1">
                                                             <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#00e676', border: 0, padding: 10 }}>
                                                                 <i className="fab fa-whatsapp fa-2x"></i>
@@ -678,23 +685,29 @@ export const DetailPayStudent = () => {
                                                                 <DropdownItem disabled><h1 style={{ fontSize: 15 }}>{student_full.student.phone1}</h1></DropdownItem>
                                                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone1)}>
                                                                     Mensaje de Recordatorio
-                                                            </DropdownItem>
+                                                                </DropdownItem>
                                                                 <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone1)}>
                                                                     Mensaje de Cobro
-                                                            </DropdownItem>
+                                                                </DropdownItem>
                                                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone1)}>
                                                                     Recordatorio Examenes
-                                                            </DropdownItem>
+                                                                </DropdownItem>
+                                                                <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone1)}>
+                                                                    Mensaje Cobro Citacion
+                                                                </DropdownItem>
                                                                 <DropdownItem disabled><h1 style={{ fontSize: 15 }}>{student_full.student.phone2}</h1></DropdownItem>
                                                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone2)}>
                                                                     Mensaje de Recordatorio
-                                                            </DropdownItem>
+                                                                </DropdownItem>
                                                                 <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone2)}>
                                                                     Mensaje de Cobro
-                                                            </DropdownItem>
+                                                                </DropdownItem>
                                                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone2)}>
                                                                     Recordatorio Examenes
-                                                            </DropdownItem>
+                                                                </DropdownItem>
+                                                                <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone2)}>
+                                                                    Mensaje Cobro Citacion
+                                                                </DropdownItem>
                                                             </DropdownMenu>
                                                         </UncontrolledDropdown>
 
@@ -706,11 +719,11 @@ export const DetailPayStudent = () => {
                                                                 <DropdownItem
                                                                     onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
                                                                     Recordatorio de Meses en mora
-                                                            </DropdownItem>
+                                                                </DropdownItem>
                                                                 <DropdownItem
                                                                     onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
                                                                     Circular de Cobro
-                                                </DropdownItem>
+                                                                </DropdownItem>
                                                             </DropdownMenu>
                                                         </UncontrolledDropdown>
 
@@ -722,11 +735,11 @@ export const DetailPayStudent = () => {
                                                                 <DropdownItem
                                                                     onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
                                                                     SMS de Recordatorio
-                                                            </DropdownItem>
+                                                                </DropdownItem>
                                                                 <DropdownItem
                                                                     onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
                                                                     SMS de Cobro
-                                                            </DropdownItem>
+                                                                </DropdownItem>
                                                             </DropdownMenu>
                                                         </UncontrolledDropdown>
                                                     </Row>
@@ -736,7 +749,6 @@ export const DetailPayStudent = () => {
                                     </div>
                                 </Col>
                             </Row>
-
                         </>
                     }
                 </>

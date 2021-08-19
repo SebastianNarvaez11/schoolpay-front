@@ -10,7 +10,7 @@ import { ToastConfirmSendSms } from '../../assets/alerts'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
 import { sendEmailMassive } from '../../redux/actions/contactAction'
 import { formatNumber, scheduleFormat } from '../../helpers/functions'
-import { sms_recordatorio, email_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes } from '../../helpers/messages'
+import { sms_recordatorio, email_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes, wpp_cobro_citacion } from '../../helpers/messages'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
@@ -277,23 +277,29 @@ export const PaymentGrades = () => {
                                 <DropdownItem disabled>{row.student.phone1}</DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone1)}>
                                     Mensaje de Recordatorio
-                            </DropdownItem>
+                                </DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_cobro(row), row.student.phone1)}>
                                     Mensaje de Cobro
-                            </DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone1)}>
+                                </DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone1)}>
                                     Recordatorio Examenes
-                            </DropdownItem>
+                                </DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(row), row.student.phone1)}>
+                                    Mensaje Cobro Citacion
+                                </DropdownItem>
                                 <DropdownItem disabled>{row.student.phone2}</DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio(row), row.student.phone2)}>
                                     Mensaje de Recordatorio
-                            </DropdownItem>
+                                </DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_cobro(row), row.student.phone2)}>
                                     Mensaje de Cobro
-                            </DropdownItem>
-                            <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone2)}>
+                                </DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone2)}>
                                     Recordatorio Examenes
-                            </DropdownItem>
+                                </DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(row), row.student.phone2)}>
+                                    Mensaje Cobro Citacion
+                                </DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </>
@@ -359,7 +365,7 @@ export const PaymentGrades = () => {
                                                     <DropdownItem
                                                         onClick={() => toggleCreateSms(sms_recordatorio)}>
                                                         Recordatorio de Meses en mora
-                                                </DropdownItem>
+                                                    </DropdownItem>
                                                     <DropdownItem disabled>Action</DropdownItem>
                                                 </DropdownMenu>
                                             </UncontrolledDropdown>
@@ -371,7 +377,7 @@ export const PaymentGrades = () => {
                                                     <DropdownItem
                                                         onClick={() => sentEmails(email_recordatorio)}>
                                                         Recordatorio de Meses en mora
-                                                </DropdownItem>
+                                                    </DropdownItem>
                                                     <DropdownItem disabled>Action</DropdownItem>
                                                 </DropdownMenu>
                                             </UncontrolledDropdown>
@@ -411,7 +417,7 @@ export const PaymentGrades = () => {
                                                     <Col>
                                                         <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
                                                             1 Mes
-                                                                        </h5>
+                                                        </h5>
                                                         <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
                                                             {un_mes}
                                                         </span>
@@ -427,7 +433,7 @@ export const PaymentGrades = () => {
                                                     <Col>
                                                         <h5 tag="h5" className="text-uppercase text-muted mb-0 " style={{ whiteSpace: 'nowrap' }}>
                                                             2 Meses
-                                                                        </h5>
+                                                        </h5>
                                                         <span className="h2 font-weight-bold mb-0" style={{ fontSize: 20 }}>
                                                             {dos_meses}
                                                         </span>
