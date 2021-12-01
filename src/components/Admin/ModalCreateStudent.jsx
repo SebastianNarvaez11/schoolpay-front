@@ -340,7 +340,7 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                                                 onChange={handleChange('coverage')}
                                             />
                                             <Label className="custom-control-label" htmlFor="customCheck1">
-                                                Covbertura
+                                                Cobertura
                                             </Label>
                                         </div>
                                         <ErrorMessage name="coverage" render={msg => <div className='mt--4 error-text'>{msg}</div>} />

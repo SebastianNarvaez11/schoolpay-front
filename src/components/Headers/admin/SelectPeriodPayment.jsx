@@ -33,6 +33,7 @@ export const SelectPeriodPayment = () => {
                         <option value={9}>Septiembre</option>
                         <option value={10}>Octubre</option>
                         <option value={11}>Noviembre</option>
+                        <option value={12}>Diciembre</option>
                     </Input>
                 </InputGroup>
             </FormGroup>
