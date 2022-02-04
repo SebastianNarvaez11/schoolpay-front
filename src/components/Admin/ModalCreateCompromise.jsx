@@ -30,7 +30,7 @@ const ModalCreateCompromise = ({ show, toggle, student }) => {
             <Formik
                 initialValues={{
                     person_charge: student.student.attending,
-                    document: '',
+                    document: student.student.attending_document,
                     month_owed: student.student.monthOwed,
                     value: student.student.amountOwed,
                     date_pay: '',

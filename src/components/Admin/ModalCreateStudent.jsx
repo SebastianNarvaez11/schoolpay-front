@@ -23,6 +23,9 @@ const formSchema = yup.object().shape({
     document: yup.string().min(5, 'El documento debe tener minimo 5 caracteres')
         .test('Digits only', 'Este campo solo admite valores numericos ', digitsOnly)
         .required('El documento es obligatorio'),
+    attending_document: yup.string().min(5, 'El documento debe tener minimo 5 caracteres')
+        .test('Digits only', 'Este campo solo admite valores numericos ', digitsOnly)
+        .required('El documento es obligatorio'),
     grade: yup.object().typeError('Seleccione un grado').required('Este campo es obligatorio'),
     schedule: yup.number().min(1, 'Seleccione una jornada').required('Este campo es obligatorio'),
     initial_charge: yup.number().min(2, 'Seleccione un periodo').required('Este campo es obligatorio'),
@@ -43,7 +46,7 @@ export const ModalCreateStudent = ({ show, toggle }) => {
     const dispatch = useDispatch()
 
     return (
-        <Modal isOpen={show} toggle={toggle} size='lg'>
+        <Modal isOpen={show} size='lg'>
             <Formik
                 initialValues={{
                     username: '',
@@ -56,6 +59,8 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                     document_type: '0',
                     document: '',
                     attending: '',
+                    attending_document: '',
+                    address: '',
                     phone1: '',
                     phone2: '',
                     discount: 0,
@@ -85,6 +90,8 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                         document_type: values.document_type,
                         document: values.document,
                         attending: values.attending,
+                        attending_document: values.attending_document,
+                        address: values.address,
                         phone1: values.phone1,
                         phone2: values.phone2,
                         discount: values.discount,
@@ -262,6 +269,38 @@ export const ModalCreateStudent = ({ show, toggle }) => {
                                                 onChange={handleChange('attending')} />
                                         </InputGroup>
                                         <ErrorMessage name="attending" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
+                                    </FormGroup>
+                                </Col>
+                                <Col lg='6'>
+                                    <FormGroup >
+                                        <InputGroup className="mb-4">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="fas fa-id-card" />
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name='attending_document' placeholder="Documento Acudiente" type="number"
+                                                value={values.attending_document}
+                                                onBlur={handleBlur('attending_document')}
+                                                onChange={handleChange('attending_document')} />
+                                        </InputGroup>
+                                        <ErrorMessage name="attending_document" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
+                                    </FormGroup>
+                                </Col>
+                                <Col lg='6'>
+                                    <FormGroup >
+                                        <InputGroup className="mb-4">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="fas fa-home" />
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name='address' placeholder="Direccion" type="text"
+                                                value={values.address}
+                                                onBlur={handleBlur('address')}
+                                                onChange={handleChange('address')} />
+                                        </InputGroup>
+                                        <ErrorMessage name="address" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
                                     </FormGroup>
                                 </Col>
                                 <Col lg='6'>

@@ -113,3 +113,11 @@ export const tresMeses = (data) => {
         return 0
     }
 }
+
+// export const cobertura = (data) => {
+//     if (data !== undefined) {
+//         return data.filter(data => data.student.coverage).length
+//     } else {
+//         return 0
+//     }
+// }

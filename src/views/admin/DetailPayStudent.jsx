@@ -8,7 +8,7 @@ import { ModalSpinner } from '../../components/Spinner/ModalSpinner'
 import ModalCreateCompromise from '../../components/Admin/ModalCreateCompromise'
 import ModalListCompromise from '../../components/Admin/ModalListCompromise'
 import ModalCreateNote from '../../components/Admin/ModalCreateNote'
-import { resetStudentSelect } from '../../redux/actions/studentActions'
+import { resetStudentSelect ,updateStudent, deleteStudent} from '../../redux/actions/studentActions'
 import { createPaymentManual, deletePaymentManual, deleteCompromises, updateCompromiseSinceDetail } from '../../redux/actions/paymentActions'
 import { scheduleFormat, formatNumber, initialCharge } from '../../helpers/functions.js'
 import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes, wpp_cobro_citacion } from '../../helpers/messages'
@@ -17,7 +17,6 @@ import {
     Row, Col, FormGroup, InputGroup, InputGroupAddon, InputGroupText,
     Input, Button, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledPopover, PopoverHeader, PopoverBody
 } from "reactstrap";
-import { updateStudent, deleteStudent } from '../../redux/actions/studentActions'
 import { host } from '../../helpers/host'
 import { ModalUpdateStudent } from '../../components/Admin/ModalUpdateStudent'
 import Highlighter from 'react-highlight-words';
@@ -99,6 +98,8 @@ export const DetailPayStudent = () => {
     // cambiar el estado del estudiante
     const toggleState = (row) => {
         row.is_active = !row.is_active
+        const fecha = new Date();
+        row.student.date_retiro = fecha.getFullYear()+ "-" + (fecha.getMonth() + 1) + "-" + fecha.getDate()
         let url = `${host}api/v1/users/update/${row.id}/`
         console.log(row)
         axios.put(url, row)
@@ -378,6 +379,10 @@ export const DetailPayStudent = () => {
                             <Row className='ml-5'>
                                 <Col lg={8} md={8}>
                                     <div className="animate__animated animate__fadeIn mb-3">
+
+                                        {!student_full.is_active && <h1 className='text-center' style={{ color: '#f5222d' }}>Estudiante Retirado</h1>} <br />
+                                        {!student_full.is_active && <h1 className='text-center' style={{ color: '#f5222d' }}>{student_full.student.date_retiro}</h1>}
+
                                         <h3 className="mb-0 " style={{ fontSize: '30px' }}>
                                             <div className='d-flex justify-content-end'>
                                                 {student_full.student.note !== '' &&
@@ -402,8 +407,8 @@ export const DetailPayStudent = () => {
                                         {current_user.type === 1 &&
                                             <Row>
                                                 <Col>
-                                                    <span style={{ fontSize: '20px', color: '#597ef7' }} onClick={() => toggleState(student_full)}>
-                                                        <i id='icon-button' className="fas fa-sync-alt rotateMe"></i>
+                                                    <span style={{ fontSize: '20px', color: '#f5222d' }} onClick={() => toggleState(student_full)}>
+                                                        <i id='icon-button' className="fas fa-user-slash"></i>
                                                     </span>
 
                                                     <span style={{ fontSize: '20px', color: '#faad14' }} className='ml-4 mr-4' onClick={() => toggleOpenUpdate(student_full)}>
@@ -567,185 +572,189 @@ export const DetailPayStudent = () => {
                                 <Col lg={4} md={4} className='mt--7'>
                                     <div style={{ marginLeft: 60, marginRight: 50 }}>
 
-                                        {!student_full.student.coverage &&
+                                        {student_full.is_active &&
                                             <>
-                                                {current_user.type === 1 &&
-                                                    <div className='animate__animated animate__fadeIn mt-3' style={{ padding: 20, borderRadius: 20, backgroundColor: 'white', marginLeft: 50 }}>
+                                                {!student_full.student.coverage &&
+                                                    <>
+                                                        {current_user.type === 1 &&
+                                                            <div className='animate__animated animate__fadeIn mt-3' style={{ padding: 20, borderRadius: 20, backgroundColor: 'white', marginLeft: 50 }}>
 
-                                                        <Formik
-                                                            initialValues={{
-                                                                value: student_full.student.monthly_payment,
-                                                                description: 'Pago manual'
-                                                            }}
+                                                                <Formik
+                                                                    initialValues={{
+                                                                        value: student_full.student.monthly_payment,
+                                                                        description: 'Pago manual'
+                                                                    }}
 
-                                                            enableReinitialize
+                                                                    enableReinitialize
 
-                                                            validationSchema={formSchema}
+                                                                    validationSchema={formSchema}
 
-                                                            onSubmit={(values, formikBag) => {
-                                                                const payment = {
-                                                                    value: values.value,
-                                                                    reference: 'Pago Manual',
-                                                                    method: 'Manual',
-                                                                    description: values.description,
-                                                                    student: student_full.student.id
-                                                                }
+                                                                    onSubmit={(values, formikBag) => {
+                                                                        const payment = {
+                                                                            value: values.value,
+                                                                            reference: 'Pago Manual',
+                                                                            method: 'Manual',
+                                                                            description: values.description,
+                                                                            student: student_full.student.id
+                                                                        }
 
-                                                                dispatch(createPaymentManual(payment))
-                                                                formikBag.setSubmitting(false)
-                                                            }}
-                                                        >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
-                                                            return (
-                                                                <Form>
-                                                                    <h3 className="mb-2" style={{ fontSize: '16px' }}>
-                                                                        <i className="icon_shadown fas fa-dollar-sign fa-2x float-right" style={{ color: '#ffffff', padding: 10, paddingLeft: 15, paddingRight: 15, marginTop: -34, backgroundColor: '#2ece89', borderRadius: 10 }}></i>
-                                                                        Registrar Pago:
-                                                                    </h3>
-                                                                    <FormGroup >
-                                                                        <InputGroup id='input-group-form' className="input-group-alternative mb-4">
-                                                                            <Input className="input_search" style={{ borderRadius: 20, backgroundColor: 'transparent', paddingLeft: 30 }}
-                                                                                name='description' placeholder="Concepto" type="text"
-                                                                                value={values.description}
-                                                                                onBlur={handleBlur('description')}
-                                                                                onChange={handleChange('description')} />
-                                                                        </InputGroup>
-                                                                        <ErrorMessage name="description" render={msg => <div className='error-text'>{msg}</div>} />
-                                                                    </FormGroup>
-                                                                    <FormGroup >
-                                                                        <InputGroup id='input-group-form' className="input-group-alternative mb-4">
-                                                                            <Input className="input_search" style={{ borderTopLeftRadius: 20, borderBottomLeftRadius: 20, backgroundColor: 'transparent', paddingLeft: 30 }}
-                                                                                name='value' placeholder="Ingrese un valor" type="number"
-                                                                                max={student_full.student.total_year - student_full.student.total_paid}
-                                                                                value={values.value}
-                                                                                onBlur={handleBlur('value')}
-                                                                                onChange={handleChange('value')} />
-                                                                            <InputGroupAddon addonType="prepend">
-                                                                                <InputGroupText style={{ borderTopRightRadius: 20, borderBottomRightRadius: 20, backgroundColor: 'transparent' }}>
-                                                                                    <i className="fas fa-dollar-sign" style={{ color: '#5257f2', paddingRight: 10 }}></i>
-                                                                                </InputGroupText>
-                                                                            </InputGroupAddon>
-                                                                        </InputGroup>
-                                                                        <ErrorMessage name="value" render={msg => <div className='error-text'>{msg}</div>} />
-                                                                    </FormGroup>
-                                                                    <Button color="success" type="submit" disabled={isSubmitting || !isValid}>
-                                                                        Registrar <i className="fas fa-arrow-right ml-5" ></i>
+                                                                        dispatch(createPaymentManual(payment))
+                                                                        formikBag.setSubmitting(false)
+                                                                    }}
+                                                                >{({ values, isSubmitting, handleBlur, handleChange, isValid }) => {
+                                                                    return (
+                                                                        <Form>
+                                                                            <h3 className="mb-2" style={{ fontSize: '16px' }}>
+                                                                                <i className="icon_shadown fas fa-dollar-sign fa-2x float-right" style={{ color: '#ffffff', padding: 10, paddingLeft: 15, paddingRight: 15, marginTop: -34, backgroundColor: '#2ece89', borderRadius: 10 }}></i>
+                                                                                Registrar Pago:
+                                                                            </h3>
+                                                                            <FormGroup >
+                                                                                <InputGroup id='input-group-form' className="input-group-alternative mb-4">
+                                                                                    <Input className="input_search" style={{ borderRadius: 20, backgroundColor: 'transparent', paddingLeft: 30 }}
+                                                                                        name='description' placeholder="Concepto" type="text"
+                                                                                        value={values.description}
+                                                                                        onBlur={handleBlur('description')}
+                                                                                        onChange={handleChange('description')} />
+                                                                                </InputGroup>
+                                                                                <ErrorMessage name="description" render={msg => <div className='error-text'>{msg}</div>} />
+                                                                            </FormGroup>
+                                                                            <FormGroup >
+                                                                                <InputGroup id='input-group-form' className="input-group-alternative mb-4">
+                                                                                    <Input className="input_search" style={{ borderTopLeftRadius: 20, borderBottomLeftRadius: 20, backgroundColor: 'transparent', paddingLeft: 30 }}
+                                                                                        name='value' placeholder="Ingrese un valor" type="number"
+                                                                                        max={student_full.student.total_year - student_full.student.total_paid}
+                                                                                        value={values.value}
+                                                                                        onBlur={handleBlur('value')}
+                                                                                        onChange={handleChange('value')} />
+                                                                                    <InputGroupAddon addonType="prepend">
+                                                                                        <InputGroupText style={{ borderTopRightRadius: 20, borderBottomRightRadius: 20, backgroundColor: 'transparent' }}>
+                                                                                            <i className="fas fa-dollar-sign" style={{ color: '#5257f2', paddingRight: 10 }}></i>
+                                                                                        </InputGroupText>
+                                                                                    </InputGroupAddon>
+                                                                                </InputGroup>
+                                                                                <ErrorMessage name="value" render={msg => <div className='error-text'>{msg}</div>} />
+                                                                            </FormGroup>
+                                                                            <Button color="success" type="submit" disabled={isSubmitting || !isValid}>
+                                                                                Registrar <i className="fas fa-arrow-right ml-5" ></i>
+                                                                            </Button>
+                                                                            {isCreatingPayment &&
+                                                                                <div className='float-right animate__animated animate__fadeIn mt--3'>
+                                                                                    <Loader
+                                                                                        type="BallTriangle"
+                                                                                        color="#5257f2"
+                                                                                        height={60}
+                                                                                        width={60}
+                                                                                    />
+                                                                                </div>
+                                                                            }
+                                                                        </Form>
+                                                                    )
+                                                                }}
+
+                                                                </Formik>
+                                                            </div>
+                                                        }
+
+                                                        <div className='animate__animated animate__fadeIn mt-5' style={{ padding: 20, borderRadius: 20, backgroundColor: 'white', marginLeft: 50 }}>
+
+                                                            <h3 className="mb-2" style={{ fontSize: '16px' }}>
+                                                                <i className="icon_shadown fas fa-handshake fa-2x float-right" style={{ color: '#ffffff', padding: 10, paddingLeft: 15, paddingRight: 15, marginTop: -34, backgroundColor: '#5257f2', borderRadius: 10 }}></i>
+                                                                Compromisos:
+                                                            </h3>
+
+                                                            <Row>
+                                                                <Col lg='6'>
+                                                                    <Button className="mt-2 btn-block" style={{ backgroundColor: '#5257f2' }}
+                                                                        disabled={student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0}
+                                                                        onClick={toggleCompromise}>
+                                                                        <i className="fas fa-plus mr-2" ></i>Nuevo
                                                                     </Button>
-                                                                    {isCreatingPayment &&
-                                                                        <div className='float-right animate__animated animate__fadeIn mt--3'>
-                                                                            <Loader
-                                                                                type="BallTriangle"
-                                                                                color="#5257f2"
-                                                                                height={60}
-                                                                                width={60}
-                                                                            />
-                                                                        </div>
-                                                                    }
-                                                                </Form>
-                                                            )
-                                                        }}
+                                                                </Col>
+                                                                <Col lg='6'>
+                                                                    <Button className="mt-2 btn-block" color="warning"
+                                                                        disabled={student_full.student.compromises.length === 0 && true}
+                                                                        onClick={toggleHistorial}>
+                                                                        <i className="fas fa-history mr-2" ></i>
+                                                                        Historial
+                                                                    </Button>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
 
-                                                        </Formik>
-                                                    </div>
+                                                        {current_user.type === 1 &&
+                                                            <Row className="mt-5 mb-3 d-flex justify-content-center animate__animated animate__fadeIn" style={{ marginLeft: 50 }}>
+
+                                                                <UncontrolledDropdown direction="up" className="mt-1 mb-1">
+                                                                    <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#00e676', border: 0, padding: 10 }}>
+                                                                        <i className="fab fa-whatsapp fa-2x"></i>
+                                                                    </DropdownToggle>
+                                                                    <DropdownMenu>
+                                                                        <DropdownItem disabled><h1 style={{ fontSize: 15 }}>{student_full.student.phone1}</h1></DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone1)}>
+                                                                            Mensaje de Recordatorio
+                                                                        </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone1)}>
+                                                                            Mensaje de Cobro
+                                                                        </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone1)}>
+                                                                            Recordatorio Examenes
+                                                                        </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone1)}>
+                                                                            Mensaje Cobro Citacion
+                                                                        </DropdownItem>
+                                                                        <DropdownItem disabled><h1 style={{ fontSize: 15 }}>{student_full.student.phone2}</h1></DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone2)}>
+                                                                            Mensaje de Recordatorio
+                                                                        </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone2)}>
+                                                                            Mensaje de Cobro
+                                                                        </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone2)}>
+                                                                            Recordatorio Examenes
+                                                                        </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone2)}>
+                                                                            Mensaje Cobro Citacion
+                                                                        </DropdownItem>
+                                                                    </DropdownMenu>
+                                                                </UncontrolledDropdown>
+
+                                                                <UncontrolledDropdown direction="up" className="mt-1 mb-1">
+                                                                    <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#e34133', border: 0, padding: 10 }}>
+                                                                        <i className="far fa-envelope fa-2x"></i>
+                                                                    </DropdownToggle>
+                                                                    <DropdownMenu>
+                                                                        <DropdownItem
+                                                                            onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
+                                                                            Recordatorio de Meses en mora
+                                                                        </DropdownItem>
+                                                                        <DropdownItem
+                                                                            onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
+                                                                            Circular de Cobro
+                                                                        </DropdownItem>
+                                                                    </DropdownMenu>
+                                                                </UncontrolledDropdown>
+
+                                                                <UncontrolledDropdown direction="up" className="mt-1 mb-1">
+                                                                    <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#1ea5f3', border: 0, padding: 10 }}>
+                                                                        <i className="fas fa-sms fa-2x"></i>
+                                                                    </DropdownToggle>
+                                                                    <DropdownMenu>
+                                                                        <DropdownItem
+                                                                            onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
+                                                                            SMS de Recordatorio
+                                                                        </DropdownItem>
+                                                                        <DropdownItem
+                                                                            onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
+                                                                            SMS de Cobro
+                                                                        </DropdownItem>
+                                                                    </DropdownMenu>
+                                                                </UncontrolledDropdown>
+                                                            </Row>
+                                                        }
+                                                    </>
                                                 }
+                                            </>}
 
-                                                <div className='animate__animated animate__fadeIn mt-5' style={{ padding: 20, borderRadius: 20, backgroundColor: 'white', marginLeft: 50 }}>
-
-                                                    <h3 className="mb-2" style={{ fontSize: '16px' }}>
-                                                        <i className="icon_shadown fas fa-handshake fa-2x float-right" style={{ color: '#ffffff', padding: 10, paddingLeft: 15, paddingRight: 15, marginTop: -34, backgroundColor: '#5257f2', borderRadius: 10 }}></i>
-                                                        Compromisos:
-                                                    </h3>
-
-                                                    <Row>
-                                                        <Col lg='6'>
-                                                            <Button className="mt-2 btn-block" style={{ backgroundColor: '#5257f2' }}
-                                                                disabled={student_full.student.compromises.filter(compromise => compromise.state === 1).length !== 0}
-                                                                onClick={toggleCompromise}>
-                                                                <i className="fas fa-plus mr-2" ></i>Nuevo
-                                                            </Button>
-                                                        </Col>
-                                                        <Col lg='6'>
-                                                            <Button className="mt-2 btn-block" color="warning"
-                                                                disabled={student_full.student.compromises.length === 0 && true}
-                                                                onClick={toggleHistorial}>
-                                                                <i className="fas fa-history mr-2" ></i>
-                                                                Historial
-                                                            </Button>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-
-                                                {current_user.type === 1 &&
-                                                    <Row className="mt-5 mb-3 d-flex justify-content-center animate__animated animate__fadeIn" style={{ marginLeft: 50 }}>
-
-                                                        <UncontrolledDropdown direction="up" className="mt-1 mb-1">
-                                                            <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#00e676', border: 0, padding: 10 }}>
-                                                                <i className="fab fa-whatsapp fa-2x"></i>
-                                                            </DropdownToggle>
-                                                            <DropdownMenu>
-                                                                <DropdownItem disabled><h1 style={{ fontSize: 15 }}>{student_full.student.phone1}</h1></DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone1)}>
-                                                                    Mensaje de Recordatorio
-                                                                </DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone1)}>
-                                                                    Mensaje de Cobro
-                                                                </DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone1)}>
-                                                                    Recordatorio Examenes
-                                                                </DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone1)}>
-                                                                    Mensaje Cobro Citacion
-                                                                </DropdownItem>
-                                                                <DropdownItem disabled><h1 style={{ fontSize: 15 }}>{student_full.student.phone2}</h1></DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio(student_full), student_full.student.phone2)}>
-                                                                    Mensaje de Recordatorio
-                                                                </DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone2)}>
-                                                                    Mensaje de Cobro
-                                                                </DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone2)}>
-                                                                    Recordatorio Examenes
-                                                                </DropdownItem>
-                                                                <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone2)}>
-                                                                    Mensaje Cobro Citacion
-                                                                </DropdownItem>
-                                                            </DropdownMenu>
-                                                        </UncontrolledDropdown>
-
-                                                        <UncontrolledDropdown direction="up" className="mt-1 mb-1">
-                                                            <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#e34133', border: 0, padding: 10 }}>
-                                                                <i className="far fa-envelope fa-2x"></i>
-                                                            </DropdownToggle>
-                                                            <DropdownMenu>
-                                                                <DropdownItem
-                                                                    onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
-                                                                    Recordatorio de Meses en mora
-                                                                </DropdownItem>
-                                                                <DropdownItem
-                                                                    onClick={() => toggleCreateEmail(email_recordatorio(student_full))}>
-                                                                    Circular de Cobro
-                                                                </DropdownItem>
-                                                            </DropdownMenu>
-                                                        </UncontrolledDropdown>
-
-                                                        <UncontrolledDropdown direction="up" className="mt-1 mb-1">
-                                                            <DropdownToggle className='icon_shadown' style={{ backgroundColor: '#1ea5f3', border: 0, padding: 10 }}>
-                                                                <i className="fas fa-sms fa-2x"></i>
-                                                            </DropdownToggle>
-                                                            <DropdownMenu>
-                                                                <DropdownItem
-                                                                    onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
-                                                                    SMS de Recordatorio
-                                                                </DropdownItem>
-                                                                <DropdownItem
-                                                                    onClick={() => toggleCreateSms(sms_recordatorio(student_full))}>
-                                                                    SMS de Cobro
-                                                                </DropdownItem>
-                                                            </DropdownMenu>
-                                                        </UncontrolledDropdown>
-                                                    </Row>
-                                                }
-                                            </>
-                                        }
                                     </div>
                                 </Col>
                             </Row>

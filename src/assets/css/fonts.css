@@ -10,13 +10,12 @@
     font-family: 'Quicksand', sans-serif;
     color: white;
 }
-
+.error-text {
+    font-family: 'Varela Round', sans-serif;
+    color: rgb(248, 0, 0);
+    font-size: 13px;
+}
 . {
     font-family: 'Varela Round', sans-serif;
 }
 
-.error-text {
-    font-family: 'Varela Round', sans-serif;
-    color: red;
-    font-size: 13px;
-}

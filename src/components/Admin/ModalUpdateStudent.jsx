@@ -29,6 +29,9 @@ const formSchema = yup.object().shape({
     attending: yup.string().min(2, 'Este campo debe tener minimo 2 caracteres')
         .test('alphabets', 'Este campo solo debe contener letras', (value) => { return /^[A-Za-zÑñ ]+$/.test(value); })
         .required('El acudiente es obligatorio'),
+    attending_document: yup.string().min(5, 'El documento debe tener minimo 5 caracteres')
+        .test('Digits only', 'Este campo solo admite valores numericos ', digitsOnly)
+        .required('El documento es obligatorio'),
     discount: yup.number().min(0, 'El valor debe ser mayor o igual a cero').max(100, 'El porcentaje maximo de descuento es el 100%')
         .required('Si no desea asignar un descuento, digite el numero 0')
 })
@@ -53,6 +56,8 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                     document_type: data.student.document_type,
                     document: data.student.document,
                     attending: data.student.attending,
+                    attending_document: data.student.attending_document,
+                    address: data.student.address,
                     phone1: data.student.phone1,
                     phone2: data.student.phone2,
                     discount: data.student.discount,
@@ -82,6 +87,8 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                         document_type: values.document_type,
                         document: values.document,
                         attending: values.attending,
+                        attending_document: values.attending_document,
+                        address: values.address,
                         phone1: values.phone1,
                         phone2: values.phone2,
                         discount: values.discount,
@@ -103,7 +110,7 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                                 text: Object.values(error.response.data)[0]
                             })
                         })
-                        
+
                     formikBag.setSubmitting(false)
                 }}
 
@@ -255,6 +262,38 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                                 <Col lg='6'>
                                     <FormGroup >
                                         <InputGroup className="mb-4">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="fas fa-id-card" />
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name='attending_document' placeholder="Documento Acudiente" type="number"
+                                                value={values.attending_document}
+                                                onBlur={handleBlur('attending_document')}
+                                                onChange={handleChange('attending_document')} />
+                                        </InputGroup>
+                                        <ErrorMessage name="attending_document" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
+                                    </FormGroup>
+                                </Col>
+                                <Col lg='6'>
+                                    <FormGroup >
+                                        <InputGroup className="mb-4">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="fas fa-home" />
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name='address' placeholder="Direccion" type="text"
+                                                value={values.address}
+                                                onBlur={handleBlur('address')}
+                                                onChange={handleChange('address')} />
+                                        </InputGroup>
+                                        <ErrorMessage name="address" render={msg => <div className='mt--4 error-text'>{msg}</div>} />
+                                    </FormGroup>
+                                </Col>
+                                <Col lg='6'>
+                                    <FormGroup >
+                                        <InputGroup className="mb-4">
                                             <Input name='phone1' placeholder="Telefono 1" type="number"
                                                 value={values.phone1}
                                                 onBlur={handleBlur('phone1')}
@@ -276,7 +315,7 @@ export const ModalUpdateStudent = ({ show, data, toggle }) => {
                                 </Col>
                                 <Col lg='6'>
                                     <FormGroup >
-                                    <Label>Descuento mensual (%):</Label>
+                                        <Label>Descuento mensual (%):</Label>
                                         <InputGroup className="mb-4">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>

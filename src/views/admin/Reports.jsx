@@ -84,9 +84,28 @@ export const Reports = () => {
     const columns = [
         {
             title: 'Codigo',
+            width: 120,
             dataIndex: ['student', 'code'],
             ...getColumnSearchProps("student.code"),
             render: (text, row) => `${row.student.code} `,
+        },
+        {
+            title: 'Estado',
+            // width: 120,
+            dataIndex: ['is_active'],
+            filters: [
+                {
+                    text: 'MATRICULADO',
+                    value: true,
+                },
+                {
+                    text: 'RETIRADO',
+                    value: false,
+                },
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) => String(record.is_active).indexOf(value) === 0,
+            render: (text, row) => row.is_active ? 'MATRICULADO' : 'RETIRADO'
         },
         {
             title: 'Apellidos',
@@ -101,7 +120,15 @@ export const Reports = () => {
             render: (text, row) => `${row.first_name} `,
         },
         {
+            title: 'Documento Estudiante',
+            // width: 120,
+            dataIndex: ['student', 'document'],
+            ...getColumnSearchProps("student.document"),
+            render: (text, row) => `${row.student.document} `,
+        },
+        {
             title: 'Cobertura',
+            // width: 120,
             dataIndex: ['student', 'coverage'],
             filters: [
                 {
@@ -119,6 +146,7 @@ export const Reports = () => {
         },
         {
             title: 'Grado',
+            // width: 120,
             dataIndex: ['student', 'grade', 'name'],
             ...getColumnSearchProps("student.grade.name"),
             sorter: (a, b) => { return a.student.grade.name.localeCompare(b.student.grade.name) },
@@ -127,6 +155,7 @@ export const Reports = () => {
         },
         {
             title: 'Jornada',
+            // width: 120,
             dataIndex: ['student', 'schedule'],
             filters: [
                 {
@@ -159,7 +188,7 @@ export const Reports = () => {
         {
             title: 'Meses en mora',
             dataIndex: 'meses',
-            width: 120,
+            // width: 120,
             sorter: (a, b) => { return a.student.monthOwed - b.student.monthOwed },
             filters: [
                 {
@@ -210,10 +239,39 @@ export const Reports = () => {
         {
             title: 'Valor en mora',
             dataIndex: 'valor',
-            width: 100,
             sorter: (a, b) => { return a.student.amountOwed - b.student.amountOwed },
             render: (text, row) => `$ ${formatNumber(row.student.amountOwed)}`,
         },
+        {
+            title: 'Total Pagado (Mensualidad)',
+            dataIndex: 'valor',
+            sorter: (a, b) => { return a.student.amountOwed - b.student.amountOwed },
+            render: (text, row) => `$ ${row.student.total_paid}`,
+        }, 
+        {
+            title: 'Total Pagado (Mensualidad + Matricula)',
+            dataIndex: 'valor',
+            sorter: (a, b) => { return a.student.amountOwed - b.student.amountOwed },
+            render: (text, row) => `$ ${row.student.total_paid + row.student.grade.enrollment}`,
+        },
+        {
+            title: 'Acudiente',
+            dataIndex: ['attending'],
+            ...getColumnSearchProps("attending"),
+            render: (text, row) => `${row.student.attending} `,
+        },
+        {
+            title: 'Documento Acudiente',
+            dataIndex: ['attending_document'],
+            ...getColumnSearchProps("attending_document"),
+            render: (text, row) => `${row.student.attending_document} `,
+        },
+        {
+            title: 'Email',
+            dataIndex: ['email'],
+            ...getColumnSearchProps("email"),
+            render: (text, row) => `${row.email} `,
+        }
     ];
 
 
@@ -252,7 +310,7 @@ export const Reports = () => {
                             columns={columns}
                             rowKey="id"
                             size="small"
-                            scroll={{ y: 500 }}
+                            scroll={{ y: 500, x: 3000 }}
                             pagination={false}
                         />
                     </Row>

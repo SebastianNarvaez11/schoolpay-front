@@ -40,7 +40,7 @@ export const PaymentGeneral = () => {
     const cobertura = () => {
         if (data_graphics !== undefined) {
             if (students !== undefined) {
-                return students.length - en_mora - al_dia
+                return students.filter(data => data.student.coverage).length
             } else {
                 return 0
             }
