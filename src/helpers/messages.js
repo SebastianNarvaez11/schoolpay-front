@@ -21,7 +21,7 @@ export const wpp_recordatorio_compromiso = (compromise) => {
 }
 
 export const wpp_recordatorio_examenes = () => {
-    return `*Recordatorio Exámenes Finales 3er Periodo.* Señor padre de familia cordial saludo, se informa que a *la proxima semana* se estarán realizando los exámenes finales del 3er periodo; le recordamos *estar al día con el pago de las mensualidades*, ya que la institución depende financieramente del pago oportuno que ustedes realicen. Agradecemos su atención. *Atte Departamento Financiero*`
+    return `*Exámenes Finales 1er Periodo.* Señor padre de familia cordial saludo, se informa que a *la proxima semana* se estarán realizando los exámenes finales del 1er periodo; le recordamos *estar al día con el pago de las mensualidades (FEBRERO Y MARZO)* , ya que la institución depende financieramente del pago oportuno que ustedes realicen. Agradecemos su atención. *Atte Departamento Financiero*`
 }
 
 export const wpp_cobro_citacion = (user) => {
