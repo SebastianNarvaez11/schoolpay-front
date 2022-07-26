@@ -10,7 +10,7 @@ import { ToastConfirmSendSms } from '../../assets/alerts'
 import { resetStudentSelect } from '../../redux/actions/studentActions'
 import { sendEmailMassive } from '../../redux/actions/contactAction'
 import { formatNumber, scheduleFormat } from '../../helpers/functions'
-import { sms_recordatorio, email_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes, wpp_cobro_citacion } from '../../helpers/messages'
+import { sms_recordatorio, email_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes, wpp_cobro_citacion, wpp_boletines } from '../../helpers/messages'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import get from "lodash.get";
@@ -284,6 +284,9 @@ export const PaymentGrades = () => {
                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone1)}>
                                     Recordatorio Examenes
                                 </DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_boletines(row), row.student.phone1)}>
+                                    Recordatorio Boletines
+                                </DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(row), row.student.phone1)}>
                                     Mensaje Cobro Citacion
                                 </DropdownItem>
@@ -296,6 +299,9 @@ export const PaymentGrades = () => {
                                 </DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone2)}>
                                     Recordatorio Examenes
+                                </DropdownItem>
+                                <DropdownItem onClick={() => senWppSms(wpp_boletines(row), row.student.phone2)}>
+                                    Recordatorio Boletines
                                 </DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(row), row.student.phone2)}>
                                     Mensaje Cobro Citacion
