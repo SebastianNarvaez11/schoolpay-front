@@ -11,7 +11,7 @@ import ModalCreateNote from '../../components/Admin/ModalCreateNote'
 import { resetStudentSelect ,updateStudent, deleteStudent} from '../../redux/actions/studentActions'
 import { createPaymentManual, deletePaymentManual, deleteCompromises, updateCompromiseSinceDetail } from '../../redux/actions/paymentActions'
 import { scheduleFormat, formatNumber, initialCharge } from '../../helpers/functions.js'
-import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes, wpp_cobro_citacion } from '../../helpers/messages'
+import { email_recordatorio, sms_recordatorio, wpp_recordatorio, wpp_cobro, wpp_recordatorio_examenes, wpp_cobro_citacion, wpp_control_ingreso } from '../../helpers/messages'
 import { Table, Input as InputAnd, Button as ButtonAntd } from 'antd';
 import {
     Row, Col, FormGroup, InputGroup, InputGroupAddon, InputGroupText,
@@ -699,6 +699,9 @@ export const DetailPayStudent = () => {
                                                                         <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone1)}>
                                                                             Recordatorio Examenes
                                                                         </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_control_ingreso(student_full), student_full.student.phone1)}>
+                                                                            Mensaje Control Ingreso
+                                                                        </DropdownItem>
                                                                         <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone1)}>
                                                                             Mensaje Cobro Citacion
                                                                         </DropdownItem>
@@ -711,6 +714,9 @@ export const DetailPayStudent = () => {
                                                                         </DropdownItem>
                                                                         <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone2)}>
                                                                             Recordatorio Examenes
+                                                                        </DropdownItem>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_control_ingreso(student_full), student_full.student.phone2)}>
+                                                                            Mensaje Control Ingreso
                                                                         </DropdownItem>
                                                                         <DropdownItem onClick={() => senWppSms(wpp_cobro_citacion(student_full), student_full.student.phone2)}>
                                                                             Mensaje Cobro Citacion
