@@ -21,7 +21,8 @@ export const wpp_recordatorio_compromiso = (compromise) => {
 }
 
 export const wpp_recordatorio_examenes = () => {
-    return `*Exámenes Finales 1er Periodo.* Señor padre de familia cordial saludo, se informa que a *la proxima semana* se estarán realizando los exámenes finales del 1er periodo; le recordamos *estar al día con el pago de las mensualidades (FEBRERO Y MARZO)* , ya que la institución depende financieramente del pago oportuno que ustedes realicen. Agradecemos su atención. *Atte Departamento Financiero*`
+    return `🚨 *EXAMENES FINALES* 🚨 Cordial saludo, se informa que *la proxima semana del 27 al 29 de Septiembre* se estarán realizando los exámenes finales 
+    del 3er periodo; el estudiante debera *estar al dia* con el pago de las mensualidades hasta el mes *SEPTIEMBRE*. Agradecemos su atención. *Atte Departamento Financiero*`
 }
 
 export const wpp_cobro_citacion = (user) => {
@@ -33,6 +34,6 @@ export const wpp_boletines = (user) => {
 }
 
 export const wpp_control_ingreso = (user) => {
-    return `🚨*CONTROL DE INGRESO*🚨\n \nCordial saludo, durante la próxima semana del *LUNES 12 AL VIERNES 16 DE SEPTIEMBRE* se estará solicitando *la agenda* al estudiante al ingreso a la institución, la cual deberá tener los sellos hasta el mes de *SEPTIEMBRE*. (El día viernes 09 se estarán sellando las agendas). *${user.first_name} ${user.last_name}*, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}*. Agradecemos su atención.`
+    return `🚨 *CONTROL DE INGRESO* 🚨\n \nCordial saludo, durante la próxima semana del *LUNES 12 AL VIERNES 16 DE SEPTIEMBRE* se estará solicitando *la agenda* al estudiante al ingreso a la institución, la cual deberá tener los sellos hasta el mes de *SEPTIEMBRE*. (El día viernes 09 se estarán sellando las agendas). *${user.first_name} ${user.last_name}*, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}*. Agradecemos su atención.`
 }
 
