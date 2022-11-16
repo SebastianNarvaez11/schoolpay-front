@@ -281,7 +281,7 @@ export const PaymentGrades = () => {
                                 <DropdownItem onClick={() => senWppSms(wpp_cobro(row), row.student.phone1)}>
                                     Mensaje de Cobro
                                 </DropdownItem>
-                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone1)}>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(row), row.student.phone1)}>
                                     Recordatorio Examenes
                                 </DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_boletines(row), row.student.phone1)}>
@@ -300,7 +300,7 @@ export const PaymentGrades = () => {
                                 <DropdownItem onClick={() => senWppSms(wpp_cobro(row), row.student.phone2)}>
                                     Mensaje de Cobro
                                 </DropdownItem>
-                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), row.student.phone2)}>
+                                <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(row), row.student.phone2)}>
                                     Recordatorio Examenes
                                 </DropdownItem>
                                 <DropdownItem onClick={() => senWppSms(wpp_boletines(row), row.student.phone2)}>

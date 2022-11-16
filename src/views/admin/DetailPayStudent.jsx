@@ -696,7 +696,7 @@ export const DetailPayStudent = () => {
                                                                         <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone1)}>
                                                                             Mensaje de Cobro
                                                                         </DropdownItem>
-                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone1)}>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(student_full), student_full.student.phone1)}>
                                                                             Recordatorio Examenes
                                                                         </DropdownItem>
                                                                         <DropdownItem onClick={() => senWppSms(wpp_control_ingreso(student_full), student_full.student.phone1)}>
@@ -712,7 +712,7 @@ export const DetailPayStudent = () => {
                                                                         <DropdownItem onClick={() => senWppSms(wpp_cobro(student_full), student_full.student.phone2)}>
                                                                             Mensaje de Cobro
                                                                         </DropdownItem>
-                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(), student_full.student.phone2)}>
+                                                                        <DropdownItem onClick={() => senWppSms(wpp_recordatorio_examenes(student_full), student_full.student.phone2)}>
                                                                             Recordatorio Examenes
                                                                         </DropdownItem>
                                                                         <DropdownItem onClick={() => senWppSms(wpp_control_ingreso(student_full), student_full.student.phone2)}>

@@ -20,7 +20,7 @@ export const wpp_recordatorio_compromiso = (compromise) => {
     return `COLEGIO ACADÉMICO EL POBLADO: \n \nCordial saludo. \n \nSe le recuerda al acudiente que tiene un compromiso de pago pendiente para el estudiante *${compromise.student.user.first_name} ${compromise.student.user.last_name}*, de grado *${compromise.student.grade.name}*, por un valor total de $ *${formatNumber(compromise.value)}*, por concepto de *${compromise.month_owed}* mensualidad(es) atrasada(s). Agradecemos su atención.`
 }
 
-export const wpp_recordatorio_examenes = () => {
+export const wpp_recordatorio_examenes = (user) => {
     return `🚨 *EXAMENES FINALES* 🚨 Cordial saludo, se informa que *Mañana jueves 17 y el viernes 18 de noviembre* se estarán realizando los exámenes finales del 4to periodo; el estudiante debera *estar al dia* con el pago de las mensualidades hasta el mes de *NOVIEMBRE*. *${user.first_name} ${user.last_name}*, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}* Agradecemos su atención. *Atte Departamento Financiero*`
 }
 
