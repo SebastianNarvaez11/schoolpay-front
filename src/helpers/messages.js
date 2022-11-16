@@ -21,7 +21,7 @@ export const wpp_recordatorio_compromiso = (compromise) => {
 }
 
 export const wpp_recordatorio_examenes = () => {
-    return `🚨 *EXAMENES FINALES* 🚨 Cordial saludo, se informa que *la proxima semana del 27 al 29 de Septiembre* se estarán realizando los exámenes finales del 3er periodo; el estudiante debera *estar al dia* con el pago de las mensualidades hasta el mes de *SEPTIEMBRE*. Agradecemos su atención. *Atte Departamento Financiero*`
+    return `🚨 *EXAMENES FINALES* 🚨 Cordial saludo, se informa que *Mañana jueves 17 y el viernes 18 de noviembre* se estarán realizando los exámenes finales del 4to periodo; el estudiante debera *estar al dia* con el pago de las mensualidades hasta el mes de *NOVIEMBRE*. *${user.first_name} ${user.last_name}*, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}* Agradecemos su atención. *Atte Departamento Financiero*`
 }
 
 export const wpp_cobro_citacion = (user) => {
