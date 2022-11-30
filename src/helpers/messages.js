@@ -29,7 +29,7 @@ export const wpp_cobro_citacion = (user) => {
 }
 
 export const wpp_boletines = (user) => {
-    return `🚨 *ENTREGA BOLETINES* 🚨\n \nCordial saludo.\n \nEl día *MARTES 25 DE OCTUBRE DE 2022* se realizará la reunión de entrega de boletines del 3er periodo, recuerde que para este día el estudiante se debe encontrar al día con el pago de las mensualidades hasta el mes de *OCTUBRE*. El estudiante *${user.first_name} ${user.last_name}* (Código: *${user.student.code}*), adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}*, por concepto de *${user.student.monthOwed}* mensualidad(es) atrasada(s). Agradecemos su atención y quedamos atentos a una pronta respuesta.`
+    return `🚨 *ENTREGA BOLETINES* 🚨\n \nCordial saludo.\n \nMañana *JUEVES 01 DE DICIEMBRE DE 2022* se realizará la reunión de entrega de boletines del 4to periodo, recuerde que el estudiante se debe encontrar al día con el pago de las mensualidades hasta el mes de *NOVIEMBRE*. El estudiante *${user.first_name} ${user.last_name}* adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}*, por concepto de *${user.student.monthOwed}* mensualidad(es) atrasada(s). Agradecemos su atención.`
 }
 
 export const wpp_control_ingreso = (user) => {
