@@ -19,7 +19,7 @@ const formSchema = yup.object().shape({
     last_name: yup.string().min(2, 'El apellido debe tener minimo 2 caracteres')
         .test('alphabets', 'El apellido solo debe contener letras', (value) => { return /^[A-Za-zÑñ ]+$/.test(value); })
         .required('El nombre es obligatorio'),
-    type: yup.number().min(2, 'Seleccione un perfil').required('El perfil es obligatorio'),
+    type: yup.number().min(1, 'Seleccione un perfil').required('El perfil es obligatorio'),
     password1: yup.string().required('La contraseña es obligatoria'),
     password2: yup.string().oneOf([yup.ref('password1'), null], 'Las contraseñas no coinciden').required('Repita la contraseña')
 })
