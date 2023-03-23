@@ -1,7 +1,7 @@
 import { formatNumber } from './functions'
 
 export const email_recordatorio = (user) => {
-    return `Se informa que a la fecha, el estudiante ${user.first_name} ${user.last_name}, de grado ${user.student.grade.name}, adeuda un valor total de $ ${formatNumber(user.student.amountOwed)}, por concepto de ${user.student.monthOwed} mensualidades atrasadas. Se le recuerda al acudiente que los pagos deben realizarse los primeros 10 dias del mes. Recomendamos efectuar el pago del valor adeudado lo mas pronto posible o dirigirse al departamento financiero del colegio para acordar un compromiso de pago.`
+    return `Se informa que a la fecha, el estudiante ${user.first_name} ${user.last_name}, de grado ${user.student.grade.name}, adeuda un valor total de $ ${formatNumber(user.student.amountOwed)}, por concepto de ${user.student.monthOwed} mensualidades atrasadas. Se le recuerda al acudiente que los pagos deben realizarse los primeros 10 días del mes. Recomendamos efectuar el pago del valor adeudado lo mas pronto posible o dirigirse al departamento financiero del colegio para acordar un compromiso de pago.`
 }
 
 export const sms_recordatorio = (user) => {
@@ -21,11 +21,11 @@ export const wpp_recordatorio_compromiso = (compromise) => {
 }
 
 export const wpp_recordatorio_examenes = (user) => {
-    return `🚨 *EXAMENES FINALES* 🚨 Cordial saludo, se informa que *La proxima semana, del 28 al 30 de Marzo* se estarán realizando los exámenes finales del 1er periodo; el estudiante debera *estar al dia* con el pago de las mensualidades hasta el mes de *MARZO*. El estudiante *${user.first_name} ${user.last_name}*, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}* Agradecemos su atención. *Atte Departamento Financiero*`
+    return `🚨 *EXAMENES FINALES* 🚨 Cordial saludo, se informa que *La próxima semana, del 28 al 30 de Marzo* se estarán realizando los exámenes finales del 1er periodo; el estudiante deberá *estar al día* con el pago de las mensualidades hasta el mes de *MARZO*. El estudiante *${user.first_name} ${user.last_name}*, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}* Agradecemos su atención. *Atte Departamento Financiero*`
 }
 
 export const wpp_cobro_citacion = (user) => {
-    return `Cordial saludo. Sr(a) *${user.student.attending}* quien registra en calidad de acudiente; Se  le informa que a la fecha, el estudiante *${user.first_name} ${user.last_name}* (Código: *${user.student.code}*), de grado ${user.student.grade.name}, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}*, por concepto de *${user.student.monthOwed}* mensualidad(es) atrasada(s). Recomendamos colocarse al dia; de lo contrario *SERÁ CITADO A LA INTITUCION*, ya que, dependemos de los recaudos por concepto de pensión para solventar los gastos y obligaciones salariales de nuestro personal. Se le recuerda al acudiente que los pagos deben realizarse los primeros 10 días del mes y *se debe enviar la foto del comprobante de pago a este WhatsApp para su registro.* Recomendamos efectuar el pago del valor adeudado lo más pronto posible. Agradecemos su atención y quedamos atentos a una pronta respuesta.`
+    return `Cordial saludo. Sr(a) *${user.student.attending}* quien registra en calidad de acudiente; Se  le informa que a la fecha, el estudiante *${user.first_name} ${user.last_name}* (Código: *${user.student.code}*), de grado ${user.student.grade.name}, adeuda un valor total de *$ ${formatNumber(user.student.amountOwed)}*, por concepto de *${user.student.monthOwed}* mensualidad(es) atrasada(s). Recomendamos colocarse al día; de lo contrario *SERÁ CITADO A LA INTITUCION*, ya que, dependemos de los recaudos por concepto de pensión para solventar los gastos y obligaciones salariales de nuestro personal. Se le recuerda al acudiente que los pagos deben realizarse los primeros 10 días del mes y *se debe enviar la foto del comprobante de pago a este WhatsApp para su registro.* Recomendamos efectuar el pago del valor adeudado lo más pronto posible. Agradecemos su atención y quedamos atentos a una pronta respuesta.`
 }
 
 export const wpp_boletines = (user) => {
