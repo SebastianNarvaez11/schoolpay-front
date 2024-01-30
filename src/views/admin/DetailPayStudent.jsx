@@ -384,7 +384,7 @@ export const DetailPayStudent = () => {
                                         {!student_full.is_active && <h1 className='text-center' style={{ color: '#f5222d' }}>{student_full.student.date_retiro}</h1>}
 
                                         <h3 className="mb-0 " style={{ fontSize: '30px' }}>
-                                            <div className='d-flex justify-content-end'>
+                                            <div className='d-flex justify-content-end text-uppercase'>
                                                 {student_full.student.note !== '' &&
                                                     <div className='mr-3'>
                                                         <Button id="UncontrolledPopover" type="button" style={{ backgroundColor: '#1ea5f3', padding: 10, border: 0 }}>

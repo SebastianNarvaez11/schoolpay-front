@@ -96,7 +96,7 @@ const ListPayments = () => {
         {
             title: 'Estudiante',
             dataIndex: ['student', 'user', 'last_name'],
-            render: (text, row) => `${row.student.user.last_name} ${row.student.user.first_name} `,
+            render: (text, row) => `${(row.student.user.last_name).toUpperCase()} ${(row.student.user.first_name).toUpperCase()} `,
         },
         {
             title: 'Grado',

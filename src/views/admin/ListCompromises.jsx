@@ -160,7 +160,7 @@ const ListCompromises = () => {
             title: 'Estudiante',
             width: 200,
             dataIndex: ['student', 'user', 'last_name'],
-            render: (text, row) => `${row.student.user.last_name} ${row.student.user.first_name} `,
+            render: (text, row) => `${(row.student.user.last_name).toUpperCase()} ${(row.student.user.first_name).toUpperCase()} `,
         },
         {
             title: 'Grado',

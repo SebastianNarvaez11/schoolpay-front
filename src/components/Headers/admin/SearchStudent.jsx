@@ -43,7 +43,7 @@ export const SearchStudent = () => {
                 disabled={isFetching} />
               <datalist id="hosting-plan" >
                 {students_filter.slice(0, 5).map(user => (
-                  <option key={user.id}>{user.student.code + ' ' + user.last_name + ' ' + user.first_name}</option>
+                  <option key={user.id}>{user.student.code + ' ' + (user.last_name).toUpperCase() + ' ' + (user.first_name).toUpperCase()}</option>
                 ))}
               </datalist>
               <InputGroupAddon addonType="prepend">

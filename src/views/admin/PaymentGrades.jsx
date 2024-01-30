@@ -158,7 +158,7 @@ export const PaymentGrades = () => {
             ...getColumnSearchProps("last_name"),
             sorter: (a, b) => { return a.last_name.localeCompare(b.last_name) },
             sortDirections: ['ascend', 'descend'],
-            render: (text, row) => `${row.last_name} ${row.first_name}`,
+            render: (text, row) => `${(row.last_name).toUpperCase()} ${(row.first_name).toUpperCase()}`,
         },
         {
             title: 'Cobertura',

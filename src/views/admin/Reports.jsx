@@ -111,13 +111,13 @@ export const Reports = () => {
             title: 'Apellidos',
             dataIndex: 'last_name',
             ...getColumnSearchProps("last_name"),
-            render: (text, row) => `${row.last_name}`,
+            render: (text, row) => `${(row.last_name).toUpperCase()}`,
         },
         {
             title: 'Nombres',
             dataIndex: ['first_name'],
             ...getColumnSearchProps("first_name"),
-            render: (text, row) => `${row.first_name} `,
+            render: (text, row) => `${(row.first_name).toUpperCase()} `,
         },
         {
             title: 'Documento Estudiante',
